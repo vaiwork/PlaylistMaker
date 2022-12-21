@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+
+        android:orientation="horizontal"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:gravity="center_horizontal|center_vertical"
+
+            android:backgroundTint="@color/white"
+
+            app:icon = "@drawable/back"
+            app:iconTint = "@color/button_text"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:gravity="top"
+
+            android:text = "@string/settings"
+            android:textColor="@color/button_text"
+            android:textSize="@dimen/textSize"
+            />
+    </LinearLayout>
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text = "@string/darkTheme"
+        android:textColor="@color/textColor"
+        android:textAllCaps="false"
+        android:paddingStart="@dimen/textMarginLeft"
+        android:paddingEnd="@dimen/textMarginLeft"
+        android:paddingTop="@dimen/textMarginTopBottom"
+        android:paddingBottom="@dimen/textMarginTopBottom"
+
+        android:gravity="top"
+        />
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text = "@string/sentApp"
+        android:textColor="@color/textColor"
+        android:textAllCaps="false"
+        android:paddingStart="@dimen/textMarginLeft"
+        android:paddingEnd="@dimen/textMarginLeft"
+        android:paddingTop="@dimen/textMarginTopBottom"
+        android:paddingBottom="@dimen/textMarginTopBottom"
+
+        android:thumb = "@drawable/sent_app_icon"
+        android:trackTint="@color/white"
+
+        android:gravity="top"
+        />
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text = "@string/writeSupport"
+        android:textColor="@color/textColor"
+        android:textAllCaps="false"
+        android:paddingStart="@dimen/textMarginLeft"
+        android:paddingEnd="@dimen/textMarginLeft"
+        android:paddingTop="@dimen/textMarginTopBottom"
+        android:paddingBottom="@dimen/textMarginTopBottom"
+
+        android:thumb = "@drawable/write_support_icon"
+        android:trackTint="@color/white"
+
+        android:gravity="top"
+        />
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text = "@string/userAgreement"
+        android:textColor="@color/textColor"
+        android:textAllCaps="false"
+        android:paddingStart="@dimen/textMarginLeft"
+        android:paddingEnd="@dimen/textMarginLeft"
+        android:paddingTop="@dimen/textMarginTopBottom"
+        android:paddingBottom="@dimen/textMarginTopBottom"
+
+        android:thumb = "@drawable/user_agreement_icon"
+        android:trackTint="@color/white"
+
+        android:gravity="top"
+        />
+
+</LinearLayout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="buttonMarginLeft">17dp</dimen>
+    <dimen name="buttonMarginRight">15dp</dimen>
+    <dimen name="buttonMarginTopBottom">28dp</dimen>
+    <dimen name="buttonBetween">16dp</dimen>
+    <dimen name="textSize">22sp</dimen>
+    <dimen name="buttonCornerRadius">16dp</dimen>
+    <dimen name="betweenIconText">10dp</dimen>
+    <dimen name="textMarginLeft">16dp</dimen>
+    <dimen name="textMarginTopBottom">21dp</dimen>
+    <dimen name="textSizeSetingsActivity">16dp</dimen>
+</resources>
