@@ -34,7 +34,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".SetingsActivity"
+            android:name=".SettingsActivity"
             android:exported="true">
         </activity>
     </application>

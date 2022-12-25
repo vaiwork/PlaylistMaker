@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Button Search anonimous class
+        // Button Search anonymous class
         val buttonSearch = findViewById<Button>(R.id.button_search)
         val buttonSearchClickListener : View.OnClickListener = object : View.OnClickListener {
             override fun onClick(v: View?) {
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         // Button Settings lambda
         val buttonSettings = findViewById<Button>(R.id.button_settings)
         buttonSettings.setOnClickListener {
-            val settingsIntent = Intent(this, SetingsActivity::class.java)
+            val settingsIntent = Intent(this, SettingsActivity::class.java)
             startActivity(settingsIntent)
         }
     }
