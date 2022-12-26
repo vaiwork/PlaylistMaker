@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size">22sp</dimen>
+    <dimen name="button_main_activity_margin_left">17dp</dimen>
+    <dimen name="button_main_activity_margin_right">15dp</dimen>
+    <dimen name="button_main_activity_margin_top_bottom">28dp</dimen>
+    <dimen name="button_main_activity_between">16dp</dimen>
+    <dimen name="button_main_activity_corner_radius">16dp</dimen>
+    <dimen name="icon_main_activity_padding">10dp</dimen>
+
+    <dimen name="switch_text_settings_activity_padding_start_end">16dp</dimen>
+    <dimen name="switch_text_settings_activity_padding_top_bottom">21dp</dimen>
+
+    <dimen name="icon_margin_end">12dp</dimen>
+    <dimen name="icon_margin_bottom">18dp</dimen>
+    <dimen name="icon_margin_top">19dp</dimen>
+    
+    <dimen name="icon_user_agreement_min_width">24dp</dimen>
+    <dimen name="icon_user_agreement_min_height">24dp</dimen>
+
+    <dimen name="icon_write_support_min_width">24dp</dimen>
+    <dimen name="icon_write_support_min_height">24dp</dimen>
+
+    <dimen name="icon_sent_app_min_width">16dp</dimen>
+    <dimen name="icon_sent_app_min_height">18dp</dimen>
+
+    <dimen name="text_settings_activity_margin_top">21dp</dimen>
+    <dimen name="text_settings_activity_margin_bottom">21dp</dimen>
+    <dimen name="text_settings_activity_margin_start">16dp</dimen>
+    <dimen name="text_settings_activity_margin_end">12dp</dimen>
+
+    <dimen name="text_settings_activity_size">16sp</dimen>
+
+</resources>
