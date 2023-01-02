@@ -1,40 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/activitySettingsTheme"
     android:orientation="vertical"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:orientation="horizontal"
         >
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/settings_toolbar"
-
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
-
-            app:navigationIcon="@drawable/back">
-
+            >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-
                 android:text = "@string/settings"
-                android:textColor="@color/button_text"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="@dimen/text_size"
-
-
-
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:fontFamily="@font/ys_display_medium"
+                android:textFontWeight="500"
+                tools:targetApi="p"
+                />
         </androidx.appcompat.widget.Toolbar>
 
     </LinearLayout>
@@ -47,8 +43,11 @@
 
         android:text = "@string/dark_theme"
         android:textSize="@dimen/text_settings_activity_size"
-        android:textColor="@color/textColor"
+        android:textColor="?attr/colorOnPrimary"
         android:textAllCaps="false"
+
+        android:fontFamily="@font/ys_display_regular"
+
         android:paddingStart="@dimen/switch_text_settings_activity_padding_start_end"
         android:paddingEnd="@dimen/switch_text_settings_activity_padding_start_end"
         android:paddingTop="@dimen/switch_text_settings_activity_padding_top_bottom"
@@ -61,38 +60,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
         android:gravity="top"
         >
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="9"
-            android:layout_marginTop="@dimen/text_settings_activity_margin_top"
-            android:layout_marginBottom="@dimen/text_settings_activity_margin_bottom"
-            android:layout_marginStart="@dimen/text_settings_activity_margin_start"
-            android:layout_marginEnd="@dimen/text_settings_activity_margin_end"
-
+            style="@style/activitySettingsTextView"
             android:text="@string/sent_app"
-            android:textSize="@dimen/text_settings_activity_size"
-            android:textColor="@color/textColor"
-            android:textAllCaps="false"
-
             />
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/icon_margin_top"
-            android:layout_marginBottom="@dimen/icon_margin_bottom"
-            android:layout_marginEnd="@dimen/icon_margin_end"
-
+            style="@style/activitySettingsImageView"
             android:src = "@drawable/sent_app_icon"
-            android:scaleType="fitEnd"
-
             android:minHeight="@dimen/icon_sent_app_min_height"
             android:minWidth="@dimen/icon_sent_app_min_width"
-
             />
     </LinearLayout>
 
@@ -100,38 +78,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
         android:gravity="top"
         >
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="9"
-            android:layout_marginTop="@dimen/text_settings_activity_margin_top"
-            android:layout_marginBottom="@dimen/text_settings_activity_margin_bottom"
-            android:layout_marginStart="@dimen/text_settings_activity_margin_start"
-            android:layout_marginEnd="@dimen/text_settings_activity_margin_end"
-
+            style="@style/activitySettingsTextView"
             android:text="@string/write_support"
-            android:textSize="@dimen/text_settings_activity_size"
-            android:textColor="@color/textColor"
-            android:textAllCaps="false"
-
             />
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/icon_margin_top"
-            android:layout_marginBottom="@dimen/icon_margin_bottom"
-            android:layout_marginEnd="@dimen/icon_margin_end"
-
+            style="@style/activitySettingsImageView"
             android:src = "@drawable/write_support_icon"
-            android:scaleType="fitEnd"
-
             android:minHeight="@dimen/icon_write_support_min_height"
             android:minWidth="@dimen/icon_write_support_min_width"
-
             />
     </LinearLayout>
 
@@ -139,38 +96,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
         android:gravity="top"
         >
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="9"
-            android:layout_marginTop="@dimen/text_settings_activity_margin_top"
-            android:layout_marginBottom="@dimen/text_settings_activity_margin_bottom"
-            android:layout_marginStart="@dimen/text_settings_activity_margin_start"
-            android:layout_marginEnd="@dimen/text_settings_activity_margin_end"
-
+            style="@style/activitySettingsTextView"
             android:text="@string/user_agreement"
-            android:textSize="@dimen/text_settings_activity_size"
-            android:textColor="@color/textColor"
-            android:textAllCaps="false"
-
             />
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/icon_margin_top"
-            android:layout_marginBottom="@dimen/icon_margin_bottom"
-            android:layout_marginEnd="@dimen/icon_margin_end"
-
+            style="@style/activitySettingsImageView"
             android:src = "@drawable/user_agreement_icon"
-            android:scaleType="fitEnd"
-
             android:minHeight="@dimen/icon_user_agreement_min_height"
             android:minWidth="@dimen/icon_write_support_min_width"
-
             />
     </LinearLayout>
 
