@@ -67,6 +67,7 @@
             android:text="@string/sent_app"
             />
         <ImageView
+            android:id ="@+id/id_sent_app"
             style="@style/activitySettingsImageView"
             android:src = "@drawable/sent_app_icon"
             android:minHeight="@dimen/icon_sent_app_min_height"
@@ -85,6 +86,7 @@
             android:text="@string/write_support"
             />
         <ImageView
+            android:id = "@+id/id_write_support"
             style="@style/activitySettingsImageView"
             android:src = "@drawable/write_support_icon"
             android:minHeight="@dimen/icon_write_support_min_height"
@@ -103,6 +105,7 @@
             android:text="@string/user_agreement"
             />
         <ImageView
+            android:id = "@+id/id_user_agreement"
             style="@style/activitySettingsImageView"
             android:src = "@drawable/user_agreement_icon"
             android:minHeight="@dimen/icon_user_agreement_min_height"
