@@ -12,6 +12,10 @@ import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 
 class SearchActivity : AppCompatActivity() {
+    companion object {
+        const val SEARCH_EDIT_TEXT_CONTENT = "SEARCH_EDIT_TEXT_CONTENT"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -40,6 +44,20 @@ class SearchActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.search_toolbar)
         toolbar.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        val searchEditText = findViewById<EditText>(R.id.activity_search_edit_text)
+        outState.putString(SEARCH_EDIT_TEXT_CONTENT, searchEditText.text.toString())
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        val searchEditText = findViewById<EditText>(R.id.activity_search_edit_text)
+        searchEditText.setText(savedInstanceState.getString(SEARCH_EDIT_TEXT_CONTENT))
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
