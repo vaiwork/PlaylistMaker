@@ -71,50 +71,56 @@
         <ImageView
             android:id="@+id/activity_search_search_image_view"
 
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-
-            android:src="@drawable/search_icon"
-
-            android:paddingStart="12dp"
-            android:paddingEnd="8dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            />
-        <EditText
-            android:id="@+id/activity_search_edit_text"
-
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="8"
-
-            android:hint="@string/search"
-            android:textColorHint="@color/yp_text_gray"
-
-            android:maxLines="1"
-            android:maxLength="255"
-
-            android:inputType="text"
-
-            android:textColor="@color/yp_black"
-
-            android:backgroundTint="@color/yp_light_gray"
-            />
-
-        <ImageView
-            android:id="@+id/activity_search_clear_image_view"
+            android:theme="@style/searchImageViewActivitySearchTheme"
 
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
 
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:paddingEnd="@dimen/image_view_search_activity_padding_start_or_end"
+            android:paddingStart="@dimen/image_view_search_activity_padding_end_or_start"
 
-            android:visibility="gone"
+            android:paddingTop="@dimen/image_view_search_activity_padding_top"
+            android:paddingBottom="@dimen/image_view_search_activity_padding_bottom"
             />
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                >
+                <EditText
+                    android:id="@+id/activity_search_edit_text"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:hint="@string/search"
+                    android:textColor="@color/yp_black"
+
+                    android:inputType="text"
+                    android:maxLength="255"
+
+                    android:maxLines="1"
+                    />
+                <ImageView
+                    android:id="@+id/activity_search_clear_image_view"
+
+                    android:theme="@style/clearTextImageViewActivitySearchTheme"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center"
+
+                    android:paddingStart="@dimen/image_view_search_activity_padding_start_or_end"
+                    android:paddingEnd="@dimen/image_view_search_activity_padding_end_or_start"
+
+                    android:paddingTop="@dimen/image_view_search_activity_padding_top"
+                    android:paddingBottom="@dimen/image_view_search_activity_padding_bottom"
+
+                    android:visibility="gone"
+                    />
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

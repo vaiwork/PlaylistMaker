@@ -37,6 +37,8 @@
 
     <!-- Вот здесь в Figma есть активный Switch -->
     <Switch
+        android:id="@+id/id_switch_dark_mode"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
