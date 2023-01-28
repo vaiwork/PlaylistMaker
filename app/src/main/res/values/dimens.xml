@@ -31,4 +31,10 @@
 
     <dimen name="text_settings_activity_size">16sp</dimen>
 
+    <dimen name="image_view_search_activity_padding_top">10dp</dimen>
+    <dimen name="image_view_search_activity_padding_bottom">10dp</dimen>
+
+    <dimen name="image_view_search_activity_padding_start_or_end">8dp</dimen>
+    <dimen name="image_view_search_activity_padding_end_or_start">12dp</dimen>
+
 </resources>
