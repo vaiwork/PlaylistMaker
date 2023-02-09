@@ -36,5 +36,11 @@
 
     <dimen name="image_view_search_activity_padding_start_or_end">8dp</dimen>
     <dimen name="image_view_search_activity_padding_end_or_start">12dp</dimen>
+    
+    <dimen name="image_view_track_view_side">45dp</dimen>
+    <dimen name="text_size_track_view_small">11sp</dimen>
+    <dimen name="text_size_track_view_big">16sp</dimen>
+    <dimen name="linear_layout_track_view_margin">14dp</dimen>
+
 
 </resources>

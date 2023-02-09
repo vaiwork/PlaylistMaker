@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:orientation="horizontal"
+
+    android:theme="@style/trackViewTheme"
+    >
+
+    <ImageView
+        android:id="@+id/song_view_song_image_view"
+        android:layout_width="@dimen/image_view_track_view_side"
+        android:layout_height="@dimen/image_view_track_view_side"
+
+        android:layout_marginStart="13dp"
+        android:layout_marginVertical="8dp"
+        android:layout_marginEnd="8dp"
+
+        android:background="@drawable/track_image_view_style"
+
+        android:scaleType="centerCrop"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+
+        android:orientation="vertical"
+
+        android:layout_weight="8"
+
+        android:layout_marginTop="@dimen/linear_layout_track_view_margin"
+        android:layout_marginEnd="@dimen/linear_layout_track_view_margin"
+        >
+        <TextView
+            android:id="@+id/song_view_song_name_text_view"
+
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/text_size_track_view_big"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal"
+
+            android:layout_marginTop="1dp"
+            >
+
+            <TextView
+                android:id="@+id/song_view_song_executor_name_text_view"
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:textColor="?attr/colorSecondary"
+                android:textSize="@dimen/text_size_track_view_small"
+                />
+
+            <ImageView
+                android:id="@+id/song_view_ellipse"
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:theme="@style/trackEllipseTrackViewTheme"
+                />
+
+            <TextView
+                android:id="@+id/song_view_song_time_text_view"
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:textColor="?attr/colorSecondary"
+                android:textSize="@dimen/text_size_track_view_small"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/song_view_arrow_forward_image_view"
+
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+
+        android:theme="@style/trackArrowButtonTrackViewTheme"
+
+        android:layout_marginEnd="20dp"
+
+        android:scaleType="center"
+        />
+</LinearLayout>
