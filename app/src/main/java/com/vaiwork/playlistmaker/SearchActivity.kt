@@ -16,14 +16,6 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val SEARCH_EDIT_TEXT_CONTENT = "SEARCH_EDIT_TEXT_CONTENT"
-    }
-
-    private var editableText: String? = ""
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
-
         // Mock Track List
         val trackMockList: ArrayList<Track> = arrayListOf(
             Track("Smells Like Teen Spirit", "Nirvana", "5:01", "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"),
@@ -32,6 +24,14 @@ class SearchActivity : AppCompatActivity() {
             Track("Whole Lotta Love", "Led Zeppelin", "5:33", "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"),
             Track("Sweet Child O'Mine", "Guns N' Roses", "5:03", "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg")
         )
+    }
+
+    private var editableText: String? = ""
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_search)
+
         val recyclerView = findViewById<RecyclerView>(R.id.activity_search_search_recycler_view)
         val songsAdapter = TrackAdapter(trackMockList)
         recyclerView.adapter = songsAdapter
