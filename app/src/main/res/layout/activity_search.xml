@@ -104,6 +104,9 @@
                     android:maxLength="255"
 
                     android:maxLines="1"
+
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
                     />
                 <ImageView
                     android:id="@+id/activity_search_clear_image_view"
@@ -129,6 +132,42 @@
         android:id="@+id/activity_search_search_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:visibility="gone" >
     </androidx.recyclerview.widget.RecyclerView>
+    <ImageView
+        android:id="@+id/activity_search_empty_placeholder_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/activitySearchEmptyPlaceholderImageViewTheme"
+        android:visibility="gone" />
+    <TextView
+        android:id="@+id/activity_search_empty_placeholder_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/activitySearchPlaceholderTextView"
+        android:visibility="gone"
+        />
+    <ImageView
+        android:id="@+id/activity_search_error_placeholder_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/activitySearchErrorPlaceholderImageViewTheme"
+        android:visibility="gone" />
+    <TextView
+        android:id="@+id/activity_search_error_placeholder_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/activitySearchPlaceholderTextView"
+        android:text="@string/error_message"
+        android:visibility="gone"
+        />
+    <Button
+        android:id="@+id/activity_search_update_placeholder_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/activitySearchUpdateButton"
+        android:text="@string/update"
+        android:visibility="gone"
+        />
 </LinearLayout>

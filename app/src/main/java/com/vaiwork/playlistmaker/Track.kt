@@ -1,6 +1,9 @@
 package com.vaiwork.playlistmaker
 
-data class Track (val trackName: String,
-                  val artistName: String,
-                  val trackTime: String,
-                  val artworkUrl100: String)
+import com.google.gson.annotations.SerializedName
+import java.util.*
+
+data class Track (@SerializedName("trackName") val trackName: String,
+                  @SerializedName("artistName") val artistName: String,
+                  @SerializedName("trackTimeMillis") var trackTime: Long,
+                  @SerializedName("artworkUrl100") val artworkUrl100: String)
