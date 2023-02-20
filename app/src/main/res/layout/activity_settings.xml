@@ -36,7 +36,7 @@
     </LinearLayout>
 
     <!-- Вот здесь в Figma есть активный Switch -->
-    <Switch
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/id_switch_dark_mode"
 
         android:layout_width="match_parent"
@@ -55,7 +55,7 @@
         android:paddingTop="@dimen/switch_text_settings_activity_padding_top_bottom"
         android:paddingBottom="@dimen/switch_text_settings_activity_padding_top_bottom"
 
-        android:gravity="top"
+        android:gravity="start"
         />
 
     <LinearLayout
