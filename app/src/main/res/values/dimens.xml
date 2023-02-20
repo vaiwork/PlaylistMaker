@@ -42,5 +42,10 @@
     <dimen name="text_size_track_view_big">16sp</dimen>
     <dimen name="linear_layout_track_view_margin">14dp</dimen>
 
-
+    <dimen name="activity_search_text_view_margin_StartEnd">24dp</dimen>
+    <dimen name="activity_search_text_view_margin_Top">16dp</dimen>
+    <dimen name="activity_search_text_size">19sp</dimen>
+    <dimen name="activity_search_corner_radius_update_button">54dp</dimen>
+    <dimen name="activity_search_update_button_text_size">14sp</dimen>
+    <dimen name="activity_search_update_button_margin_top">24dp</dimen>
 </resources>

@@ -3,10 +3,10 @@ package com.vaiwork.playlistmaker
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
-import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -27,7 +27,7 @@ class SettingsActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
         // set dark mode or disable dark mode on switch click
-        val switchDarkMode = findViewById<Switch>(R.id.id_switch_dark_mode)
+        val switchDarkMode = findViewById<SwitchMaterial>(R.id.id_switch_dark_mode)
         switchDarkMode.setOnClickListener {
             isCheckedSwitch += 1
             if (isNightModeOn) {
