@@ -93,14 +93,32 @@
             </FrameLayout>
         </LinearLayout>
     </LinearLayout>
+    <TextView
+        android:id="@+id/activity_search_text_view_your_searches"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        style="@style/activitySearchYourSearchTextView"
+        android:visibility="gone"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activity_search_search_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:visibility="gone"
         >
     </androidx.recyclerview.widget.RecyclerView>
+    <Button
+        android:id="@+id/activity_search_clear_history_button"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        style="@style/activitySearchButton"
+        android:text="@string/clear_history"
+        android:visibility="gone"
+        />
     <ImageView
         android:id="@+id/activity_search_empty_placeholder_image_view"
         android:layout_width="wrap_content"
@@ -134,7 +152,7 @@
         android:id="@+id/activity_search_update_placeholder_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/activitySearchUpdateButton"
+        style="@style/activitySearchButton"
         android:text="@string/update"
         android:visibility="gone"
         />

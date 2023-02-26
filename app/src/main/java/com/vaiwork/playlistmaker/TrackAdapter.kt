@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
+
 class TrackAdapter (
     private val tracks: ArrayList<Track>
 ) : RecyclerView.Adapter<TrackViewHolder>()
@@ -15,6 +16,9 @@ class TrackAdapter (
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
+        holder.itemView.setOnClickListener{
+            (holder.itemView.context.applicationContext as App).addItemToSharedPrefs(tracks[position])
+        }
     }
 
     override fun getItemCount(): Int {

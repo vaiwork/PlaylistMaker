@@ -39,6 +39,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchEditText: EditText
     private lateinit var clearImageView: ImageView
     private lateinit var toolbar: Toolbar
+    private lateinit var clearHistoryButton: Button
+    private lateinit var yourSearcherTextView: TextView
 
     private var tracks = ArrayList<Track>()
 
@@ -46,8 +48,18 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        yourSearcherTextView = findViewById(R.id.activity_search_text_view_your_searches)
+        clearHistoryButton = findViewById(R.id.activity_search_clear_history_button)
         recyclerView = findViewById(R.id.activity_search_search_recycler_view)
         var songsAdapter: TrackAdapter
+        if ((applicationContext as App).getItemsFromSharedPrefs() != null) {
+            tracks = (applicationContext as App).getItemsFromSharedPrefs()!!
+            songsAdapter = TrackAdapter(tracks)
+            recyclerView.adapter = songsAdapter
+            recyclerView.visibility = View.VISIBLE
+            yourSearcherTextView.visibility = View.VISIBLE
+            clearHistoryButton.visibility = View.VISIBLE
+        }
 
         searchEmptyPlaceholderImageView = findViewById(R.id.activity_search_empty_placeholder_image_view)
         searchEmptyPlaceholderTextView = findViewById(R.id.activity_search_empty_placeholder_text_view)
@@ -65,6 +77,14 @@ class SearchActivity : AppCompatActivity() {
 
         val editViewTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                recyclerView.visibility = View.GONE
+                yourSearcherTextView.visibility = View.GONE
+                clearHistoryButton.visibility = View.GONE
+                searchEmptyPlaceholderImageView.visibility = View.GONE
+                searchEmptyPlaceholderTextView.visibility = View.GONE
+                searchErrorPlaceholderImageView.visibility = View.GONE
+                searchErrorPlaceholderTextView.visibility = View.GONE
+                searchUpdatePlaceholderButton.visibility = View.GONE
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -78,6 +98,8 @@ class SearchActivity : AppCompatActivity() {
                     tracks = ArrayList<Track>()
                     songsAdapter = TrackAdapter(tracks)
                     recyclerView.visibility = View.GONE
+                    yourSearcherTextView.visibility = View.GONE
+                    clearHistoryButton.visibility = View.GONE
                     recyclerView.adapter = songsAdapter
                 }
                 editableText = s.toString()
@@ -106,6 +128,8 @@ class SearchActivity : AppCompatActivity() {
                                 searchUpdatePlaceholderButton.visibility = View.GONE
                                 searchEmptyPlaceholderImageView.visibility = View.GONE
                                 searchEmptyPlaceholderTextView.visibility = View.GONE
+                                yourSearcherTextView.visibility = View.GONE
+                                clearHistoryButton.visibility = View.GONE
                                 recyclerView.adapter = songsAdapter
                             } else {
                                 recyclerView.visibility = View.GONE
@@ -114,6 +138,8 @@ class SearchActivity : AppCompatActivity() {
                                 searchErrorPlaceholderImageView.visibility = View.GONE
                                 searchErrorPlaceholderTextView.visibility = View.GONE
                                 searchUpdatePlaceholderButton.visibility = View.GONE
+                                yourSearcherTextView.visibility = View.GONE
+                                clearHistoryButton.visibility = View.GONE
                             }
                         } else {
                             searchEmptyPlaceholderImageView.visibility = View.GONE
@@ -121,6 +147,8 @@ class SearchActivity : AppCompatActivity() {
                             searchErrorPlaceholderImageView.visibility = View.VISIBLE
                             searchErrorPlaceholderTextView.visibility = View.VISIBLE
                             searchUpdatePlaceholderButton.visibility = View.VISIBLE
+                            yourSearcherTextView.visibility = View.GONE
+                            clearHistoryButton.visibility = View.GONE
                         }
                     }
 
@@ -131,11 +159,23 @@ class SearchActivity : AppCompatActivity() {
                         searchErrorPlaceholderImageView.visibility = View.VISIBLE
                         searchErrorPlaceholderTextView.visibility = View.VISIBLE
                         searchUpdatePlaceholderButton.visibility = View.VISIBLE
+                        yourSearcherTextView.visibility = View.GONE
+                        clearHistoryButton.visibility = View.GONE
                     }
 
                 })
             }
             false
+        }
+
+        clearHistoryButton.setOnClickListener{
+            (applicationContext as App).clearItemsFromSharedPrefs()
+            tracks = ArrayList<Track>()
+            songsAdapter = TrackAdapter(tracks)
+            recyclerView.adapter = songsAdapter
+            recyclerView.visibility = View.GONE
+            yourSearcherTextView.visibility = View.GONE
+            clearHistoryButton.visibility = View.GONE
         }
 
         clearImageView.setOnClickListener {
