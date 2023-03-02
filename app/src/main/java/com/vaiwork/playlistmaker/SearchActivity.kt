@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), OnItemClickedListener, OnClickedListener {
 
     companion object {
         const val SEARCH_EDIT_TEXT_CONTENT = "SEARCH_EDIT_TEXT_CONTENT"
@@ -39,15 +39,25 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchEditText: EditText
     private lateinit var clearImageView: ImageView
     private lateinit var toolbar: Toolbar
+    private lateinit var yourSearcherTextView: TextView
 
+    private lateinit var songsAdapter: TrackAdapter
     private var tracks = ArrayList<Track>()
+    private var thisSearchActivity = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        yourSearcherTextView = findViewById(R.id.activity_search_text_view_your_searches)
         recyclerView = findViewById(R.id.activity_search_search_recycler_view)
-        var songsAdapter: TrackAdapter
+        if (SearchHistory((applicationContext as App).sharedPrefs).getItemsFromSharedPrefs() != null) {
+            tracks = SearchHistory((applicationContext as App).sharedPrefs).getItemsFromSharedPrefs()!!
+            songsAdapter = TrackAdapter(tracks, this,this, true)
+            recyclerView.adapter = songsAdapter
+            recyclerView.visibility = View.VISIBLE
+            yourSearcherTextView.visibility = View.VISIBLE
+        }
 
         searchEmptyPlaceholderImageView = findViewById(R.id.activity_search_empty_placeholder_image_view)
         searchEmptyPlaceholderTextView = findViewById(R.id.activity_search_empty_placeholder_text_view)
@@ -65,6 +75,13 @@ class SearchActivity : AppCompatActivity() {
 
         val editViewTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                recyclerView.visibility = View.GONE
+                yourSearcherTextView.visibility = View.GONE
+                searchEmptyPlaceholderImageView.visibility = View.GONE
+                searchEmptyPlaceholderTextView.visibility = View.GONE
+                searchErrorPlaceholderImageView.visibility = View.GONE
+                searchErrorPlaceholderTextView.visibility = View.GONE
+                searchUpdatePlaceholderButton.visibility = View.GONE
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -75,9 +92,17 @@ class SearchActivity : AppCompatActivity() {
                 searchUpdatePlaceholderButton.visibility = View.GONE
                 clearImageView.visibility = clearButtonVisibility(s)
                 if (s.isNullOrEmpty()) {
-                    tracks = ArrayList<Track>()
-                    songsAdapter = TrackAdapter(tracks)
-                    recyclerView.visibility = View.GONE
+                    if (SearchHistory((applicationContext as App).sharedPrefs).getItemsFromSharedPrefs() != null) {
+                        tracks = SearchHistory((applicationContext as App).sharedPrefs).getItemsFromSharedPrefs()!!
+                        yourSearcherTextView.visibility = View.VISIBLE
+                        recyclerView.visibility = View.VISIBLE
+                        songsAdapter = TrackAdapter(tracks, thisSearchActivity, thisSearchActivity, true)
+                    } else {
+                        tracks = ArrayList()
+                        yourSearcherTextView.visibility = View.GONE
+                        recyclerView.visibility = View.GONE
+                        songsAdapter = TrackAdapter(tracks, thisSearchActivity, thisSearchActivity)
+                    }
                     recyclerView.adapter = songsAdapter
                 }
                 editableText = s.toString()
@@ -99,14 +124,16 @@ class SearchActivity : AppCompatActivity() {
                             val tracksJson = response.body()
                             if (tracksJson?.resultCount!! > 0) {
                                 tracks = tracksJson.results
-                                songsAdapter = TrackAdapter(tracks)
+                                songsAdapter = TrackAdapter(tracks, thisSearchActivity, thisSearchActivity)
+                                recyclerView.adapter = songsAdapter
                                 recyclerView.visibility = View.VISIBLE
                                 searchErrorPlaceholderImageView.visibility = View.GONE
                                 searchErrorPlaceholderTextView.visibility = View.GONE
                                 searchUpdatePlaceholderButton.visibility = View.GONE
                                 searchEmptyPlaceholderImageView.visibility = View.GONE
                                 searchEmptyPlaceholderTextView.visibility = View.GONE
-                                recyclerView.adapter = songsAdapter
+                                yourSearcherTextView.visibility = View.GONE
+
                             } else {
                                 recyclerView.visibility = View.GONE
                                 searchEmptyPlaceholderImageView.visibility = View.VISIBLE
@@ -114,6 +141,7 @@ class SearchActivity : AppCompatActivity() {
                                 searchErrorPlaceholderImageView.visibility = View.GONE
                                 searchErrorPlaceholderTextView.visibility = View.GONE
                                 searchUpdatePlaceholderButton.visibility = View.GONE
+                                yourSearcherTextView.visibility = View.GONE
                             }
                         } else {
                             searchEmptyPlaceholderImageView.visibility = View.GONE
@@ -121,6 +149,8 @@ class SearchActivity : AppCompatActivity() {
                             searchErrorPlaceholderImageView.visibility = View.VISIBLE
                             searchErrorPlaceholderTextView.visibility = View.VISIBLE
                             searchUpdatePlaceholderButton.visibility = View.VISIBLE
+                            yourSearcherTextView.visibility = View.GONE
+                            recyclerView.visibility = View.GONE
                         }
                     }
 
@@ -131,6 +161,7 @@ class SearchActivity : AppCompatActivity() {
                         searchErrorPlaceholderImageView.visibility = View.VISIBLE
                         searchErrorPlaceholderTextView.visibility = View.VISIBLE
                         searchUpdatePlaceholderButton.visibility = View.VISIBLE
+                        yourSearcherTextView.visibility = View.GONE
                     }
 
                 })
@@ -177,5 +208,18 @@ class SearchActivity : AppCompatActivity() {
         } else {
             View.VISIBLE
         }
+    }
+
+    override fun OnItemClicked(track: Track) {
+        SearchHistory((applicationContext as App).sharedPrefs).addItemToSharedPrefs(track)
+    }
+
+    override fun OnClicked() {
+        SearchHistory((applicationContext as App).sharedPrefs).clearItemsFromSharedPrefs()
+        tracks = ArrayList()
+        songsAdapter = TrackAdapter(tracks, this, this)
+        recyclerView.adapter = songsAdapter
+        recyclerView.visibility = View.GONE
+        yourSearcherTextView.visibility = View.GONE
     }
 }

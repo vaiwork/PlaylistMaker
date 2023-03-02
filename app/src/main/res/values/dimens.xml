@@ -45,7 +45,13 @@
     <dimen name="activity_search_text_view_margin_StartEnd">24dp</dimen>
     <dimen name="activity_search_text_view_margin_Top">16dp</dimen>
     <dimen name="activity_search_text_size">19sp</dimen>
-    <dimen name="activity_search_corner_radius_update_button">54dp</dimen>
-    <dimen name="activity_search_update_button_text_size">14sp</dimen>
-    <dimen name="activity_search_update_button_margin_top">24dp</dimen>
+    <dimen name="activity_search_corner_radius_button">54dp</dimen>
+    <dimen name="activity_search_button_text_size">14sp</dimen>
+    <dimen name="activity_search_button_margin_top">24dp</dimen>
+
+    <dimen name="activity_search_text_view_your_search_margin_bottom">8dp</dimen>
+    <dimen name="activity_search_text_view_your_search_padding_top">18dp</dimen>
+    <dimen name="activity_search_text_view_your_search_padding_bottom">12dp</dimen>
+    <dimen name="activity_search_text_view_your_search_padding_start">16dp</dimen>
+    <dimen name="activity_search_text_view_your_search_padding_end">16dp</dimen>
 </resources>
