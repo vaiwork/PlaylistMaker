@@ -1,6 +1,7 @@
 package com.vaiwork.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -212,6 +213,9 @@ class SearchActivity : AppCompatActivity(), OnItemClickedListener, OnClickedList
 
     override fun OnItemClicked(track: Track) {
         SearchHistory((applicationContext as App).sharedPrefs).addItemToSharedPrefs(track)
+
+        val audioPleerActivityIntent = Intent(this, AudioPleerActivity::class.java)
+        startActivity(audioPleerActivityIntent)
     }
 
     override fun OnClicked() {

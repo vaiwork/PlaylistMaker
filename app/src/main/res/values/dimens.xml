@@ -54,4 +54,12 @@
     <dimen name="activity_search_text_view_your_search_padding_bottom">12dp</dimen>
     <dimen name="activity_search_text_view_your_search_padding_start">16dp</dimen>
     <dimen name="activity_search_text_view_your_search_padding_end">16dp</dimen>
+
+    <dimen name="activity_pleer_toolbar_margin">4dp</dimen>
+    <dimen name="activity_pleer_text_view_track_name_text_size">22sp</dimen>
+    <dimen name="activity_pleer_text_view_track_name_margin_top">24dp</dimen>
+    <dimen name="activity_pleer_text_view_artist_name_margin_top">12dp</dimen>
+    <dimen name="activity_pleer_upper_text_view_text_size">14sp</dimen>
+    <dimen name="activity_pleer_static_dynamic_text_view_text_size">13sp</dimen>
+    <dimen name="activity_pleer_static_dynamic_text_view_margin_start_end">16dp</dimen>
 </resources>
