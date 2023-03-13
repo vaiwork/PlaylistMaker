@@ -62,4 +62,7 @@
     <dimen name="activity_pleer_upper_text_view_text_size">14sp</dimen>
     <dimen name="activity_pleer_static_dynamic_text_view_text_size">13sp</dimen>
     <dimen name="activity_pleer_static_dynamic_text_view_margin_start_end">16dp</dimen>
+    <dimen name="activity_pleer_album_image_corner_radius">8dp</dimen>
+    <dimen name="activity_pleer_vertical_guideline_constraint_guide_begin_end">24dp</dimen>
+    <dimen name="activity_pleer_album_image_margin_top">26dp</dimen>
 </resources>

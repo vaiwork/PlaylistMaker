@@ -6,6 +6,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -36,6 +38,7 @@ class AudioPleerActivity : AppCompatActivity() {
         albumImageView = findViewById(R.id.activity_pleer_album_image)
         Glide.with(this).load(clickedTrack.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg"))
             .placeholder(R.drawable.placeholder_album_image_light_mode)
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.activity_pleer_album_image_corner_radius))))
             .into(albumImageView)
 
         trackName = findViewById(R.id.activity_pleer_track_name)
