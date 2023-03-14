@@ -65,4 +65,9 @@
     <dimen name="activity_pleer_album_image_corner_radius">8dp</dimen>
     <dimen name="activity_pleer_vertical_guideline_constraint_guide_begin_end">24dp</dimen>
     <dimen name="activity_pleer_album_image_margin_top">26dp</dimen>
+    <dimen name="activity_pleer_static_dynamic_text_view_margin_top">9dp</dimen>
+    <dimen name="activity_pleer_static_dynamic_text_view_margin_bottom">8dp</dimen>
+    <dimen name="activity_pleer_button_image_view_margin_top">40dp</dimen>
+    <dimen name="activity_pleer_button_image_view_margin_bottom">12dp</dimen>
+    <dimen name="activity_pleer_text_view_spend_time_margin_bottom">30dp</dimen>
 </resources>

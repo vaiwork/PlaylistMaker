@@ -31,7 +31,6 @@ class AudioPleerActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.activity_pleer_back_toolbar)
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        // clicked item
         var tracks: ArrayList<Track> = SearchHistory((applicationContext as App).sharedPrefs).getItemsFromSharedPrefs()!!
         var clickedTrack = tracks[0]
 
