@@ -54,4 +54,20 @@
     <dimen name="activity_search_text_view_your_search_padding_bottom">12dp</dimen>
     <dimen name="activity_search_text_view_your_search_padding_start">16dp</dimen>
     <dimen name="activity_search_text_view_your_search_padding_end">16dp</dimen>
+
+    <dimen name="activity_pleer_toolbar_margin">4dp</dimen>
+    <dimen name="activity_pleer_text_view_track_name_text_size">22sp</dimen>
+    <dimen name="activity_pleer_text_view_track_name_margin_top">24dp</dimen>
+    <dimen name="activity_pleer_text_view_artist_name_margin_top">12dp</dimen>
+    <dimen name="activity_pleer_upper_text_view_text_size">14sp</dimen>
+    <dimen name="activity_pleer_static_dynamic_text_view_text_size">13sp</dimen>
+    <dimen name="activity_pleer_static_dynamic_text_view_margin_start_end">16dp</dimen>
+    <dimen name="activity_pleer_album_image_corner_radius">8dp</dimen>
+    <dimen name="activity_pleer_vertical_guideline_constraint_guide_begin_end">24dp</dimen>
+    <dimen name="activity_pleer_album_image_margin_top">26dp</dimen>
+    <dimen name="activity_pleer_static_dynamic_text_view_margin_top">9dp</dimen>
+    <dimen name="activity_pleer_static_dynamic_text_view_margin_bottom">8dp</dimen>
+    <dimen name="activity_pleer_button_image_view_margin_top">40dp</dimen>
+    <dimen name="activity_pleer_button_image_view_margin_bottom">12dp</dimen>
+    <dimen name="activity_pleer_text_view_spend_time_margin_bottom">30dp</dimen>
 </resources>

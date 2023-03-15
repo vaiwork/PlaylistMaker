@@ -22,4 +22,6 @@
 
     <color name="yp_light_gray">#E6E8EB</color>
     <color name="yp_text_gray">#AEAFB4</color>
+
+    <color name="yp_button_gray">#1A1B2240</color>
 </resources>

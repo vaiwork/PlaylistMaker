@@ -8,7 +8,7 @@
     <string name="sent_app">Поделиться приложением</string>
     <string name="write_support">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
-    <string id="url_android_developer" name="url_android_developer">https://practicum.yandex.ru/android-developer/</string>
+    <string name="url_android_developer" id="url_android_developer">https://practicum.yandex.ru/android-developer/</string>
     <string name="support_email">vaiwork@yandex.ru</string>
     <string name="support_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="support_body">Спасибо разработчикам и разработчицам за крутое приложение!</string>
@@ -18,4 +18,16 @@
     <string name="update">Обновить</string>
     <string name="clear_history">Очистить историю</string>
     <string name="your_search">Вы искали</string>
+    <string name="activity_pleer_hint_track_name">Название трека</string>
+    <string name="activity_pleer_hont_artist_name">Название артиста</string>
+    <string name="activity_pleer_hint_spend_time">00:30</string>
+    <string name="activity_pleer_text_track_time">Длительность</string>
+    <string name="activity_pleer_text_album">Альбом</string>
+    <string name="activity_pleer_hint_album">Название альбома</string>
+    <string name="activity_pleer_text_year">Год</string>
+    <string name="activity_pleer_hint_year">Год выхода трека</string>
+    <string name="activity_pleer_text_genre">Жанр</string>
+    <string name="activity_pleer_hint_genre">Название жанра</string>
+    <string name="activity_pleer_text_country">Страна</string>
+    <string name="activity_pleer_hint_country">Название страны</string>
 </resources>

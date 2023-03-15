@@ -145,4 +145,18 @@
         <item name="android:layout_marginTop">110dp</item>
         <item name="android:layout_gravity">center</item>
     </style>
+    <style name="activityPleerTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/yp_black</item>
+        <item name="colorPrimaryVariant">@android:color/white</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@android:color/white</item>
+        <item name="colorSecondaryVariant">@android:color/black</item>
+        <item name="colorOnSecondary">@color/yp_black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="navigationIcon">@drawable/back_dark_mode</item>
+    </style>
 </resources>
