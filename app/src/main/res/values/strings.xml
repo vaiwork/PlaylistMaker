@@ -20,7 +20,7 @@
     <string name="your_search">Вы искали</string>
     <string name="activity_pleer_hint_track_name">Название трека</string>
     <string name="activity_pleer_hont_artist_name">Название артиста</string>
-    <string name="activity_pleer_hint_spend_time">00:30</string>
+    <string name="activity_pleer_hint_spend_time">00:00</string>
     <string name="activity_pleer_text_track_time">Длительность</string>
     <string name="activity_pleer_text_album">Альбом</string>
     <string name="activity_pleer_hint_album">Название альбома</string>
