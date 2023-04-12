@@ -1,41 +1,39 @@
-package com.vaiwork.playlistmaker
+package com.vaiwork.playlistmaker.presentation.AudioPleer
 
-import android.content.SharedPreferences
-import android.media.MediaPlayer
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+
 import android.widget.ImageView
 import android.widget.TextView
+
 import androidx.appcompat.widget.Toolbar
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
+import androidx.appcompat.app.AppCompatActivity
+
 import java.text.SimpleDateFormat
+
 import java.util.*
+
 import kotlin.collections.ArrayList
 
-class AudioPleerActivity : AppCompatActivity() {
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-        private const val AUDIO_PLEER_DELAY = 500L
-    }
+import com.vaiwork.playlistmaker.App
+import com.vaiwork.playlistmaker.R
+import com.vaiwork.playlistmaker.SearchHistory
+import com.vaiwork.playlistmaker.Track
+import com.vaiwork.playlistmaker.data.MediaPlayerInteraction
+import com.vaiwork.playlistmaker.data.Utils
 
-    lateinit var sharedPrefs: SharedPreferences
+class AudioPleerActivity : AppCompatActivity(), MediaPlayerInteraction {
 
-    private var mediaPlayer = MediaPlayer()
+    private val mediaPlayer = com.vaiwork.playlistmaker.data.MediaPlayer()
 
     private val audioPleerHandler = Handler(Looper.getMainLooper())
     private val audioPleerRunnable = Runnable {
         spendTimeControl()
     }
-
-    private var playerState = STATE_DEFAULT
 
     private lateinit var albumImageView: ImageView
     private lateinit var timeTextView: TextView
@@ -53,22 +51,27 @@ class AudioPleerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_pleer)
 
-        sharedPrefs = getSharedPreferences(App.SETTINGS, MODE_PRIVATE)
-
         toolbar = findViewById(R.id.activity_pleer_back_toolbar)
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        val tracks: ArrayList<Track> = SearchHistory((applicationContext as App).sharedPrefs).getItemsFromSharedPrefs()!!
+        val tracks: ArrayList<Track> = SearchHistory((applicationContext as App).sharedPrefs)
+            .getItemsFromSharedPrefs()!!
         val clickedTrack = tracks[0]
 
         playImageView = findViewById(R.id.activity_pleer_play_image_view)
         preparePlayer(clickedTrack)
 
         albumImageView = findViewById(R.id.activity_pleer_album_image)
-        Glide.with(this).load(clickedTrack.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg"))
-            .placeholder(R.drawable.placeholder_album_image_light_mode)
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.activity_pleer_album_image_corner_radius))))
-            .into(albumImageView)
+
+        Utils().setImageWithPlaceholder(this, albumImageView,
+            clickedTrack.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg"),
+            R.drawable.placeholder_album_image_light_mode,
+            RequestOptions.bitmapTransform(
+                RoundedCorners(
+                    resources.getDimensionPixelSize(R.dimen.activity_pleer_album_image_corner_radius)
+                )
+            )
+        )
 
         trackName = findViewById(R.id.activity_pleer_track_name)
         trackName.text = clickedTrack.trackName
@@ -77,7 +80,8 @@ class AudioPleerActivity : AppCompatActivity() {
         artistName.text = clickedTrack.artistName
 
         timeTextView = findViewById(R.id.activity_pleer_time)
-        timeTextView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(clickedTrack.trackTime)
+        timeTextView.text = SimpleDateFormat("mm:ss", Locale.getDefault())
+            .format(clickedTrack.trackTime)
 
         albumTextView = findViewById(R.id.activity_pleer_album)
         albumTextView.text = clickedTrack.collectionName
@@ -98,61 +102,71 @@ class AudioPleerActivity : AppCompatActivity() {
         }
     }
 
-    private fun startPlayer() {
-        mediaPlayer.start()
-        if (sharedPrefs.getBoolean(App.DARK_MODE, false)) {
+    override fun startPlayer() {
+        mediaPlayer.mediaPlayer.start()
+
+        if (Utils().getBooleanKeySharedPref(applicationContext as App,
+                App.SETTINGS,
+                MODE_PRIVATE,
+                App.DARK_MODE,
+                false)) {
             playImageView.setImageResource(R.drawable.pause_night_mode_button)
         } else {
             playImageView.setImageResource(R.drawable.pause_light_mode_button)
         }
-        playerState = STATE_PLAYING
+
+        mediaPlayer.playerState = com.vaiwork.playlistmaker.data.MediaPlayer.STATE_PLAYING
         spendTimeControl()
     }
 
-    private fun pausePlayer() {
+    override fun pausePlayer() {
         audioPleerHandler.removeCallbacks(audioPleerRunnable)
-        mediaPlayer.pause()
+        mediaPlayer.mediaPlayer.pause()
         playImageView.setImageResource(R.drawable.play_light_mode_button)
-        playerState = STATE_PAUSED
+        mediaPlayer.playerState = com.vaiwork.playlistmaker.data.MediaPlayer.STATE_PAUSED
     }
 
-    private fun preparePlayer(clickedTrack: Track) {
-        mediaPlayer.setDataSource(clickedTrack.previewUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
+    override fun preparePlayer(clickedTrack: Track) {
+        mediaPlayer.mediaPlayer.setDataSource(clickedTrack.previewUrl)
+        mediaPlayer.mediaPlayer.prepareAsync()
+        mediaPlayer.mediaPlayer.setOnPreparedListener {
             playImageView.isEnabled = true
-            playerState = STATE_PREPARED
+            mediaPlayer.playerState = com.vaiwork.playlistmaker.data.MediaPlayer.STATE_PREPARED
         }
-        mediaPlayer.setOnCompletionListener {
+        mediaPlayer.mediaPlayer.setOnCompletionListener {
             spendTimeTextView.text = "00:00"
             playImageView.setImageResource(R.drawable.play_light_mode_button)
-            playerState = STATE_PREPARED
+            mediaPlayer.playerState = com.vaiwork.playlistmaker.data.MediaPlayer.STATE_PREPARED
         }
     }
 
-    private fun playbackControl() {
-        when(playerState) {
-            STATE_PLAYING -> {
+    override fun playbackControl() {
+        when(mediaPlayer.playerState) {
+            com.vaiwork.playlistmaker.data.MediaPlayer.STATE_PLAYING -> {
                 pausePlayer()
             }
-            STATE_PREPARED, STATE_PAUSED -> {
+            com.vaiwork.playlistmaker.data.MediaPlayer.STATE_PREPARED,
+            com.vaiwork.playlistmaker.data.MediaPlayer.STATE_PAUSED -> {
                 startPlayer()
             }
         }
     }
 
-    private fun spendTimeControl() {
-        if (STATE_PLAYING == playerState) {
-            audioPleerHandler.postDelayed(audioPleerRunnable, AUDIO_PLEER_DELAY)
+    override fun spendTimeControl() {
+        if (com.vaiwork.playlistmaker.data.MediaPlayer.STATE_PLAYING == mediaPlayer.playerState) {
+            audioPleerHandler.postDelayed(audioPleerRunnable,
+                com.vaiwork.playlistmaker.data.MediaPlayer.AUDIO_PLEER_DELAY)
             spendTimeTextView.text =
-                SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+                SimpleDateFormat("mm:ss", Locale.getDefault()).format(
+                    mediaPlayer.mediaPlayer.currentPosition
+                )
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         audioPleerHandler.removeCallbacks(audioPleerRunnable)
-        mediaPlayer.release()
+        mediaPlayer.mediaPlayer.release()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -160,8 +174,8 @@ class AudioPleerActivity : AppCompatActivity() {
         spendTimeTextView.text = "00:00"
         playImageView.setImageResource(R.drawable.play_light_mode_button)
         audioPleerHandler.removeCallbacks(audioPleerRunnable)
-        mediaPlayer.stop()
-        mediaPlayer.prepareAsync()
-        playerState = STATE_PREPARED
+        mediaPlayer.mediaPlayer.stop()
+        mediaPlayer.mediaPlayer.prepareAsync()
+        mediaPlayer.playerState = com.vaiwork.playlistmaker.data.MediaPlayer.STATE_PREPARED
     }
 }
