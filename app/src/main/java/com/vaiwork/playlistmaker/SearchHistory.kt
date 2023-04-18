@@ -3,6 +3,8 @@ package com.vaiwork.playlistmaker
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.content.SharedPreferences
+import com.vaiwork.playlistmaker.domain.entities.Track
+import com.vaiwork.playlistmaker.presentation.ui.app.App
 
 
 class SearchHistory (private var sharedPrefs: SharedPreferences) {
