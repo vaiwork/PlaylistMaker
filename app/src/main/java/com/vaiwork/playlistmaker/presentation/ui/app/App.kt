@@ -2,7 +2,6 @@ package com.vaiwork.playlistmaker.presentation.ui.app
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-
 import com.vaiwork.playlistmaker.domain.usecases.SharedPreferencesAPIInteractor
 
 class App: Application() {

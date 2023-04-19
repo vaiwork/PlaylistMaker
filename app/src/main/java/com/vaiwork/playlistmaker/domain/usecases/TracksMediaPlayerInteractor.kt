@@ -1,9 +1,8 @@
 package com.vaiwork.playlistmaker.domain.usecases
 
-import android.media.MediaPlayer
 import com.vaiwork.playlistmaker.data.TracksMediaPlayer
 
-class TracksMediaPlayerInteractor {
+class TracksMediaPlayerInteractor () {
 
     private val tracksMediaPlayer: TracksMediaPlayer = TracksMediaPlayer()
 
@@ -22,12 +21,12 @@ class TracksMediaPlayerInteractor {
         tracksMediaPlayer.prepareAsync()
     }
 
-    fun OnPreparedListener(listener: MediaPlayer.OnPreparedListener) {
-        tracksMediaPlayer.OnPreparedListener(listener)
+    fun onPreparedListener(listener: (Any) -> Unit) {
+        tracksMediaPlayer.onPreparedListener(listener)
     }
 
-    fun OnCompletionListener(listener: MediaPlayer.OnCompletionListener) {
-        tracksMediaPlayer.OnCompletionListener(listener)
+    fun onCompletionListener(listener: (Any) -> Unit) {
+        tracksMediaPlayer.onCompletionListener(listener)
     }
 
     fun release() {
@@ -67,6 +66,6 @@ class TracksMediaPlayerInteractor {
     }
 
     fun getAudioPleerDelay(): Long {
-        return TracksMediaPlayer.AUDIO_PLEER_DELAY
+        return TracksMediaPlayer.AUDIO_PLAYER_DELAY
     }
 }

@@ -1,7 +1,6 @@
 package com.vaiwork.playlistmaker.data
 
 import android.content.Context
-
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.vaiwork.playlistmaker.data.repository.SharedPreferencesAPI
@@ -37,6 +36,10 @@ class SharedPreferencesAPIImp(
         sharedPreferenceKey: String,
         defaultValue: Boolean
     ) {
-        context.getSharedPreferences(sharedPreferenceName, sharedPreferenceMode).edit().putBoolean(sharedPreferenceKey, defaultValue).apply()
+        context
+            .getSharedPreferences(sharedPreferenceName, sharedPreferenceMode)
+            .edit()
+            .putBoolean(sharedPreferenceKey, defaultValue)
+            .apply()
     }
 }

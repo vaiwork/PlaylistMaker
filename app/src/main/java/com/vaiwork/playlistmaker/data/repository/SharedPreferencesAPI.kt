@@ -9,8 +9,8 @@ interface SharedPreferencesAPI {
                                 defaultValue: Boolean): Boolean
 
     fun getTracksSharedPref(sharedPreferenceName: String,
-                 sharedPreferenceMode: Int,
-                 sharedPreferenceKey: String): ArrayList<Track>
+                            sharedPreferenceMode: Int,
+                            sharedPreferenceKey: String): ArrayList<Track>
 
     fun setBooleanKeySharedPref(sharedPreferenceName: String,
                                 sharedPreferenceMode: Int,

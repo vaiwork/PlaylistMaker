@@ -23,11 +23,11 @@ class AudioPleerPresenter(
     init {
         tracksMediaPlayerInteractor.setDataSource(dataSource)
         tracksMediaPlayerInteractor.prepareAsync()
-        tracksMediaPlayerInteractor.OnPreparedListener {
+        tracksMediaPlayerInteractor.onPreparedListener {
             enablePlayButton()
             tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
         }
-        tracksMediaPlayerInteractor.OnCompletionListener{
+        tracksMediaPlayerInteractor.onCompletionListener{
             setDefaultSpendTimeTextView()
             setPlayButton()
             tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())

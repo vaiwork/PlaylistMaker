@@ -9,10 +9,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import java.text.SimpleDateFormat
 import java.util.*
-
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.entities.Track
 import com.vaiwork.playlistmaker.domain.usecases.SharedPreferencesAPIInteractor
