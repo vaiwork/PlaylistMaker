@@ -1,8 +1,8 @@
-package com.vaiwork.playlistmaker
+package com.vaiwork.playlistmaker.presentation.ui.app
 
 import android.app.Application
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import com.vaiwork.playlistmaker.domain.usecases.SharedPreferencesAPIInteractor
 
 class App: Application() {
 
@@ -12,18 +12,16 @@ class App: Application() {
         const val HISTORY_TRACKS = "history_tracks"
     }
 
-    lateinit var sharedPrefs: SharedPreferences
     var darkTheme = false
 
     override fun onCreate() {
-        sharedPrefs = getSharedPreferences(SETTINGS, MODE_PRIVATE)
-        darkTheme = sharedPrefs.getBoolean(DARK_MODE, false)
-        switchTheme(darkTheme)
         super.onCreate()
+        darkTheme = SharedPreferencesAPIInteractor(this).getBooleanKeySharedPref(SETTINGS, MODE_PRIVATE, DARK_MODE, false)
+        switchTheme(darkTheme)
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
-        sharedPrefs.edit().putBoolean(DARK_MODE, darkThemeEnabled).apply()
+        SharedPreferencesAPIInteractor(this).setBooleanKeySharedPref(SETTINGS, MODE_PRIVATE, DARK_MODE, darkThemeEnabled)
         darkTheme = darkThemeEnabled
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {

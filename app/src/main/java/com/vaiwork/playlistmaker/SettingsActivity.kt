@@ -6,6 +6,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.vaiwork.playlistmaker.presentation.ui.app.App
 
 class SettingsActivity : AppCompatActivity() {
 

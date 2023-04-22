@@ -18,6 +18,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
+import com.vaiwork.playlistmaker.domain.entities.Track
+import com.vaiwork.playlistmaker.presentation.ui.AudioPleer.AudioPleerActivity
+import com.vaiwork.playlistmaker.presentation.ui.app.App
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -62,8 +65,8 @@ class SearchActivity : AppCompatActivity(), OnItemClickedListener, OnClickedList
 
         yourSearcherTextView = findViewById(R.id.activity_search_text_view_your_searches)
         recyclerView = findViewById(R.id.activity_search_search_recycler_view)
-        if (SearchHistory((applicationContext as App).sharedPrefs).getItemsFromSharedPrefs() != null) {
-            tracks = SearchHistory((applicationContext as App).sharedPrefs).getItemsFromSharedPrefs()!!
+        if (SearchHistory((applicationContext as App).getSharedPreferences(App.SETTINGS, MODE_PRIVATE)).getItemsFromSharedPrefs() != null) {
+            tracks = SearchHistory((applicationContext as App).getSharedPreferences(App.SETTINGS, MODE_PRIVATE)).getItemsFromSharedPrefs()!!
             songsAdapter = TrackAdapter(tracks, this,this, true)
             recyclerView.adapter = songsAdapter
             recyclerView.visibility = View.VISIBLE
@@ -105,8 +108,8 @@ class SearchActivity : AppCompatActivity(), OnItemClickedListener, OnClickedList
                 searchUpdatePlaceholderButton.visibility = View.GONE
                 clearImageView.visibility = clearButtonVisibility(s)
                 if (s.isNullOrEmpty()) {
-                    if (SearchHistory((applicationContext as App).sharedPrefs).getItemsFromSharedPrefs() != null) {
-                        tracks = SearchHistory((applicationContext as App).sharedPrefs).getItemsFromSharedPrefs()!!
+                    if (SearchHistory((applicationContext as App).getSharedPreferences(App.SETTINGS, MODE_PRIVATE)).getItemsFromSharedPrefs() != null) {
+                        tracks = SearchHistory((applicationContext as App).getSharedPreferences(App.SETTINGS, MODE_PRIVATE)).getItemsFromSharedPrefs()!!
                         yourSearcherTextView.visibility = View.VISIBLE
                         recyclerView.visibility = View.VISIBLE
                         songsAdapter = TrackAdapter(tracks, thisSearchActivity, thisSearchActivity, true)
@@ -234,7 +237,7 @@ class SearchActivity : AppCompatActivity(), OnItemClickedListener, OnClickedList
 
     override fun OnItemClicked(track: Track) {
         if (clickDebounce()) {
-            SearchHistory((applicationContext as App).sharedPrefs).addItemToSharedPrefs(track)
+            SearchHistory((applicationContext as App).getSharedPreferences(App.SETTINGS, MODE_PRIVATE)).addItemToSharedPrefs(track)
 
             val audioPleerActivityIntent = Intent(this, AudioPleerActivity::class.java)
             startActivity(audioPleerActivityIntent)
@@ -242,7 +245,7 @@ class SearchActivity : AppCompatActivity(), OnItemClickedListener, OnClickedList
     }
 
     override fun OnClicked() {
-        SearchHistory((applicationContext as App).sharedPrefs).clearItemsFromSharedPrefs()
+        SearchHistory((applicationContext as App).getSharedPreferences(App.SETTINGS, MODE_PRIVATE)).clearItemsFromSharedPrefs()
         tracks = ArrayList()
         songsAdapter = TrackAdapter(tracks, this, this)
         recyclerView.adapter = songsAdapter
