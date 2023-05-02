@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker
+package com.vaiwork.playlistmaker.ui.search
 
 import android.content.Context
 import android.content.Intent
@@ -18,6 +18,13 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
+import com.vaiwork.playlistmaker.App
+import com.vaiwork.playlistmaker.ui.audioplayer.AudioPleerActivity
+import com.vaiwork.playlistmaker.OnItemClickedListener
+import com.vaiwork.playlistmaker.R
+import com.vaiwork.playlistmaker.data.dto.TrackSearchResponse
+import com.vaiwork.playlistmaker.data.network.iTunesSearchApi
+import com.vaiwork.playlistmaker.domain.models.Track
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -150,10 +157,10 @@ class SearchActivity : AppCompatActivity(), OnItemClickedListener, OnClickedList
 
     private fun searchRequest() {
         val varITunesSearchApi = retrofit.create<iTunesSearchApi>()
-        varITunesSearchApi.getTracks(editableText!!).enqueue(object : Callback<TrackResponse> {
+        varITunesSearchApi.getTracks(editableText!!).enqueue(object : Callback<TrackSearchResponse> {
             override fun onResponse(
-                call: Call<TrackResponse>,
-                response: Response<TrackResponse>
+                call: Call<TrackSearchResponse>,
+                response: Response<TrackSearchResponse>
             ) {
                 progressBar.visibility = View.GONE
                 if (response.isSuccessful) {
@@ -191,7 +198,7 @@ class SearchActivity : AppCompatActivity(), OnItemClickedListener, OnClickedList
                 }
             }
 
-            override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+            override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
                 t.printStackTrace()
                 progressBar.visibility = View.GONE
                 searchEmptyPlaceholderImageView.visibility = View.GONE

@@ -1,9 +1,12 @@
-package com.vaiwork.playlistmaker
+package com.vaiwork.playlistmaker.ui.search
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.vaiwork.playlistmaker.OnItemClickedListener
+import com.vaiwork.playlistmaker.R
+import com.vaiwork.playlistmaker.domain.models.Track
 
 
 class TrackAdapter (

@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker
+package com.vaiwork.playlistmaker.ui.search
 
 interface OnClickedListener {
     fun OnClicked()

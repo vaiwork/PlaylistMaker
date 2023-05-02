@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker
+package com.vaiwork.playlistmaker.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,8 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.vaiwork.playlistmaker.App
+import com.vaiwork.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -52,7 +54,9 @@ class SettingsActivity : AppCompatActivity() {
         // action for user agreement image view
         userAgreementImageView = findViewById(R.id.id_user_agreement)
         userAgreementImageView.setOnClickListener{
-            val userAgreementImageViewIntent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(getString(R.string.url_user_agreement)))
+            val userAgreementImageViewIntent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(getString(
+                R.string.url_user_agreement
+            )))
             startActivity(userAgreementImageViewIntent)
         }
     }

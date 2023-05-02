@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker
+package com.vaiwork.playlistmaker.domain.models
 
 import com.google.gson.annotations.SerializedName
 import java.util.*

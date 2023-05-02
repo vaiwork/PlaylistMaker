@@ -1,10 +1,14 @@
-package com.vaiwork.playlistmaker
+package com.vaiwork.playlistmaker.ui.main
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import com.vaiwork.playlistmaker.ui.media.MediaActivity
+import com.vaiwork.playlistmaker.R
+import com.vaiwork.playlistmaker.ui.settings.SettingsActivity
+import com.vaiwork.playlistmaker.ui.search.SearchActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

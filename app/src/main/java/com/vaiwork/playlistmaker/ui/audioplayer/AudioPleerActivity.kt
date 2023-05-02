@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker
+package com.vaiwork.playlistmaker.ui.audioplayer
 
 import android.content.SharedPreferences
 import android.media.MediaPlayer
@@ -12,6 +12,10 @@ import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.vaiwork.playlistmaker.App
+import com.vaiwork.playlistmaker.R
+import com.vaiwork.playlistmaker.ui.search.SearchHistory
+import com.vaiwork.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList

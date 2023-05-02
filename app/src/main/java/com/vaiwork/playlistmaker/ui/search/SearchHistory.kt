@@ -1,8 +1,10 @@
-package com.vaiwork.playlistmaker
+package com.vaiwork.playlistmaker.ui.search
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.content.SharedPreferences
+import com.vaiwork.playlistmaker.App
+import com.vaiwork.playlistmaker.domain.models.Track
 
 
 class SearchHistory (private var sharedPrefs: SharedPreferences) {
