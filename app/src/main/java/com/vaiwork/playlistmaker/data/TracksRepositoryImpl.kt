@@ -1,8 +1,8 @@
 package com.vaiwork.playlistmaker.data
 
+import com.vaiwork.playlistmaker.Resource
 import com.vaiwork.playlistmaker.data.dto.TrackSearchRequest
 import com.vaiwork.playlistmaker.data.dto.TrackSearchResponse
-import com.vaiwork.playlistmaker.domain.api.Resource
 import com.vaiwork.playlistmaker.domain.api.TracksRepository
 import com.vaiwork.playlistmaker.domain.models.Track
 
@@ -12,7 +12,7 @@ class TracksRepositoryImpl(
 
     override fun searchTracks(expression: String): Resource<ArrayList<Track>> {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
-        var result: ArrayList<Track> = arrayListOf()
+        val result: ArrayList<Track> = arrayListOf()
         when (response.resultCode) {
             200 -> {
                 for (it in (response as TrackSearchResponse).results) {
