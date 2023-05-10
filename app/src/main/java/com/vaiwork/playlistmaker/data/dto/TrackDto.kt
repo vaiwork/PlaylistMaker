@@ -1,13 +1,15 @@
 package com.vaiwork.playlistmaker.data.dto
 
-data class TrackDto (val trackId: Int,
-                  val trackName: String,
-                  val artistName: String,
-                  var trackTime: Long,
-                  val artworkUrl100: String,
-                  val collectionName: String,
-                  val releaseDate: String,
-                  val primaryGenreName: String,
-                  val country: String,
-                  val previewUrl: String
+import com.google.gson.annotations.SerializedName
+
+data class TrackDto (@SerializedName("trackId") val trackId: Int,
+                  @SerializedName("trackName") val trackName: String,
+                  @SerializedName("artistName") val artistName: String,
+                  @SerializedName("trackTimeMillis") var trackTime: Long,
+                  @SerializedName("artworkUrl100") val artworkUrl100: String,
+                  @SerializedName("collectionName") val collectionName: String,
+                  @SerializedName("releaseDate") val releaseDate: String,
+                  @SerializedName("primaryGenreName") val primaryGenreName: String,
+                  @SerializedName("country") val country: String,
+                  @SerializedName("previewUrl") val previewUrl: String
 )

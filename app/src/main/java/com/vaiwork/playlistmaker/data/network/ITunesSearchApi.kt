@@ -8,6 +8,6 @@ import retrofit2.http.Query
 interface iTunesSearchApi {
 
     @GET("search")
-    fun getTracks(@Query("term") text: String): Call<TrackSearchResponse>
+    fun searchTracks(@Query("term") text: String): Call<TrackSearchResponse>
 
 }

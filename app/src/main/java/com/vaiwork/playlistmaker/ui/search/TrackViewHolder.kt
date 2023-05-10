@@ -5,11 +5,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.vaiwork.playlistmaker.OnItemClickedListener
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class TrackViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
     private val songImage: ImageView = itemView.findViewById(R.id.song_view_song_image_view)
@@ -17,7 +16,7 @@ class TrackViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
     private val songExecutorName: TextView = itemView.findViewById(R.id.song_view_song_executor_name_text_view)
     private val songTime: TextView = itemView.findViewById(R.id.song_view_song_time_text_view)
 
-    fun bind(songTrack: Track, itemClickListener: OnItemClickedListener) {
+    fun bind(songTrack: Track, itemClickListener: TrackAdapter.TrackClickListener) {
         Glide.with(itemView)
             .load(songTrack.artworkUrl100)
             .placeholder(R.drawable.ic_round_music_video_24)
@@ -27,7 +26,7 @@ class TrackViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
         songTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(songTrack.trackTime)
 
         itemView.setOnClickListener {
-            itemClickListener.OnItemClicked(songTrack)
+            itemClickListener.onTrackClick(songTrack)
         }
     }
 }
