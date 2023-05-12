@@ -33,12 +33,12 @@ class SharedPreferencesClient(
         sharedPreferenceName: String,
         sharedPreferenceMode: Int,
         sharedPreferenceKey: String,
-        defaultValue: Boolean
+        value: Boolean
     ) {
         activity.applicationContext
             .getSharedPreferences(sharedPreferenceName, sharedPreferenceMode)
             .edit()
-            .putBoolean(sharedPreferenceKey, defaultValue)
+            .putBoolean(sharedPreferenceKey, value)
             .apply()
     }
 

@@ -1,6 +1,6 @@
 package com.vaiwork.playlistmaker.data
 
-import com.vaiwork.playlistmaker.Resource
+import com.vaiwork.playlistmaker.util.Resource
 import com.vaiwork.playlistmaker.data.dto.TrackSearchRequest
 import com.vaiwork.playlistmaker.data.dto.TrackSearchResponse
 import com.vaiwork.playlistmaker.domain.api.TracksRepository

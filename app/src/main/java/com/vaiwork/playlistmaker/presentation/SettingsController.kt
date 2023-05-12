@@ -1,13 +1,16 @@
 package com.vaiwork.playlistmaker.presentation
 
 import android.app.Activity
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.net.Uri
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.vaiwork.playlistmaker.App
+import com.vaiwork.playlistmaker.util.App
 import com.vaiwork.playlistmaker.R
+import com.vaiwork.playlistmaker.util.Creator
 
 class SettingsController(
     private val activity: Activity
@@ -18,6 +21,8 @@ class SettingsController(
     private lateinit var writeSupportImageView: ImageView
     private lateinit var userAgreementImageView: ImageView
 
+    private val sharedPreferenceInteractor = Creator.provideSharedPreferenceInteractor(activity)
+
     fun onCreate() {
         toolbar = activity.findViewById(R.id.settings_toolbar)
         switchDarkMode = activity.findViewById(R.id.id_switch_dark_mode)
@@ -27,9 +32,16 @@ class SettingsController(
 
         toolbar.setNavigationOnClickListener { activity.onBackPressed() }
 
-        switchDarkMode.isChecked = (activity.applicationContext as App).darkTheme
+        switchDarkMode.isChecked = sharedPreferenceInteractor.getBoolean(App.SETTINGS, MODE_PRIVATE, App.DARK_MODE, false)
         switchDarkMode.setOnCheckedChangeListener { switcher, checked ->
-            (activity.applicationContext as App).switchTheme(checked)
+            sharedPreferenceInteractor.switchTheme(App.SETTINGS, MODE_PRIVATE, App.DARK_MODE, checked)
+            AppCompatDelegate.setDefaultNightMode(
+                if (checked) {
+                    AppCompatDelegate.MODE_NIGHT_YES
+                } else {
+                    AppCompatDelegate.MODE_NIGHT_NO
+                }
+            )
         }
 
         sendImageView.setOnClickListener {

@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker
+package com.vaiwork.playlistmaker.util
 
 import android.app.Activity
 import android.content.Context

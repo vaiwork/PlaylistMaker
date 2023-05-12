@@ -2,7 +2,7 @@ package com.vaiwork.playlistmaker.ui.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.vaiwork.playlistmaker.Creator
+import com.vaiwork.playlistmaker.util.Creator
 import com.vaiwork.playlistmaker.R
 
 class MainActivity : AppCompatActivity() {

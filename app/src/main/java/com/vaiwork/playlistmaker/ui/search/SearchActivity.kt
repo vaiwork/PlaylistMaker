@@ -3,7 +3,7 @@ package com.vaiwork.playlistmaker.ui.search
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.vaiwork.playlistmaker.Creator
+import com.vaiwork.playlistmaker.util.Creator
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.ui.audioplayer.AudioPleerActivity
 

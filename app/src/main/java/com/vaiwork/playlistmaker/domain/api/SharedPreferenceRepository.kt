@@ -10,4 +10,6 @@ interface SharedPreferenceRepository {
     fun clear(sharedPreferenceName: String, sharedPreferenceMode: Int, sharedPreferenceKey: String)
 
     fun getBoolean(sharedPreferenceName: String, sharedPreferenceMode: Int, sharedPreferenceKey: String, defaultValue: Boolean): Boolean
+
+    fun switchTheme(sharedPreferenceName: String, sharedPreferenceMode: Int, sharedPreferenceKey: String, value: Boolean)
 }

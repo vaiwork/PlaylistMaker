@@ -19,8 +19,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
-import com.vaiwork.playlistmaker.App
-import com.vaiwork.playlistmaker.Creator
+import com.vaiwork.playlistmaker.util.App
+import com.vaiwork.playlistmaker.util.Creator
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.api.TracksInteractor
 import com.vaiwork.playlistmaker.domain.models.Track

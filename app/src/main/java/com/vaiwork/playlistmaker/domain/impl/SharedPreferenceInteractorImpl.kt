@@ -27,4 +27,13 @@ class SharedPreferenceInteractorImpl(
     ): Boolean {
         return sharedPreferenceRepository.getBoolean(sharedPreferenceName, sharedPreferenceMode, sharedPreferenceKey, defaultValue)
     }
+
+    override fun switchTheme(
+        sharedPreferenceName: String,
+        sharedPreferenceMode: Int,
+        sharedPreferenceKey: String,
+        value: Boolean
+    ) {
+        sharedPreferenceRepository.switchTheme(sharedPreferenceName, sharedPreferenceMode, sharedPreferenceKey, value)
+    }
 }

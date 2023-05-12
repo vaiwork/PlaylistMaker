@@ -15,7 +15,7 @@ interface DBClient {
     fun setBooleanKey(sharedPreferenceName: String,
                       sharedPreferenceMode: Int,
                       sharedPreferenceKey: String,
-                      defaultValue: Boolean)
+                      value: Boolean)
 
     fun putString(sharedPreferenceName: String,
                   sharedPreferenceMode: Int,

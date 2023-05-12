@@ -1,6 +1,6 @@
 package com.vaiwork.playlistmaker.domain.impl
 
-import com.vaiwork.playlistmaker.Resource
+import com.vaiwork.playlistmaker.util.Resource
 import com.vaiwork.playlistmaker.domain.api.TracksInteractor
 import com.vaiwork.playlistmaker.domain.api.TracksRepository
 

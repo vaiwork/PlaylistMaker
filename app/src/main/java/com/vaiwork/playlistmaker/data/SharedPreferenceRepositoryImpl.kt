@@ -71,4 +71,13 @@ class SharedPreferenceRepositoryImpl(
     ): Boolean {
         return dbClient.getBooleanKey(sharedPreferenceName, sharedPreferenceMode, sharedPreferenceKey, defaultValue)
     }
+
+    override fun switchTheme(
+        sharedPreferenceName: String,
+        sharedPreferenceMode: Int,
+        sharedPreferenceKey: String,
+        value: Boolean
+    ) {
+        dbClient.setBooleanKey(sharedPreferenceName, sharedPreferenceMode, sharedPreferenceKey, value)
+    }
 }
