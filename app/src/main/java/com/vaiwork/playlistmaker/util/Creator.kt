@@ -20,7 +20,8 @@ import com.vaiwork.playlistmaker.domain.impl.TracksMediaPlayerInteractorImpl
 import com.vaiwork.playlistmaker.presentation.MainController
 import com.vaiwork.playlistmaker.presentation.SettingsController
 import com.vaiwork.playlistmaker.presentation.TracksMediaPlayerController
-import com.vaiwork.playlistmaker.presentation.TracksSearchController
+import com.vaiwork.playlistmaker.presentation.trackssearch.TracksSearchPresenter
+import com.vaiwork.playlistmaker.presentation.trackssearch.TracksSearchView
 import com.vaiwork.playlistmaker.ui.search.TrackAdapter
 
 object Creator {
@@ -32,16 +33,16 @@ object Creator {
         return TracksInteractorImpl(getTracksRepository(context))
     }
 
-    fun provideTracksSearchController(activity: Activity, adapter: TrackAdapter): TracksSearchController {
-        return TracksSearchController(activity, adapter)
+    fun provideTracksSearchPresenter(tracksSearchView: TracksSearchView, context: Context): TracksSearchPresenter {
+        return TracksSearchPresenter(tracksSearchView, context)
     }
 
-    private fun getSharedPreferenceRepository(activity: Activity): SharedPreferenceRepository {
-        return SharedPreferenceRepositoryImpl(SharedPreferencesClient(activity))
+    private fun getSharedPreferenceRepository(context: Context): SharedPreferenceRepository {
+        return SharedPreferenceRepositoryImpl(SharedPreferencesClient(context))
     }
 
-    fun provideSharedPreferenceInteractor(activity: Activity): SharedPreferenceInteractor {
-        return SharedPreferenceInteractorImpl(getSharedPreferenceRepository(activity))
+    fun provideSharedPreferenceInteractor(context: Context): SharedPreferenceInteractor {
+        return SharedPreferenceInteractorImpl(getSharedPreferenceRepository(context))
     }
 
     private fun getTracksMediaPlayerRepository(): TracksMediaPlayerRepository {

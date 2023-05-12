@@ -81,4 +81,12 @@ class TrackAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>()
     fun setTracks(_tracks: ArrayList<Track>) {
         tracks = _tracks
     }
+
+    fun clearTracks() {
+        tracks.clear()
+    }
+
+    fun addTracks(_tracks: ArrayList<Track>) {
+        tracks.addAll(_tracks)
+    }
 }
