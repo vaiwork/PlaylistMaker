@@ -17,12 +17,14 @@ import com.vaiwork.playlistmaker.domain.api.TracksRepository
 import com.vaiwork.playlistmaker.domain.impl.SharedPreferenceInteractorImpl
 import com.vaiwork.playlistmaker.domain.impl.TracksInteractorImpl
 import com.vaiwork.playlistmaker.domain.impl.TracksMediaPlayerInteractorImpl
-import com.vaiwork.playlistmaker.presentation.MainController
-import com.vaiwork.playlistmaker.presentation.SettingsController
-import com.vaiwork.playlistmaker.presentation.TracksMediaPlayerController
+import com.vaiwork.playlistmaker.presentation.main.MainPresenter
+import com.vaiwork.playlistmaker.presentation.settings.SettingsPresenter
+import com.vaiwork.playlistmaker.presentation.main.MainView
+import com.vaiwork.playlistmaker.presentation.settings.SettingsView
+import com.vaiwork.playlistmaker.presentation.tracksmediaplayer.TracksMediaPlayerPresenter
+import com.vaiwork.playlistmaker.presentation.tracksmediaplayer.TracksMediaPlayerView
 import com.vaiwork.playlistmaker.presentation.trackssearch.TracksSearchPresenter
 import com.vaiwork.playlistmaker.presentation.trackssearch.TracksSearchView
-import com.vaiwork.playlistmaker.ui.search.TrackAdapter
 
 object Creator {
     private fun getTracksRepository(context: Context): TracksRepository {
@@ -53,15 +55,15 @@ object Creator {
         return TracksMediaPlayerInteractorImpl(getTracksMediaPlayerRepository())
     }
 
-    fun provideTracksMediaPlayerController(activity: Activity): TracksMediaPlayerController {
-        return TracksMediaPlayerController(activity)
+    fun provideTracksMediaPlayerPresenter(tracksMediaPlayerView: TracksMediaPlayerView, context: Context): TracksMediaPlayerPresenter {
+        return TracksMediaPlayerPresenter(tracksMediaPlayerView, context)
     }
 
-    fun provideSettingsController(activity: Activity): SettingsController {
-        return SettingsController(activity)
+    fun provideSettingsController(view: SettingsView, context: Context): SettingsPresenter {
+        return SettingsPresenter(view, context)
     }
 
-    fun provideMainController(activity: Activity): MainController {
-        return MainController(activity)
+    fun provideMainPresenter(view: MainView, context: Context): MainPresenter {
+        return MainPresenter(view, context)
     }
 }

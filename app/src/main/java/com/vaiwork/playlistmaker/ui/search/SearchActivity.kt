@@ -20,7 +20,7 @@ import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.presentation.trackssearch.TracksSearchPresenter
 import com.vaiwork.playlistmaker.presentation.trackssearch.TracksSearchView
-import com.vaiwork.playlistmaker.ui.audioplayer.AudioPleerActivity
+import com.vaiwork.playlistmaker.ui.audioplayer.AudioPlayerActivity
 import com.vaiwork.playlistmaker.util.Creator
 
 class SearchActivity : AppCompatActivity(), TracksSearchView {
@@ -140,8 +140,8 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
             if (tracksSearchPresenter.clickDebounce()) {
                 tracksSearchPresenter.onDebounce(it)
 
-                val audioPleerActivityIntent = Intent(this, AudioPleerActivity::class.java)
-                startActivity(audioPleerActivityIntent)
+                val audioPlayerActivityIntent = Intent(this, AudioPlayerActivity::class.java)
+                startActivity(audioPlayerActivityIntent)
             }
         }
     }
