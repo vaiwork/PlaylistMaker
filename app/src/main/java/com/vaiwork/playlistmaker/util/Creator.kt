@@ -35,8 +35,8 @@ object Creator {
         return TracksInteractorImpl(getTracksRepository(context))
     }
 
-    fun provideTracksSearchPresenter(tracksSearchView: TracksSearchView, context: Context): TracksSearchPresenter {
-        return TracksSearchPresenter(tracksSearchView, context)
+    fun provideTracksSearchPresenter(context: Context): TracksSearchPresenter {
+        return TracksSearchPresenter(context)
     }
 
     private fun getSharedPreferenceRepository(context: Context): SharedPreferenceRepository {
@@ -55,15 +55,15 @@ object Creator {
         return TracksMediaPlayerInteractorImpl(getTracksMediaPlayerRepository())
     }
 
-    fun provideTracksMediaPlayerPresenter(tracksMediaPlayerView: TracksMediaPlayerView, context: Context): TracksMediaPlayerPresenter {
-        return TracksMediaPlayerPresenter(tracksMediaPlayerView, context)
+    fun provideTracksMediaPlayerPresenter(context: Context): TracksMediaPlayerPresenter {
+        return TracksMediaPlayerPresenter(context)
     }
 
-    fun provideSettingsController(view: SettingsView, context: Context): SettingsPresenter {
-        return SettingsPresenter(view, context)
+    fun provideSettingsController(context: Context): SettingsPresenter {
+        return SettingsPresenter(context)
     }
 
-    fun provideMainPresenter(view: MainView, context: Context): MainPresenter {
-        return MainPresenter(view, context)
+    fun provideMainPresenter(context: Context): MainPresenter {
+        return MainPresenter(context)
     }
 }

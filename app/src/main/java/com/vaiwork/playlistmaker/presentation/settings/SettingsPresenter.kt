@@ -7,12 +7,21 @@ import com.vaiwork.playlistmaker.util.App
 import com.vaiwork.playlistmaker.util.Creator
 
 class SettingsPresenter(
-    private val view: SettingsView,
     private val context: Context
 ) {
 
 
     private val sharedPreferenceInteractor = Creator.provideSharedPreferenceInteractor(context)
+
+    private var view: SettingsView? = null
+
+    fun attachView(view: SettingsView) {
+        this.view = view
+    }
+
+    fun detachView() {
+        this.view = null
+    }
 
     fun getDarkModeValue(): Boolean {
         return sharedPreferenceInteractor.getBoolean(App.SETTINGS, MODE_PRIVATE, App.DARK_MODE, false)

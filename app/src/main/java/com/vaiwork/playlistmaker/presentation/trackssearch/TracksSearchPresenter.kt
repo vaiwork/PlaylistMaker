@@ -7,13 +7,16 @@ import android.os.Handler
 import android.os.Looper
 import com.vaiwork.playlistmaker.domain.api.TracksInteractor
 import com.vaiwork.playlistmaker.domain.models.Track
+import com.vaiwork.playlistmaker.ui.search.TracksState
 import com.vaiwork.playlistmaker.util.App
 import com.vaiwork.playlistmaker.util.Creator
 
 class TracksSearchPresenter(
-    private val tracksSearchView: TracksSearchView,
     private val context: Context
     ) {
+    private var tracksSearchView: TracksSearchView? = null
+    private var tracksState: TracksState? = null
+
     private val tracksInteractor = Creator.provideTracksInteractor(context)
     private val sharedPreferenceInteractor = Creator.provideSharedPreferenceInteractor(context)
 
@@ -22,7 +25,6 @@ class TracksSearchPresenter(
         private const val CLICK_DEBOUNCE_DELAY = 1000L
         const val SEARCH_EDIT_TEXT_CONTENT = "SEARCH_EDIT_TEXT_CONTENT"
     }
-
 
     private var lastSearchText: String? = null
     private val handler = Handler(Looper.getMainLooper())
@@ -38,15 +40,49 @@ class TracksSearchPresenter(
 
     fun searchRequest(newSearchText: String) {
         if (!newSearchText.isNullOrEmpty()) {
+            //
+            //tracksSearchView.showLoading()
+
+            renderState(TracksState.Loading)
+
             tracksInteractor.searchTracks(newSearchText, object: TracksInteractor.TracksConsumer {
                 override fun consume(foundTracks: ArrayList<Track>?, errorMessage: String?) {
                     handler.post {
-                        tracksSearchView.showProgressBar(false)
+                        //tracksSearchView.showProgressBar(false)
                         if (foundTracks != null) {
                             tracks.clear()
                             tracks.addAll(foundTracks)
                             //tracksSearchView.showTracksList(true)
                         }
+                        //
+                        when {
+                            errorMessage != null -> {
+                                renderState(
+                                    TracksState.Error(
+                                        errorMessage = "Что-то не так",
+                                    )
+                                )
+                                tracksSearchView?.showToast(errorMessage)
+                            }
+
+                            tracks.isEmpty() -> {
+                                renderState(
+                                    TracksState.Empty(
+                                        message = "Ничего не найдено",
+                                    )
+                                )
+                            }
+
+                            else -> {
+                                renderState(
+                                    TracksState.Content(
+                                        tracks = tracks,
+                                    )
+                                )
+                            }
+                        }
+
+                        /*
                         if (errorMessage != null) {
                             tracksSearchView.showErrorPlaceholderMessage(true)
                             showMessage("Что-то не так", errorMessage)
@@ -61,7 +97,7 @@ class TracksSearchPresenter(
                             tracksSearchView.showEmptyPlaceholderMessage(false)
                             tracksSearchView.showErrorPlaceholderMessage(false)
                             tracksSearchView.showYourSearchers(false)
-                        }
+                        }*/
                     }
                 }
             }
@@ -70,6 +106,9 @@ class TracksSearchPresenter(
     }
 
     fun searchDebounce(changedText: String) {
+        if (lastSearchText == changedText) {
+            return
+        }
         this.lastSearchText = changedText
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
@@ -88,7 +127,7 @@ class TracksSearchPresenter(
     fun onRestoreInstanceState(savedInstanceState: Bundle) {
         editableText = savedInstanceState.getString(SEARCH_EDIT_TEXT_CONTENT)
         if (editableText != null) {
-            tracksSearchView.setEditText(editableText)
+            tracksSearchView?.setEditText(editableText)
         }
     }
 
@@ -101,6 +140,7 @@ class TracksSearchPresenter(
         return current
     }
 
+    /*
     private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {
             if (additionalMessage.isNotEmpty()) {
@@ -108,6 +148,7 @@ class TracksSearchPresenter(
             }
         }
     }
+    */
 
     fun setEditableText(text: String) {
         editableText = text
@@ -119,5 +160,19 @@ class TracksSearchPresenter(
 
     fun clearHistoryTracks() {
         sharedPreferenceInteractor.clear(App.SETTINGS, MODE_PRIVATE, App.HISTORY_TRACKS)
+    }
+
+    fun attachView(view: TracksSearchView) {
+        this.tracksSearchView = view
+        tracksState?.let { view.render(it) }
+    }
+
+    fun detachView() {
+        this.tracksSearchView = null
+    }
+
+    private fun renderState(state: TracksState) {
+        this.tracksState = state
+        this.tracksSearchView?.render(state)
     }
 }
