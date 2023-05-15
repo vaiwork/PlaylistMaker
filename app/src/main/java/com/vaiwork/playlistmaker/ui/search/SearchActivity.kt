@@ -13,7 +13,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.vaiwork.playlistmaker.R
@@ -21,13 +20,23 @@ import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.presentation.trackssearch.TracksSearchPresenter
 import com.vaiwork.playlistmaker.presentation.trackssearch.TracksSearchView
 import com.vaiwork.playlistmaker.ui.audioplayer.AudioPlayerActivity
-import com.vaiwork.playlistmaker.util.App
 import com.vaiwork.playlistmaker.util.Creator
+import moxy.MvpActivity
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 
-class SearchActivity : AppCompatActivity(), TracksSearchView {
+class SearchActivity : MvpActivity(), TracksSearchView {
 
     private var tracksAdapter : TrackAdapter = TrackAdapter()
-    private var tracksSearchPresenter: TracksSearchPresenter? = null //Creator.provideTracksSearchPresenter(this, this)
+
+    @InjectPresenter
+    lateinit var tracksSearchPresenter: TracksSearchPresenter //? = null //Creator.provideTracksSearchPresenter(this, this)
+    @ProvidePresenter
+    fun providePresenter(): TracksSearchPresenter {
+        return Creator.provideTracksSearchPresenter(
+            context = this.applicationContext,
+        )
+    }
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchEmptyPlaceholderImageView: ImageView
@@ -43,26 +52,28 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
 
     private lateinit var editViewTextWatcher: TextWatcher
 
+    /*
     override fun onStart() {
         super.onStart()
-        tracksSearchPresenter?.attachView(this)
+        //tracksSearchPresenter?.attachView(this)
     }
 
     override fun onResume() {
         super.onResume()
-        tracksSearchPresenter?.attachView(this)
+        //tracksSearchPresenter?.attachView(this)
     }
+    */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        tracksSearchPresenter = (this.applicationContext as? App)?.tracksSearchPresenter
-        if (tracksSearchPresenter == null) {
-            tracksSearchPresenter = Creator.provideTracksSearchPresenter(this)
-            (this.applicationContext as? App)?.tracksSearchPresenter = tracksSearchPresenter
-        }
-        tracksSearchPresenter?.attachView(this)
+        //tracksSearchPresenter = (this.applicationContext as? App)?.tracksSearchPresenter
+        //if (tracksSearchPresenter == null) {
+        //    tracksSearchPresenter = Creator.provideTracksSearchPresenter(this)
+            //(this.applicationContext as? App)?.tracksSearchPresenter = tracksSearchPresenter
+        //}
+        //tracksSearchPresenter?.attachView(this)
 
         yourSearcherTextView = findViewById(R.id.activity_search_text_view_your_searches)
         recyclerView = findViewById(R.id.activity_search_search_recycler_view)
@@ -78,7 +89,7 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
 
         //
         tracksAdapter.setClearHistoryClickListener {
-            tracksSearchPresenter?.clearHistoryTracks()
+            tracksSearchPresenter.clearHistoryTracks()
             tracksAdapter.setTracks(ArrayList())
             recyclerView.adapter = tracksAdapter
             showTracksList(false)
@@ -86,9 +97,9 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
 
         }
 
-        if (tracksSearchPresenter?.getHistoryTracks()?.isNotEmpty() == true) {
+        if (tracksSearchPresenter.getHistoryTracks().isNotEmpty()) {
             tracksAdapter.setHistoryAdapter()
-            tracksAdapter.setTracks(tracksSearchPresenter?.getHistoryTracks()!!)
+            tracksAdapter.setTracks(tracksSearchPresenter.getHistoryTracks())
             recyclerView.adapter = tracksAdapter
             showTracksList(true)
             showYourSearchers(true)
@@ -111,8 +122,8 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
                 showErrorPlaceholderMessage(false)
                 clearImageView.visibility = clearButtonVisibility(s)
                 if (s.isNullOrEmpty()) {
-                    if (tracksSearchPresenter?.getHistoryTracks()?.isNotEmpty() == true) {
-                        tracksAdapter.setTracks(tracksSearchPresenter?.getHistoryTracks()!!)
+                    if (tracksSearchPresenter.getHistoryTracks().isNotEmpty()) {
+                        tracksAdapter.setTracks(tracksSearchPresenter.getHistoryTracks())
                         showYourSearchers(true)
                         showTracksList(true)
                         tracksAdapter.setHistoryAdapter()
@@ -124,11 +135,11 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
                     recyclerView.adapter = tracksAdapter
                 } else {
                     showProgressBar(true)
-                    tracksSearchPresenter?.searchDebounce(
+                    tracksSearchPresenter.searchDebounce(
                         changedText = s.toString() ?: ""
                     )
                 }
-                tracksSearchPresenter?.setEditableText(s.toString())
+                tracksSearchPresenter.setEditableText(s.toString())
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -137,7 +148,7 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
         editViewTextWatcher.let { searchEditText.addTextChangedListener(it) }
         searchEditText.addTextChangedListener(editViewTextWatcher)
         searchEditText.setOnClickListener{
-            tracksSearchPresenter?.searchRequest(searchEditText.text.toString())
+            tracksSearchPresenter.searchRequest(searchEditText.text.toString())
         }
 
         clearImageView.setOnClickListener {
@@ -155,8 +166,8 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
         //
 
         tracksAdapter.setItemClickListener {
-            if (tracksSearchPresenter?.clickDebounce() == true) {
-                tracksSearchPresenter?.onDebounce(it)
+            if (tracksSearchPresenter.clickDebounce()) {
+                tracksSearchPresenter.onDebounce(it)
 
                 val audioPlayerActivityIntent = Intent(this, AudioPlayerActivity::class.java)
                 startActivity(audioPlayerActivityIntent)
@@ -172,37 +183,43 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
         }
     }
 
+    /*
     override fun onDestroy() {
         super.onDestroy()
-        tracksSearchPresenter?.detachView()
+        //tracksSearchPresenter?.detachView()
         editViewTextWatcher.let { searchEditText.removeTextChangedListener(it) }
 
-        if (isFinishing()) {
+        //if (isFinishing()) {
             // Очищаем ссылку на Presenter в Application
-            (this.application as? App)?.tracksSearchPresenter = null
-        }
+            //(this.application as? App)?.tracksSearchPresenter = null
+        //}
     }
+    */
 
+    /*
     override fun onPause() {
         super.onPause()
-        tracksSearchPresenter?.detachView()
+        //tracksSearchPresenter?.detachView()
     }
 
     override fun onStop() {
         super.onStop()
-        tracksSearchPresenter?.detachView()
+        //tracksSearchPresenter?.detachView()
     }
+    */
 
+    /*
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        tracksSearchPresenter?.onSaveInstanceState(outState)
-        tracksSearchPresenter?.detachView()
+        tracksSearchPresenter.onSaveInstanceState(outState)
+        //tracksSearchPresenter?.detachView()
     }
+     */
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         searchEditText = findViewById(R.id.activity_search_edit_text)
-        tracksSearchPresenter?.onRestoreInstanceState(savedInstanceState)
+        tracksSearchPresenter.onRestoreInstanceState(savedInstanceState)
     }
 
     fun showTracksList(isVisible: Boolean) {
@@ -244,7 +261,7 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
     }
     */
 
-    override fun showLoading() {
+    fun showLoading() {
         recyclerView.visibility = View.GONE
         searchEmptyPlaceholderImageView.visibility = View.GONE
         searchEmptyPlaceholderTextView.visibility = View.GONE
@@ -254,7 +271,7 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
         progressBar.visibility = View.VISIBLE
     }
 
-    override fun showError(errorMessage: String) {
+    fun showError(errorMessage: String) {
         recyclerView.visibility = View.GONE
         searchEmptyPlaceholderImageView.visibility = View.GONE
         searchEmptyPlaceholderTextView.visibility = View.GONE
@@ -266,7 +283,7 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
         searchErrorPlaceholderTextView.text = errorMessage
     }
 
-    override fun showEmpty(emptyMessage: String) {
+    fun showEmpty(emptyMessage: String) {
         recyclerView.visibility = View.GONE
         searchEmptyPlaceholderImageView.visibility = View.VISIBLE
         searchEmptyPlaceholderTextView.visibility = View.VISIBLE
@@ -278,7 +295,7 @@ class SearchActivity : AppCompatActivity(), TracksSearchView {
         searchEmptyPlaceholderTextView.text = emptyMessage
     }
 
-    override fun showContent(tracks: ArrayList<Track>) {
+    fun showContent(tracks: ArrayList<Track>) {
         recyclerView.visibility = View.VISIBLE
         searchEmptyPlaceholderImageView.visibility = View.GONE
         searchEmptyPlaceholderTextView.visibility = View.GONE

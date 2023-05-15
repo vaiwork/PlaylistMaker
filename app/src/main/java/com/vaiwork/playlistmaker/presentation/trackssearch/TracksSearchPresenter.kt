@@ -10,12 +10,13 @@ import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.ui.search.TracksState
 import com.vaiwork.playlistmaker.util.App
 import com.vaiwork.playlistmaker.util.Creator
+import moxy.MvpPresenter
 
 class TracksSearchPresenter(
     private val context: Context
-    ) {
-    private var tracksSearchView: TracksSearchView? = null
-    private var tracksState: TracksState? = null
+    ) : MvpPresenter<TracksSearchView>() {
+    //private var tracksSearchView: TracksSearchView? = null
+    //private var tracksState: TracksState? = null
 
     private val tracksInteractor = Creator.provideTracksInteractor(context)
     private val sharedPreferenceInteractor = Creator.provideSharedPreferenceInteractor(context)
@@ -62,7 +63,7 @@ class TracksSearchPresenter(
                                         errorMessage = "Что-то не так",
                                     )
                                 )
-                                tracksSearchView?.showToast(errorMessage)
+                                viewState.showToast(errorMessage)
                             }
 
                             tracks.isEmpty() -> {
@@ -118,16 +119,22 @@ class TracksSearchPresenter(
         sharedPreferenceInteractor.addTrack(track, App.SETTINGS, MODE_PRIVATE, App.HISTORY_TRACKS)
     }
 
+    /*
     fun onSaveInstanceState(outState: Bundle) {
         if (editableText != null) {
             outState.putString(SEARCH_EDIT_TEXT_CONTENT, editableText)
         }
     }
+    */
+
+    override fun onDestroy() {
+        handler.removeCallbacksAndMessages(searchRunnable)
+    }
 
     fun onRestoreInstanceState(savedInstanceState: Bundle) {
         editableText = savedInstanceState.getString(SEARCH_EDIT_TEXT_CONTENT)
         if (editableText != null) {
-            tracksSearchView?.setEditText(editableText)
+            viewState.setEditText(editableText)
         }
     }
 
@@ -162,6 +169,7 @@ class TracksSearchPresenter(
         sharedPreferenceInteractor.clear(App.SETTINGS, MODE_PRIVATE, App.HISTORY_TRACKS)
     }
 
+    /*
     fun attachView(view: TracksSearchView) {
         this.tracksSearchView = view
         tracksState?.let { view.render(it) }
@@ -170,9 +178,11 @@ class TracksSearchPresenter(
     fun detachView() {
         this.tracksSearchView = null
     }
+    */
 
     private fun renderState(state: TracksState) {
-        this.tracksState = state
-        this.tracksSearchView?.render(state)
+        //this.tracksState = state
+        //this.tracksSearchView?.render(state)
+        viewState.render(state)
     }
 }

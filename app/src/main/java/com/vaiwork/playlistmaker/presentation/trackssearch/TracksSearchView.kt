@@ -2,9 +2,14 @@ package com.vaiwork.playlistmaker.presentation.trackssearch
 
 import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.ui.search.TracksState
+import moxy.MvpView
+import moxy.viewstate.strategy.AddToEndSingleStrategy
+import moxy.viewstate.strategy.OneExecutionStateStrategy
+import moxy.viewstate.strategy.StateStrategyType
 
-interface TracksSearchView {
+interface TracksSearchView : MvpView {
 
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun setEditText(text: String?)
 
     /*
@@ -30,21 +35,11 @@ interface TracksSearchView {
 
     // Методы, меняющие внешний вид экрана
 
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun render(state: TracksState)
-
-    // Состояние «загрузки»
-    fun showLoading()
-
-    // Состояние «ошибки»
-    fun showError(errorMessage: String)
-
-    // Состояние «пустого списка»
-    fun showEmpty(emptyMessage: String)
-
-    // Состояние «контента»
-    fun showContent(tracks: ArrayList<Track>)
 
     // Методы «одноразовых событий»
 
+    @StateStrategyType(OneExecutionStateStrategy::class)
     fun showToast(additionalMessage: String)
 }

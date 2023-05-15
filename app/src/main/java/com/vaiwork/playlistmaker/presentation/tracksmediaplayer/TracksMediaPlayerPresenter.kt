@@ -10,14 +10,16 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.presentation.settings.SettingsView
+import com.vaiwork.playlistmaker.ui.audioplayer.AudioPlayerState
 import com.vaiwork.playlistmaker.util.App
 import com.vaiwork.playlistmaker.util.Creator
+import moxy.MvpPresenter
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TracksMediaPlayerPresenter(
     private val context: Context
-) {
+) : MvpPresenter<TracksMediaPlayerView>() {
     private val tracksMediaPlayerInteractor = Creator.provideTracksMediaPlayerInteractor()
     private val sharedPreferenceInteractor = Creator.provideSharedPreferenceInteractor(context)
 
@@ -28,8 +30,9 @@ class TracksMediaPlayerPresenter(
         spendTimeControl()
     }
 
-    private var view: TracksMediaPlayerView? = null
+    //private var view: TracksMediaPlayerView? = null
 
+    /*
     fun attachView(view: TracksMediaPlayerView) {
         this.view = view
     }
@@ -37,21 +40,28 @@ class TracksMediaPlayerPresenter(
     fun detachView() {
         this.view = null
     }
-
+    */
     private fun spendTimeControl() {
         if (tracksMediaPlayerInteractor.getPlayerState() == tracksMediaPlayerInteractor.getPlayerState()) {
             audioPleerHandler.postDelayed(audioPleerRunnable, tracksMediaPlayerInteractor.getAudioPleerDelay())
-            view?.setSpendTime(SimpleDateFormat("mm:ss", Locale.getDefault()).format(tracksMediaPlayerInteractor.getCurrentPosition()))
+            viewState.setSpendTime(SimpleDateFormat("mm:ss", Locale.getDefault()).format(tracksMediaPlayerInteractor.getCurrentPosition()))
         }
     }
 
     private fun startPlayer() {
         tracksMediaPlayerInteractor.startPlayer()
+        viewState.render(
+            AudioPlayerState.Started(
+                isDarkTheme = sharedPreferenceInteractor.getBoolean(App.SETTINGS, MODE_PRIVATE, App.DARK_MODE, false)
+            )
+        )
+        /*
         if (sharedPreferenceInteractor.getBoolean(App.SETTINGS, MODE_PRIVATE, App.DARK_MODE, false)) {
             view?.setNightPauseImage()
         } else {
             view?.setLightPauseImage()
         }
+        */
         tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePlaying())
         spendTimeControl()
     }
@@ -59,7 +69,10 @@ class TracksMediaPlayerPresenter(
     private fun pausePlayer() {
         audioPleerHandler.removeCallbacks(audioPleerRunnable)
         tracksMediaPlayerInteractor.pausePlayer()
-        view?.setLightPlayImage()
+        viewState.render(
+            AudioPlayerState.PreparedPaused
+        )
+        //view?.setLightPlayImage()
         tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePaused())
     }
 
@@ -69,12 +82,15 @@ class TracksMediaPlayerPresenter(
         tracksMediaPlayerInteractor.setDataSource(lastClickedTrack.previewUrl)
         tracksMediaPlayerInteractor.prepareAsync()
         tracksMediaPlayerInteractor.onPreparedListener {
-            view?.activatePlayImage(true)
+            viewState.activatePlayImage(true)
             tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
         }
         tracksMediaPlayerInteractor.onCompletionListener {
-            view?.setSpendTime("00:00")
-            view?.setLightPlayImage()
+            viewState.render(
+                AudioPlayerState.PreparedPaused
+            )
+            viewState.setSpendTime("00:00")
+            //view?.setLightPlayImage()
             tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
         }
     }
@@ -94,21 +110,25 @@ class TracksMediaPlayerPresenter(
         }
     }
 
-    fun onDestroy() {
+    override fun onDestroy() {
         audioPleerHandler.removeCallbacks(audioPleerRunnable)
         tracksMediaPlayerInteractor.release()
     }
 
     fun onSaveInstanceState() {
-        view?.setSpendTime("00:00")
-        view?.setLightPlayImage()
+        viewState.render(
+            AudioPlayerState.PreparedPaused
+        )
+        viewState.setSpendTime("00:00")
+        //view?.setLightPlayImage()
+
         audioPleerHandler.removeCallbacks(audioPleerRunnable)
         tracksMediaPlayerInteractor.stop()
         tracksMediaPlayerInteractor.prepareAsync()
         tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
     }
 
-    fun getHistoryTracks(): ArrayList<Track> {
+    private fun getHistoryTracks(): ArrayList<Track> {
         return sharedPreferenceInteractor.getTracks(App.SETTINGS, MODE_PRIVATE, App.HISTORY_TRACKS)
     }
 

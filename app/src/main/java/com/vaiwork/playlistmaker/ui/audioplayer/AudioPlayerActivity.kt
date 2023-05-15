@@ -3,17 +3,26 @@ package com.vaiwork.playlistmaker.ui.audioplayer
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.presentation.tracksmediaplayer.TracksMediaPlayerPresenter
 import com.vaiwork.playlistmaker.presentation.tracksmediaplayer.TracksMediaPlayerView
-import com.vaiwork.playlistmaker.ui.search.TracksState
-import com.vaiwork.playlistmaker.util.App
 import com.vaiwork.playlistmaker.util.Creator
+import moxy.MvpActivity
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 
-class AudioPlayerActivity : AppCompatActivity(), TracksMediaPlayerView {
-    private var tracksMediaPlayerPresenter: TracksMediaPlayerPresenter? = null //Creator.provideTracksMediaPlayerPresenter(this, this)
+class AudioPlayerActivity : MvpActivity(), TracksMediaPlayerView {
+
+    @InjectPresenter
+    lateinit var tracksMediaPlayerPresenter: TracksMediaPlayerPresenter //Creator.provideTracksMediaPlayerPresenter(this, this)
+
+    @ProvidePresenter
+    fun providePresenter(): TracksMediaPlayerPresenter {
+        return Creator.provideTracksMediaPlayerPresenter(
+            context = this.applicationContext,
+        )
+    }
 
     private lateinit var albumImageView: ImageView
     private lateinit var timeTextView: TextView
@@ -27,6 +36,7 @@ class AudioPlayerActivity : AppCompatActivity(), TracksMediaPlayerView {
     private lateinit var playImageView: ImageView
     private lateinit var spendTimeTextView: TextView
 
+    /*
     override fun onStart() {
         super.onStart()
         tracksMediaPlayerPresenter?.attachView(this)
@@ -36,17 +46,19 @@ class AudioPlayerActivity : AppCompatActivity(), TracksMediaPlayerView {
         super.onResume()
         tracksMediaPlayerPresenter?.attachView(this)
     }
-
+    */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_pleer)
 
+        /*
         tracksMediaPlayerPresenter = (this.applicationContext as? App)?.tracksMediaPlayerPresenter
         if (tracksMediaPlayerPresenter == null) {
             tracksMediaPlayerPresenter = Creator.provideTracksMediaPlayerPresenter(this)
             (this.applicationContext as? App)?.tracksMediaPlayerPresenter = tracksMediaPlayerPresenter
         }
         tracksMediaPlayerPresenter?.attachView(this)
+         */
 
         toolbar = findViewById(R.id.activity_pleer_back_toolbar)
         playImageView = findViewById(R.id.activity_pleer_play_image_view)
@@ -62,42 +74,46 @@ class AudioPlayerActivity : AppCompatActivity(), TracksMediaPlayerView {
 
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        tracksMediaPlayerPresenter?.setDefaultPlayerState()
-        tracksMediaPlayerPresenter?.preparePlayer()
-        tracksMediaPlayerPresenter?.setAlbumImage(R.drawable.placeholder_album_image_light_mode,
+        tracksMediaPlayerPresenter.setDefaultPlayerState()
+        tracksMediaPlayerPresenter.preparePlayer()
+        tracksMediaPlayerPresenter.setAlbumImage(R.drawable.placeholder_album_image_light_mode,
             R.dimen.activity_pleer_album_image_corner_radius,
             albumImageView)
 
-        trackName.text = tracksMediaPlayerPresenter?.getTrackName()
-        artistName.text = tracksMediaPlayerPresenter?.getTrackArtistName()
-        timeTextView.text = tracksMediaPlayerPresenter?.getTrackTime()
-        albumTextView.text = tracksMediaPlayerPresenter?.getTrackCollection()
-        yearTextView.text = tracksMediaPlayerPresenter?.getTrackYear()
-        styleTextView.text = tracksMediaPlayerPresenter?.getTrackPrimaryGenre()
-        countryTextView.text = tracksMediaPlayerPresenter?.getTrackCountry()
+        trackName.text = tracksMediaPlayerPresenter.getTrackName()
+        artistName.text = tracksMediaPlayerPresenter.getTrackArtistName()
+        timeTextView.text = tracksMediaPlayerPresenter.getTrackTime()
+        albumTextView.text = tracksMediaPlayerPresenter.getTrackCollection()
+        yearTextView.text = tracksMediaPlayerPresenter.getTrackYear()
+        styleTextView.text = tracksMediaPlayerPresenter.getTrackPrimaryGenre()
+        countryTextView.text = tracksMediaPlayerPresenter.getTrackCountry()
 
         playImageView.setOnClickListener {
-            tracksMediaPlayerPresenter?.playbackControl()
+            tracksMediaPlayerPresenter.playbackControl()
         }
     }
 
+    /*
     override fun onDestroy() {
         super.onDestroy()
+        tracksMediaPlayerPresenter.onDestroy()
+        /*
         tracksMediaPlayerPresenter?.detachView()
-        tracksMediaPlayerPresenter?.onDestroy()
-
         if (isFinishing()) {
             // Очищаем ссылку на Presenter в Application
             (this.application as? App)?.tracksMediaPlayerPresenter = null
         }
+         */
     }
+     */
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        tracksMediaPlayerPresenter?.detachView()
-        tracksMediaPlayerPresenter?.onSaveInstanceState()
+        //tracksMediaPlayerPresenter?.detachView()
+        tracksMediaPlayerPresenter.onSaveInstanceState()
     }
 
+    /*
     override fun onPause() {
         super.onPause()
         tracksMediaPlayerPresenter?.detachView()
@@ -107,22 +123,40 @@ class AudioPlayerActivity : AppCompatActivity(), TracksMediaPlayerView {
         super.onStop()
         tracksMediaPlayerPresenter?.detachView()
     }
+    */
+
+    override fun render(state: AudioPlayerState) {
+        when (state) {
+            is AudioPlayerState.PreparedPaused -> setLightPlayImage()
+            is AudioPlayerState.Started -> setPauseImage(state.isDarkTheme)
+        }
+    }
 
     override fun setSpendTime(text: String) {
         spendTimeTextView.text = text
     }
 
-    override fun setNightPauseImage() {
+    private fun setPauseImage(isDarkTheme: Boolean) {
+        if (isDarkTheme) {
+            setNightPauseImage()
+        } else {
+            setLightPauseImage()
+        }
+    }
+
+    private fun setNightPauseImage() {
         playImageView.setImageResource(R.drawable.pause_night_mode_button)
     }
 
-    override fun setLightPauseImage() {
+    private fun setLightPauseImage() {
         playImageView.setImageResource(R.drawable.pause_light_mode_button)
     }
 
-    override fun setLightPlayImage() {
+
+    private fun setLightPlayImage() {
         playImageView.setImageResource(R.drawable.play_light_mode_button)
     }
+
 
     override fun activatePlayImage(value: Boolean) {
         playImageView.isEnabled = value
