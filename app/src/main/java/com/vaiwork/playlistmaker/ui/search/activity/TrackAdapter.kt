@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker.ui.search
+package com.vaiwork.playlistmaker.ui.search.activity
 
 import android.view.LayoutInflater
 import android.view.View

@@ -1,21 +1,20 @@
-package com.vaiwork.playlistmaker.ui.settings
+package com.vaiwork.playlistmaker.ui.settings.activity
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.vaiwork.playlistmaker.R
-import com.vaiwork.playlistmaker.presentation.settings.SettingsPresenter
-import com.vaiwork.playlistmaker.presentation.settings.SettingsView
-import com.vaiwork.playlistmaker.util.App
-import com.vaiwork.playlistmaker.util.Creator
+import com.vaiwork.playlistmaker.ui.settings.view_model.SettingsViewModel
 
-class SettingsActivity : AppCompatActivity(), SettingsView {
+class SettingsActivity : AppCompatActivity() {
 
-    private var settingsPresenter: SettingsPresenter? = null //Creator.provideSettingsController(this, this)
+    private lateinit var settingsViewModel: SettingsViewModel //Creator.provideSettingsController(this, this)
 
     private lateinit var toolbar: Toolbar
     private lateinit var switchDarkMode: SwitchMaterial
@@ -23,26 +22,11 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
     private lateinit var writeSupportImageView: ImageView
     private lateinit var userAgreementImageView: ImageView
 
-    override fun onStart() {
-        super.onStart()
-        settingsPresenter?.attachView(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        settingsPresenter?.attachView(this)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        settingsPresenter = (this.applicationContext as? App)?.settingsPresenter
-        if (settingsPresenter == null) {
-            settingsPresenter = Creator.provideSettingsController(this)
-            (this.applicationContext as? App)?.settingsPresenter = settingsPresenter
-        }
-        settingsPresenter?.attachView(this)
+        settingsViewModel = ViewModelProvider(this, SettingsViewModel.getViewModelFactory())[SettingsViewModel::class.java]
 
         toolbar = findViewById(R.id.settings_toolbar)
         switchDarkMode = findViewById(R.id.id_switch_dark_mode)
@@ -52,9 +36,9 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
 
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        switchDarkMode.isChecked = settingsPresenter?.getDarkModeValue()!!
+        switchDarkMode.isChecked = settingsViewModel.getDarkModeValue()
         switchDarkMode.setOnCheckedChangeListener { switcher, checked ->
-            settingsPresenter?.switchAppTheme(checked)
+            settingsViewModel.switchAppTheme(checked)
         }
 
         sendImageView.setOnClickListener {
@@ -79,31 +63,6 @@ class SettingsActivity : AppCompatActivity(), SettingsView {
                     R.string.url_user_agreement
                 )))
             startActivity(userAgreementImageViewIntent)
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        settingsPresenter?.detachView()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        settingsPresenter?.detachView()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        settingsPresenter?.detachView()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        settingsPresenter?.detachView()
-
-        if (isFinishing()) {
-            // Очищаем ссылку на Presenter в Application
-            (this.application as? App)?.settingsPresenter = null
         }
     }
 }

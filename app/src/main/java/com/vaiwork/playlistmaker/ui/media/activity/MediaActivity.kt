@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker.ui.media
+package com.vaiwork.playlistmaker.ui.media.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

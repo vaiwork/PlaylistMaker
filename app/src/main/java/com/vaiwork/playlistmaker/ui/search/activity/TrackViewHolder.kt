@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker.ui.search
+package com.vaiwork.playlistmaker.ui.search.activity
 
 import android.view.View
 import android.widget.ImageView
@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.models.Track
+import com.vaiwork.playlistmaker.ui.search.activity.TrackAdapter
 import java.text.SimpleDateFormat
 import java.util.Locale
 

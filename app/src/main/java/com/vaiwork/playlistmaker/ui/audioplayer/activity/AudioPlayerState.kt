@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker.ui.audioplayer
+package com.vaiwork.playlistmaker.ui.audioplayer.activity
 
 sealed interface AudioPlayerState {
     object PreparedPaused: AudioPlayerState

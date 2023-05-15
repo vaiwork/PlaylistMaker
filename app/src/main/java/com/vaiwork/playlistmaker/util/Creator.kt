@@ -1,6 +1,5 @@
 package com.vaiwork.playlistmaker.util
 
-import android.app.Activity
 import android.content.Context
 import com.vaiwork.playlistmaker.data.SharedPreferenceRepositoryImpl
 import com.vaiwork.playlistmaker.data.TracksMediaPlayerRepositoryImpl
@@ -17,14 +16,6 @@ import com.vaiwork.playlistmaker.domain.api.TracksRepository
 import com.vaiwork.playlistmaker.domain.impl.SharedPreferenceInteractorImpl
 import com.vaiwork.playlistmaker.domain.impl.TracksInteractorImpl
 import com.vaiwork.playlistmaker.domain.impl.TracksMediaPlayerInteractorImpl
-import com.vaiwork.playlistmaker.presentation.main.MainPresenter
-import com.vaiwork.playlistmaker.presentation.settings.SettingsPresenter
-import com.vaiwork.playlistmaker.presentation.main.MainView
-import com.vaiwork.playlistmaker.presentation.settings.SettingsView
-import com.vaiwork.playlistmaker.presentation.tracksmediaplayer.TracksMediaPlayerPresenter
-import com.vaiwork.playlistmaker.presentation.tracksmediaplayer.TracksMediaPlayerView
-import com.vaiwork.playlistmaker.presentation.trackssearch.TracksSearchPresenter
-import com.vaiwork.playlistmaker.presentation.trackssearch.TracksSearchView
 
 object Creator {
     private fun getTracksRepository(context: Context): TracksRepository {
@@ -33,10 +24,6 @@ object Creator {
 
     fun provideTracksInteractor(context: Context): TracksInteractor {
         return TracksInteractorImpl(getTracksRepository(context))
-    }
-
-    fun provideTracksSearchPresenter(context: Context): TracksSearchPresenter {
-        return TracksSearchPresenter(context)
     }
 
     private fun getSharedPreferenceRepository(context: Context): SharedPreferenceRepository {
@@ -55,15 +42,4 @@ object Creator {
         return TracksMediaPlayerInteractorImpl(getTracksMediaPlayerRepository())
     }
 
-    fun provideTracksMediaPlayerPresenter(context: Context): TracksMediaPlayerPresenter {
-        return TracksMediaPlayerPresenter(context)
-    }
-
-    fun provideSettingsController(context: Context): SettingsPresenter {
-        return SettingsPresenter(context)
-    }
-
-    fun provideMainPresenter(context: Context): MainPresenter {
-        return MainPresenter(context)
-    }
 }
