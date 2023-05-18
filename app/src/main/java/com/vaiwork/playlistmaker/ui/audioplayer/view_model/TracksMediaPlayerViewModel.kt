@@ -149,7 +149,7 @@ class TracksMediaPlayerViewModel(
     }
 
     fun getTrackTime(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(lastClickedTrack.trackTime)
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(lastClickedTrack.trackTimeMillis)
     }
 
     fun getTrackCollection(): String {

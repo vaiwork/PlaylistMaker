@@ -13,16 +13,15 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.models.Track
+import com.vaiwork.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
 import com.vaiwork.playlistmaker.ui.search.view_model.ToastState
 import com.vaiwork.playlistmaker.ui.search.view_model.TracksSearchViewModel
-import com.vaiwork.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
 
 class SearchActivity : AppCompatActivity() {
 
@@ -239,18 +238,19 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showContent(tracks: ArrayList<Track>) {
-        recyclerView.visibility = View.VISIBLE
         searchEmptyPlaceholderImageView.visibility = View.GONE
         searchEmptyPlaceholderTextView.visibility = View.GONE
         searchErrorPlaceholderImageView.visibility = View.GONE
         searchErrorPlaceholderTextView.visibility = View.GONE
         yourSearcherTextView.visibility = View.GONE
         progressBar.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
 
         tracksAdapter.unsetHistoryAdapter()
         tracksAdapter.clearTracks()
         tracksAdapter.addTracks(tracks)
         tracksAdapter.notifyDataSetChanged()
+        recyclerView.adapter = tracksAdapter
     }
 
     private fun showToast(additionalMessage: String) {

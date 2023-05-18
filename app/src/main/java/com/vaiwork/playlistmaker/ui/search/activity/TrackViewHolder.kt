@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.models.Track
-import com.vaiwork.playlistmaker.ui.search.activity.TrackAdapter
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -24,7 +23,7 @@ class TrackViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
             .into(songImage)
         songName.text = songTrack.trackName
         songExecutorName.text = songTrack.artistName
-        songTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(songTrack.trackTime)
+        songTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(songTrack.trackTimeMillis)
 
         itemView.setOnClickListener {
             itemClickListener.onTrackClick(songTrack)

@@ -19,7 +19,7 @@ class TrackAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
-        return if (viewType === R.layout.track_view) {
+        return if (viewType == R.layout.track_view) {
             view = LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
             TrackViewHolder(view)
         } else {

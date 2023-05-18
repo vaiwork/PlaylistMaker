@@ -1,6 +1,5 @@
 package com.vaiwork.playlistmaker.data.db
 
-import android.app.Activity
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

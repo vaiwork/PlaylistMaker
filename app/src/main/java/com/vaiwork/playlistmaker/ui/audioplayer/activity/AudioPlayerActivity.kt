@@ -3,14 +3,13 @@ package com.vaiwork.playlistmaker.ui.audioplayer.activity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.vaiwork.playlistmaker.R
-import com.vaiwork.playlistmaker.ui.audioplayer.view_model.TracksMediaPlayerViewModel
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.ActivatePlayState
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.SpendTimeState
+import com.vaiwork.playlistmaker.ui.audioplayer.view_model.TracksMediaPlayerViewModel
 
 class AudioPlayerActivity : AppCompatActivity() {
 

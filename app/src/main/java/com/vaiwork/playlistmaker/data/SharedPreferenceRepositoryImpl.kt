@@ -45,7 +45,7 @@ class SharedPreferenceRepositoryImpl(
                         _track.trackId,
                         _track.trackName,
                         _track.artistName,
-                        _track.trackTime,
+                        _track.trackTimeMillis,
                         _track.artworkUrl100,
                         _track.collectionName,
                         _track.releaseDate,
