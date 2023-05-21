@@ -1,22 +1,25 @@
-package com.vaiwork.playlistmaker
+package com.vaiwork.playlistmaker.ui.search.activity
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.vaiwork.playlistmaker.R
+import com.vaiwork.playlistmaker.domain.models.Track
 
-
-class TrackAdapter (
-    private val tracks: ArrayList<Track>,
-    private val itemClickListener: OnItemClickedListener,
-    private val buttonClearHistoryClickListener: OnClickedListener,
-    private val isHistoryAdapter: Boolean = false
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>()
+class TrackAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
+    private var itemClickListener: TrackClickListener = TrackClickListener {  }
+
+    private var buttonClearHistoryClickListener: ClearHistoryClickListener = ClearHistoryClickListener {  }
+
+    private var tracks: ArrayList<Track> = ArrayList()
+
+    private var isHistoryAdapter: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
-        return if (viewType === R.layout.track_view) {
+        return if (viewType == R.layout.track_view) {
             view = LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
             TrackViewHolder(view)
         } else {
@@ -51,4 +54,39 @@ class TrackAdapter (
         }
     }
 
+    fun interface TrackClickListener {
+        fun onTrackClick(track: Track)
+    }
+
+    fun interface ClearHistoryClickListener {
+        fun onClearHistoryClick()
+    }
+
+    fun setHistoryAdapter() {
+        isHistoryAdapter = true
+    }
+
+    fun unsetHistoryAdapter() {
+        isHistoryAdapter = false
+    }
+
+    fun setItemClickListener(clickListener: TrackClickListener) {
+        itemClickListener = clickListener
+    }
+
+    fun setClearHistoryClickListener(clickListener: ClearHistoryClickListener) {
+        buttonClearHistoryClickListener = clickListener
+    }
+
+    fun setTracks(_tracks: ArrayList<Track>) {
+        tracks = _tracks
+    }
+
+    fun clearTracks() {
+        tracks.clear()
+    }
+
+    fun addTracks(_tracks: ArrayList<Track>) {
+        tracks.addAll(_tracks)
+    }
 }
