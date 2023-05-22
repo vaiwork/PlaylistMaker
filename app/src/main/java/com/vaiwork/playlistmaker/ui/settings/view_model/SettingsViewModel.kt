@@ -4,24 +4,13 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import com.vaiwork.playlistmaker.domain.api.SharedPreferenceInteractor
 import com.vaiwork.playlistmaker.util.App
-import com.vaiwork.playlistmaker.util.Creator
 
-class SettingsViewModel(application: Application): AndroidViewModel(application) {
-
-
-    private val sharedPreferenceInteractor = Creator.provideSharedPreferenceInteractor(getApplication<Application>())
-
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application)
-            }
-        }
-    }
+class SettingsViewModel(
+    private val sharedPreferenceInteractor: SharedPreferenceInteractor,
+    application: Application
+): AndroidViewModel(application) {
 
     fun getDarkModeValue(): Boolean {
         return sharedPreferenceInteractor.getBoolean(App.SETTINGS, MODE_PRIVATE, App.DARK_MODE, false)

@@ -4,18 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.ViewModelProvider
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.ui.main.view_model.MainViewModel
 import com.vaiwork.playlistmaker.ui.media.activity.MediaActivity
 import com.vaiwork.playlistmaker.ui.search.activity.SearchActivity
 import com.vaiwork.playlistmaker.ui.settings.activity.SettingsActivity
-import com.vaiwork.playlistmaker.util.App
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModel()
 
     private lateinit var buttonSearch: Button
     private lateinit var buttonMedia: Button
@@ -24,8 +22,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        mainViewModel = ViewModelProvider(this, MainViewModel.getViewModelFactory())[MainViewModel::class.java]
 
         buttonSearch = findViewById(R.id.button_search)
         buttonMedia = findViewById(R.id.button_media)

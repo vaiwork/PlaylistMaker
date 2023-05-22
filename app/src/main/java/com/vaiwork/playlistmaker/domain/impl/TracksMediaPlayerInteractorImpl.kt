@@ -1,7 +1,5 @@
 package com.vaiwork.playlistmaker.domain.impl
 
-import android.media.MediaPlayer.OnCompletionListener
-import android.media.MediaPlayer.OnPreparedListener
 import com.vaiwork.playlistmaker.domain.api.TracksMediaPlayerInteractor
 import com.vaiwork.playlistmaker.domain.api.TracksMediaPlayerRepository
 
@@ -35,6 +33,10 @@ class TracksMediaPlayerInteractorImpl(
 
     override fun release() {
         tracksMediaPlayerRepository.release()
+    }
+
+    override fun reset() {
+        tracksMediaPlayerRepository.reset()
     }
 
     override fun stop() {

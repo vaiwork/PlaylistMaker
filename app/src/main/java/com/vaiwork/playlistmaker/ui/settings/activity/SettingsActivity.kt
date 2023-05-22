@@ -4,17 +4,16 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.ui.settings.view_model.SettingsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var settingsViewModel: SettingsViewModel //Creator.provideSettingsController(this, this)
+    private val settingsViewModel: SettingsViewModel by viewModel()
 
     private lateinit var toolbar: Toolbar
     private lateinit var switchDarkMode: SwitchMaterial
@@ -25,8 +24,6 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
-        settingsViewModel = ViewModelProvider(this, SettingsViewModel.getViewModelFactory())[SettingsViewModel::class.java]
 
         toolbar = findViewById(R.id.settings_toolbar)
         switchDarkMode = findViewById(R.id.id_switch_dark_mode)

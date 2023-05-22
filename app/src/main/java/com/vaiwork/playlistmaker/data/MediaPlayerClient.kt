@@ -16,6 +16,8 @@ interface MediaPlayerClient {
 
     fun release()
 
+    fun reset()
+
     fun stop()
 
     fun setCurrentPlayerState(state: Int)

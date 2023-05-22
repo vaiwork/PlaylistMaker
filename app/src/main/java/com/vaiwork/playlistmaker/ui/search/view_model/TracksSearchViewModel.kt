@@ -8,16 +8,15 @@ import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import com.vaiwork.playlistmaker.domain.api.SharedPreferenceInteractor
 import com.vaiwork.playlistmaker.domain.api.TracksInteractor
 import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.ui.search.activity.TracksState
 import com.vaiwork.playlistmaker.util.App
-import com.vaiwork.playlistmaker.util.Creator
 
 class TracksSearchViewModel(
+    private val tracksInteractor: TracksInteractor,
+    private val sharedPreferenceInteractor: SharedPreferenceInteractor,
     application: Application
     ) : AndroidViewModel(application) {
 
@@ -33,19 +32,10 @@ class TracksSearchViewModel(
     private val toastState = MutableLiveData<ToastState>(ToastState.None)
     fun observeToastState(): LiveData<ToastState> = toastState
 
-    private val tracksInteractor = Creator.provideTracksInteractor(getApplication<Application>())
-    private val sharedPreferenceInteractor = Creator.provideSharedPreferenceInteractor(getApplication<Application>())
-
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
         const val SEARCH_EDIT_TEXT_CONTENT = "SEARCH_EDIT_TEXT_CONTENT"
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                TracksSearchViewModel(this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application)
-            }
-        }
     }
 
     private var lastSearchText: String? = null
