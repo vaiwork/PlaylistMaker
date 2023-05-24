@@ -42,7 +42,7 @@ class TracksMediaPlayerViewModel(
     fun observeActivatePlayImage(): LiveData<ActivatePlayState> = activatePlayImageLiveData
 
     private fun spendTimeControl() {
-        if (tracksMediaPlayerInteractor.getPlayerState() == tracksMediaPlayerInteractor.getPlayerState()) {
+        if (tracksMediaPlayerInteractor.getPlayerState() == tracksMediaPlayerInteractor.getStatePlaying()) {
             audioPleerHandler.postDelayed(audioPleerRunnable, tracksMediaPlayerInteractor.getAudioPleerDelay())
             setSpendTime(SimpleDateFormat("mm:ss", Locale.getDefault()).format(tracksMediaPlayerInteractor.getCurrentPosition()))
         }
@@ -75,6 +75,7 @@ class TracksMediaPlayerViewModel(
         tracksMediaPlayerInteractor.setDataSource(lastClickedTrack.previewUrl)
         tracksMediaPlayerInteractor.prepareAsync()
         tracksMediaPlayerInteractor.onPreparedListener {
+            setSpendTime("00:00")
             activatePlayImage(true)
             tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
         }
@@ -103,7 +104,14 @@ class TracksMediaPlayerViewModel(
     }
 
     override fun onCleared() {
+        //renderState(
+        //    AudioPlayerState.PreparedPaused
+        //)
+        setSpendTime("00:00")
         audioPleerHandler.removeCallbacksAndMessages(audioPleerRunnable)
+        tracksMediaPlayerInteractor.stop()
+        tracksMediaPlayerInteractor.prepareAsync()
+        tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
     }
 
     fun onSaveInstanceState() {

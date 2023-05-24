@@ -82,8 +82,8 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         tracksMediaPlayerViewModel.onSaveInstanceState()
+        super.onSaveInstanceState(outState)
     }
 
     private fun render(state: AudioPlayerState) {
