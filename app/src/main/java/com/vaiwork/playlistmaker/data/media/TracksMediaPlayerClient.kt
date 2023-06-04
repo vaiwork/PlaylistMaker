@@ -4,9 +4,10 @@ import android.media.MediaPlayer
 import com.vaiwork.playlistmaker.data.MediaPlayerClient
 
 class TracksMediaPlayerClient(
-    val mediaPlayer: MediaPlayer = MediaPlayer(),
-    var playerState: Int = STATE_DEFAULT
+    private val mediaPlayer: MediaPlayer = MediaPlayer(),
 ) : MediaPlayerClient {
+
+    var playerState: Int = STATE_DEFAULT
 
     companion object {
         const val STATE_DEFAULT = 0
@@ -36,6 +37,10 @@ class TracksMediaPlayerClient(
 
     override fun release() {
         mediaPlayer.release()
+    }
+
+    override fun reset() {
+        mediaPlayer.reset()
     }
 
     override fun stop() {

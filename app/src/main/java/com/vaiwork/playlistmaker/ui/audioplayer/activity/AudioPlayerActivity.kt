@@ -5,15 +5,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProvider
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.ActivatePlayState
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.SpendTimeState
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.TracksMediaPlayerViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AudioPlayerActivity : AppCompatActivity() {
-
-    private lateinit var tracksMediaPlayerViewModel: TracksMediaPlayerViewModel //Creator.provideTracksMediaPlayerPresenter(this, this)
+    private val tracksMediaPlayerViewModel: TracksMediaPlayerViewModel by viewModel()
 
     private lateinit var albumImageView: ImageView
     private lateinit var timeTextView: TextView
@@ -30,8 +29,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_pleer)
-
-        tracksMediaPlayerViewModel = ViewModelProvider(this, TracksMediaPlayerViewModel.getViewModelFactory())[TracksMediaPlayerViewModel::class.java]
 
         toolbar = findViewById(R.id.activity_pleer_back_toolbar)
         playImageView = findViewById(R.id.activity_pleer_play_image_view)
@@ -85,8 +82,8 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         tracksMediaPlayerViewModel.onSaveInstanceState()
+        super.onSaveInstanceState(outState)
     }
 
     private fun render(state: AudioPlayerState) {

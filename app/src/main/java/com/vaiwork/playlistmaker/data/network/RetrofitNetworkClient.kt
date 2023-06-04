@@ -8,21 +8,11 @@ import androidx.annotation.RequiresApi
 import com.vaiwork.playlistmaker.data.NetworkClient
 import com.vaiwork.playlistmaker.data.dto.Response
 import com.vaiwork.playlistmaker.data.dto.TrackSearchRequest
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitNetworkClient(
+    private val iTunesService: iTunesSearchApi,
     private val context: Context
     ): NetworkClient {
-
-    private val iTunesBaseUrl = "http://itunes.apple.com/"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val iTunesService = retrofit.create(iTunesSearchApi::class.java)
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun doRequest(dto: Any): Response {

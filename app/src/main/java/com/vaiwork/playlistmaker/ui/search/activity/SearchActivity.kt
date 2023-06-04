@@ -15,17 +15,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
 import com.vaiwork.playlistmaker.ui.search.view_model.ToastState
 import com.vaiwork.playlistmaker.ui.search.view_model.TracksSearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var tracksSearchViewModel: TracksSearchViewModel
+    private val tracksSearchViewModel: TracksSearchViewModel by viewModel()
 
     private var tracksAdapter : TrackAdapter = TrackAdapter()
 
@@ -44,8 +44,6 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
-        tracksSearchViewModel = ViewModelProvider(this, TracksSearchViewModel.getViewModelFactory())[TracksSearchViewModel::class.java]
 
         yourSearcherTextView = findViewById(R.id.activity_search_text_view_your_searches)
         recyclerView = findViewById(R.id.activity_search_search_recycler_view)

@@ -16,6 +16,8 @@ interface TracksMediaPlayerInteractor {
 
     fun release()
 
+    fun reset()
+
     fun stop()
 
     fun setPlayerState(state: Int)

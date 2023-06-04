@@ -33,6 +33,10 @@ class TracksMediaPlayerRepositoryImpl(
         mediaPlayerClient.release()
     }
 
+    override fun reset() {
+        mediaPlayerClient.reset()
+    }
+
     override fun stop() {
         mediaPlayerClient.stop()
     }
