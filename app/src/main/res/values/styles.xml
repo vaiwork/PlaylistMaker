@@ -104,4 +104,46 @@
         <item name="android:layout_marginBottom">@dimen/activity_pleer_static_dynamic_text_view_margin_bottom</item>
         <item name="android:maxLines">1</item>
     </style>
+    <style name="fragmentFavouritesTracksPlaceholderTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_marginTop">@dimen/activity_search_text_view_margin_Top</item>
+        <item name="android:layout_marginStart">@dimen/activity_search_text_view_margin_StartEnd</item>
+        <item name="android:layout_marginEnd">@dimen/activity_search_text_view_margin_StartEnd</item>
+        <item name="android:textSize">@dimen/activity_search_text_size</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:text">@string/fragment_favourites_tracks_your_media_empty</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight" tools:targetApi="p">400</item>
+    </style>
+    <style name="fragmentPlaylistsPlaceholderTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_marginTop">@dimen/activity_search_text_view_margin_Top</item>
+        <item name="android:layout_marginStart">@dimen/activity_search_text_view_margin_StartEnd</item>
+        <item name="android:layout_marginEnd">@dimen/activity_search_text_view_margin_StartEnd</item>
+        <item name="android:textSize">@dimen/activity_search_text_size</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:text">@string/fragment_favourites_tracks_your_media_empty</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight" tools:targetApi="p">500</item>
+    </style>
+    <style name="fragmentPlaylistsNewPlaylistButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/activity_search_button_margin_top</item>
+        <item name="cornerRadius">@dimen/activity_search_corner_radius_button</item>
+        <item name="android:backgroundTint">?attr/colorOnPrimary</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:textSize">@dimen/activity_search_button_text_size</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight" tools:targetApi="p">500</item>
+    </style>
+    <style name="activityMediaTabLayoutText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:gravity">center_horizontal|top</item>
+        <item name="android:textFontWeight" tools:targetApi="p">500</item>
+    </style>
 </resources>

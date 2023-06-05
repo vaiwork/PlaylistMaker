@@ -30,4 +30,9 @@
     <string name="activity_pleer_hint_genre">Название жанра</string>
     <string name="activity_pleer_text_country">Страна</string>
     <string name="activity_pleer_hint_country">Название страны</string>
+    <string name="fragment_favourites_tracks_your_media_empty">Ваша медиатека пуста</string>
+    <string name="fragment_playlists_you_do_not_create_no_one_playlists">Вы не создали ни одного плейлиста</string>
+    <string name="fragment_playlists_new_playlist">Новый плейлист</string>
+    <string name="activity_media_favourites_tracks">Избранные треки</string>
+    <string name="activity_media_playlists">Плейлисты</string>
 </resources>
