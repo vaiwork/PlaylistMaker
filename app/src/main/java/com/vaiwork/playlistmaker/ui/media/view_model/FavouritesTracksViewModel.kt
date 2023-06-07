@@ -10,7 +10,6 @@ class FavouritesTracksViewModel: ViewModel() {
     fun observeState(): LiveData<FavouritesTracksState> = stateLiveData
 
     init {
-        stateLiveData.postValue(FavouritesTracksState.Error("Ваша медиатека пуста"))
+        stateLiveData.postValue(FavouritesTracksState.ErrorYourMediaEmpty)
     }
-
 }

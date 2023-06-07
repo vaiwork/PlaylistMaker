@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.vaiwork.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.vaiwork.playlistmaker.ui.media.view_model.PlaylistsState
@@ -12,12 +13,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment: Fragment() {
     private val playlistsViewModel: PlaylistsViewModel by viewModel()
-    private lateinit var binding: FragmentPlaylistsBinding
+    private var binding: FragmentPlaylistsBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -25,16 +26,21 @@ class PlaylistsFragment: Fragment() {
 
         playlistsViewModel.observeState().observe(viewLifecycleOwner) {
             when(it) {
-                is PlaylistsState.Error -> showError(it.message)
+                is PlaylistsState.ErrorYouDoNotCreateAnyPlaylists -> showError()
             }
         }
     }
 
-    private fun showError(message: String) {
-        binding.apply {
-            fragmentPlaylistsNewPlaylistButton.visibility = View.VISIBLE
-            fragmentPlaylistsPlaceholderImageView.visibility = View.VISIBLE
-            fragmentPlaylistsPlaceholderTextView.visibility = View.VISIBLE
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
+    private fun showError() {
+        binding?.apply {
+            fragmentPlaylistsNewPlaylistButton.isVisible = true
+            fragmentPlaylistsPlaceholderImageView.isVisible = true
+            fragmentPlaylistsPlaceholderTextView.isVisible = true
         }
     }
 }
