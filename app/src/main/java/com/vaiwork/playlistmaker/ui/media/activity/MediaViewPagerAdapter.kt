@@ -7,11 +7,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class MediaViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    companion object{
-        fun newInstance() = FavouritesTracksFragment()
-            .apply { }
-    }
-
     override fun getItemCount(): Int {
         return 2
     }

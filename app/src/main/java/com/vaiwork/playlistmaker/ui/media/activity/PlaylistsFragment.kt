@@ -15,6 +15,11 @@ class PlaylistsFragment: Fragment() {
     private val playlistsViewModel: PlaylistsViewModel by viewModel()
     private var binding: FragmentPlaylistsBinding? = null
 
+    companion object{
+        fun newInstance() = PlaylistsFragment()
+            .apply { }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentPlaylistsBinding.inflate(inflater, container, false)

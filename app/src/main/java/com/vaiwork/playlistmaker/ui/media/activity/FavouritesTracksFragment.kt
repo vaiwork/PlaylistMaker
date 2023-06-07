@@ -16,6 +16,11 @@ class FavouritesTracksFragment: Fragment() {
     private val favouritesTracksViewModel: FavouritesTracksViewModel by viewModel()
     private var binding: FragmentFavouritesTracksBinding? = null
 
+    companion object{
+        fun newInstance() = FavouritesTracksFragment()
+            .apply { }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentFavouritesTracksBinding.inflate(inflater, container, false)
