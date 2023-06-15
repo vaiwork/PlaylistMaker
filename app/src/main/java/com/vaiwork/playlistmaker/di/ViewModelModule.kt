@@ -2,6 +2,8 @@ package com.vaiwork.playlistmaker.di
 
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.TracksMediaPlayerViewModel
 import com.vaiwork.playlistmaker.ui.main.view_model.MainViewModel
+import com.vaiwork.playlistmaker.ui.media.view_model.FavouritesTracksViewModel
+import com.vaiwork.playlistmaker.ui.media.view_model.PlaylistsViewModel
 import com.vaiwork.playlistmaker.ui.search.view_model.TracksSearchViewModel
 import com.vaiwork.playlistmaker.ui.settings.view_model.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -23,5 +25,14 @@ val viewModelModule = module {
 
     viewModel {
         TracksMediaPlayerViewModel(get(), get(), androidApplication())
+    }
+
+
+    viewModel {
+        FavouritesTracksViewModel()
+    }
+
+    viewModel {
+        PlaylistsViewModel()
     }
 }
