@@ -146,4 +146,8 @@
         <item name="android:gravity">center_horizontal|top</item>
         <item name="android:textFontWeight" tools:targetApi="p">500</item>
     </style>
+    <style name="test" parent="Widget.Design.BottomNavigationView">
+        <item name="itemTextColor">#3772E7</item>
+        <item name="itemIconTint">#3772E7</item>
+    </style>
 </resources>

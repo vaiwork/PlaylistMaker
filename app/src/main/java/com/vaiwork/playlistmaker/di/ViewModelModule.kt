@@ -1,7 +1,7 @@
 package com.vaiwork.playlistmaker.di
 
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.TracksMediaPlayerViewModel
-import com.vaiwork.playlistmaker.ui.main.view_model.MainViewModel
+import com.vaiwork.playlistmaker.ui.root.view_model.RootViewModel
 import com.vaiwork.playlistmaker.ui.media.view_model.FavouritesTracksViewModel
 import com.vaiwork.playlistmaker.ui.media.view_model.PlaylistsViewModel
 import com.vaiwork.playlistmaker.ui.search.view_model.TracksSearchViewModel
@@ -12,7 +12,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel {
-        MainViewModel(get(), androidApplication())
+        RootViewModel(get(), androidApplication())
     }
 
     viewModel {

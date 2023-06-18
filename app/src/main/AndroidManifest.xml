@@ -20,28 +20,16 @@
         <activity
             android:name=".ui.audioplayer.activity.AudioPlayerActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.search.activity.SearchActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ui.media.activity.MediaActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ui.main.activity.MainActivity"
-            android:exported="true">
+        <activity android:name=".ui.root.activity.RootActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
         </activity>
-        <activity
-            android:name=".ui.settings.activity.SettingsActivity"
-            android:exported="true" />
     </application>
 
 </manifest>

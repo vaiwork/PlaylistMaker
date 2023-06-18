@@ -1,8 +1,8 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="activityMainTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="activityRootTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/layout</item>
+        <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/white</item>
         <item name="colorOnPrimary">@color/yp_black</item>
         <!-- Secondary brand color. -->
@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:backgroundTint">@color/yp_light_gray</item>
     </style>
     <style name="activitySettingsTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -25,7 +26,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="navigationIcon">@drawable/back</item>
     </style>
     <style name="activitySearchTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -39,7 +39,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="navigationIcon">@drawable/back</item>
         <item name="android:backgroundTint">@color/yp_light_gray</item>
     </style>
     <style name="searchImageViewActivitySearchTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -54,7 +53,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:src">@drawable/search_icon</item>
     </style>
     <style name="clearTextImageViewActivitySearchTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -230,7 +228,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="navigationIcon">@drawable/back</item>
         <item name="android:backgroundTint">@color/yp_light_gray</item>
     </style>
     <style name="activityMediaTabLayout" parent="Theme.AppCompat.DayNight.NoActionBar">

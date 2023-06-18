@@ -3,35 +3,49 @@ package com.vaiwork.playlistmaker.ui.settings.activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.vaiwork.playlistmaker.R
+import com.vaiwork.playlistmaker.databinding.FragmentSettingsBinding
 import com.vaiwork.playlistmaker.ui.settings.view_model.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsFragment: Fragment() {
+    private lateinit var binding: FragmentSettingsBinding
 
     private val settingsViewModel: SettingsViewModel by viewModel()
 
-    private lateinit var toolbar: Toolbar
     private lateinit var switchDarkMode: SwitchMaterial
     private lateinit var sendImageView: ImageView
     private lateinit var writeSupportImageView: ImageView
     private lateinit var userAgreementImageView: ImageView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+    companion object {
+        const val TAG = "SettingsFragment"
+    }
 
-        toolbar = findViewById(R.id.settings_toolbar)
-        switchDarkMode = findViewById(R.id.id_switch_dark_mode)
-        sendImageView = findViewById(R.id.id_sent_app)
-        writeSupportImageView = findViewById(R.id.id_write_support)
-        userAgreementImageView = findViewById(R.id.id_user_agreement)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        toolbar.setNavigationOnClickListener { onBackPressed() }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        switchDarkMode = binding.idSwitchDarkMode
+        sendImageView = binding.idSentApp
+        writeSupportImageView = binding.idWriteSupport
+        userAgreementImageView = binding.idUserAgreement
 
         switchDarkMode.isChecked = settingsViewModel.getDarkModeValue()
         switchDarkMode.setOnCheckedChangeListener { switcher, checked ->
