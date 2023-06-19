@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:theme="@style/trackViewTheme"
+    android:theme="@style/root"
     >
     <ImageView
         android:id="@+id/song_view_song_image_view"
@@ -22,9 +22,12 @@
         android:layout_weight="8"
         android:layout_marginTop="@dimen/linear_layout_track_view_margin"
         android:layout_marginEnd="@dimen/linear_layout_track_view_margin"
+        android:theme="@style/root"
         >
         <TextView
             android:id="@+id/song_view_song_name_text_view"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:textColor="?attr/colorOnPrimary"
@@ -35,12 +38,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="1dp"
+            android:theme="@style/root"
             >
             <TextView
                 android:id="@+id/song_view_song_executor_name_text_view"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="?attr/colorSecondary"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="@dimen/text_size_track_view_small"
                 />
             <ImageView
@@ -51,9 +57,11 @@
                 />
             <TextView
                 android:id="@+id/song_view_song_time_text_view"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="?attr/colorSecondary"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="@dimen/text_size_track_view_small"
                 />
         </LinearLayout>

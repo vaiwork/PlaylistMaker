@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/activitySearchTheme"
+    android:theme="@style/root"
     >
     <Button
         android:id="@+id/activity_search_clear_history_button"

@@ -18,7 +18,7 @@ class TracksSearchViewModel(
     private val tracksInteractor: TracksInteractor,
     private val sharedPreferenceInteractor: SharedPreferenceInteractor,
     application: Application
-    ) : AndroidViewModel(application) {
+) : AndroidViewModel(application) {
 
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
@@ -53,7 +53,7 @@ class TracksSearchViewModel(
     fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             renderState(TracksState.Loading)
-            tracksInteractor.searchTracks(newSearchText, object: TracksInteractor.TracksConsumer {
+            tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
                 override fun consume(foundTracks: ArrayList<Track>?, errorMessage: String?) {
                     if (foundTracks != null) {
                         tracks.clear()
@@ -68,6 +68,7 @@ class TracksSearchViewModel(
                             )
                             showToast(errorMessage)
                         }
+
                         tracks.isEmpty() -> {
                             renderState(
                                 TracksState.Empty(
@@ -75,6 +76,7 @@ class TracksSearchViewModel(
                                 )
                             )
                         }
+
                         else -> {
                             renderState(
                                 TracksState.Content(
@@ -113,7 +115,7 @@ class TracksSearchViewModel(
         }
     }
 
-    fun clickDebounce() : Boolean {
+    fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false

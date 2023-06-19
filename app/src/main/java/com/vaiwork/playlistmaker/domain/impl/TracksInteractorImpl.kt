@@ -11,7 +11,7 @@ class TracksInteractorImpl(
     override fun searchTracks(expression: String, consumer: TracksInteractor.TracksConsumer) {
         val t = Thread {
             when (val response = repository.searchTracks(expression)) {
-                is Resource.Success<*> -> consumer.consume(response.data , null)
+                is Resource.Success<*> -> consumer.consume(response.data, null)
                 is Resource.Error<*> -> consumer.consume(null, response.message)
             }
         }

@@ -15,10 +15,12 @@ class RootViewModel(
     fun switchTheme() {
         val currentTheme: Boolean = sharedPreferenceInteractor.getBoolean(
             App.SETTINGS,
-            AppCompatActivity.MODE_PRIVATE, App.DARK_MODE, false)
+            AppCompatActivity.MODE_PRIVATE, App.DARK_MODE, false
+        )
         sharedPreferenceInteractor.switchTheme(
             App.SETTINGS,
-            AppCompatActivity.MODE_PRIVATE, App.DARK_MODE, currentTheme)
+            AppCompatActivity.MODE_PRIVATE, App.DARK_MODE, currentTheme
+        )
         AppCompatDelegate.setDefaultNightMode(
             if (currentTheme) {
                 AppCompatDelegate.MODE_NIGHT_YES

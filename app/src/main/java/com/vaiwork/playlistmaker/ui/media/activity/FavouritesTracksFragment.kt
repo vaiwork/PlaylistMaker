@@ -11,27 +11,29 @@ import com.vaiwork.playlistmaker.ui.media.view_model.FavouritesTracksState
 import com.vaiwork.playlistmaker.ui.media.view_model.FavouritesTracksViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavouritesTracksFragment: Fragment() {
+class FavouritesTracksFragment : Fragment() {
 
     private val favouritesTracksViewModel: FavouritesTracksViewModel by viewModel()
-    private var binding: FragmentFavouritesTracksBinding? = null
+    private lateinit var binding: FragmentFavouritesTracksBinding
 
-    companion object{
+    companion object {
         fun newInstance() = FavouritesTracksFragment()
             .apply { }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentFavouritesTracksBinding.inflate(inflater, container, false)
-        return binding!!.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         favouritesTracksViewModel.observeState().observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 is FavouritesTracksState.ErrorYourMediaEmpty -> showError()
             }
         }
@@ -39,11 +41,11 @@ class FavouritesTracksFragment: Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
+        //binding = null
     }
 
     private fun showError() {
-        binding?.apply {
+        binding.apply {
             fragmentYourMediaEmptyPlaceholderImageView.isVisible = true
             fragmentYourMediaEmptyPlaceholderTextView.isVisible = true
         }

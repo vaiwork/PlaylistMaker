@@ -18,7 +18,7 @@ class MediaFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMediaBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -28,8 +28,8 @@ class MediaFragment : Fragment() {
 
         binding.viewPager.adapter = MediaViewPagerAdapter(childFragmentManager, lifecycle)
 
-        tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) {  tab, position ->
-            when(position) {
+        tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            when (position) {
                 0 -> tab.text = getString(R.string.activity_media_favourites_tracks)
                 1 -> tab.text = getString(R.string.activity_media_playlists)
             }

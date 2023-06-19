@@ -1,6 +1,5 @@
 package com.vaiwork.playlistmaker.ui.search.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.databinding.FragmentSearchBinding
 import com.vaiwork.playlistmaker.domain.models.Track
-import com.vaiwork.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
 import com.vaiwork.playlistmaker.ui.search.view_model.ToastState
 import com.vaiwork.playlistmaker.ui.search.view_model.TracksSearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,7 +30,7 @@ class SearchFragment : Fragment() {
 
     private val tracksSearchViewModel: TracksSearchViewModel by viewModel()
 
-    private var tracksAdapter : TrackAdapter = TrackAdapter()
+    private var tracksAdapter: TrackAdapter = TrackAdapter()
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchEmptyPlaceholderImageView: ImageView
@@ -46,10 +44,8 @@ class SearchFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -116,7 +112,7 @@ class SearchFragment : Fragment() {
                 } else {
                     showProgressBar(true)
                     tracksSearchViewModel.searchDebounce(
-                        changedText = s.toString() ?: ""
+                        changedText = s.toString()
                     )
                 }
                 tracksSearchViewModel.setEditableText(s.toString())
@@ -127,21 +123,22 @@ class SearchFragment : Fragment() {
         }
         editViewTextWatcher.let { searchEditText.addTextChangedListener(it) }
         searchEditText.addTextChangedListener(editViewTextWatcher)
-        searchEditText.setOnClickListener{
+        searchEditText.setOnClickListener {
             tracksSearchViewModel.searchRequest(searchEditText.text.toString())
         }
 
         clearImageView.setOnClickListener {
-            val inputMethodManager = requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputMethodManager?.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            val inputMethodManager =
+                requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(
+                requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
+            )
             searchEditText.setText("")
         }
 
-        searchUpdatePlaceholderButton.setOnClickListener{
+        searchUpdatePlaceholderButton.setOnClickListener {
             searchEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
         }
-
-        //
 
         tracksAdapter.setItemClickListener {
             if (tracksSearchViewModel.clickDebounce()) {
@@ -163,8 +160,8 @@ class SearchFragment : Fragment() {
             setEditText(it)
         }
 
-        tracksSearchViewModel.observeToastState().observe(viewLifecycleOwner) {toastState ->
-            if(toastState is ToastState.Show) {
+        tracksSearchViewModel.observeToastState().observe(viewLifecycleOwner) { toastState ->
+            if (toastState is ToastState.Show) {
                 showToast(toastState.additionalMessage)
                 tracksSearchViewModel.toastWasShown()
             }

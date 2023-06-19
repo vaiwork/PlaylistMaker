@@ -1,6 +1,6 @@
 package com.vaiwork.playlistmaker.data.dto
 
-data class TrackSearchResponse (
+data class TrackSearchResponse(
     val resultCount: Int,
     val results: ArrayList<TrackDto>
 ) : Response()

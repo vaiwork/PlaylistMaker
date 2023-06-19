@@ -11,17 +11,19 @@ import com.vaiwork.playlistmaker.ui.media.view_model.PlaylistsState
 import com.vaiwork.playlistmaker.ui.media.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistsFragment: Fragment() {
+class PlaylistsFragment : Fragment() {
     private val playlistsViewModel: PlaylistsViewModel by viewModel()
     private var binding: FragmentPlaylistsBinding? = null
 
-    companion object{
+    companion object {
         fun newInstance() = PlaylistsFragment()
             .apply { }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding!!.root
     }
@@ -30,7 +32,7 @@ class PlaylistsFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         playlistsViewModel.observeState().observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 is PlaylistsState.ErrorYouDoNotCreateAnyPlaylists -> showError()
             }
         }

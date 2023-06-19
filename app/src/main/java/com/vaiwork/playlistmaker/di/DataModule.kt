@@ -19,10 +19,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 val dataModule = module {
     single<iTunesSearchApi> {
         Retrofit.Builder()
-        .baseUrl("http://itunes.apple.com/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-        .create(iTunesSearchApi::class.java)
+            .baseUrl("http://itunes.apple.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(iTunesSearchApi::class.java)
     }
 
     single {

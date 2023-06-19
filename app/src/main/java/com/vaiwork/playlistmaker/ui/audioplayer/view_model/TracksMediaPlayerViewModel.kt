@@ -38,13 +38,22 @@ class TracksMediaPlayerViewModel(
     private val setSpendTimeLiveData = MutableLiveData<SpendTimeState>(SpendTimeState.Default)
     fun observeSetSpendTime(): LiveData<SpendTimeState> = setSpendTimeLiveData
 
-    private val activatePlayImageLiveData = MutableLiveData<ActivatePlayState>(ActivatePlayState.Default)
+    private val activatePlayImageLiveData =
+        MutableLiveData<ActivatePlayState>(ActivatePlayState.Default)
+
     fun observeActivatePlayImage(): LiveData<ActivatePlayState> = activatePlayImageLiveData
 
     private fun spendTimeControl() {
         if (tracksMediaPlayerInteractor.getPlayerState() == tracksMediaPlayerInteractor.getStatePlaying()) {
-            audioPleerHandler.postDelayed(audioPleerRunnable, tracksMediaPlayerInteractor.getAudioPleerDelay())
-            setSpendTime(SimpleDateFormat("mm:ss", Locale.getDefault()).format(tracksMediaPlayerInteractor.getCurrentPosition()))
+            audioPleerHandler.postDelayed(
+                audioPleerRunnable,
+                tracksMediaPlayerInteractor.getAudioPleerDelay()
+            )
+            setSpendTime(
+                SimpleDateFormat("mm:ss", Locale.getDefault()).format(
+                    tracksMediaPlayerInteractor.getCurrentPosition()
+                )
+            )
         }
     }
 
@@ -52,7 +61,12 @@ class TracksMediaPlayerViewModel(
         tracksMediaPlayerInteractor.startPlayer()
         renderState(
             AudioPlayerState.Started(
-                isDarkTheme = sharedPreferenceInteractor.getBoolean(App.SETTINGS, MODE_PRIVATE, App.DARK_MODE, false)
+                isDarkTheme = sharedPreferenceInteractor.getBoolean(
+                    App.SETTINGS,
+                    MODE_PRIVATE,
+                    App.DARK_MODE,
+                    false
+                )
             )
         )
         tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePlaying())
@@ -93,10 +107,11 @@ class TracksMediaPlayerViewModel(
     }
 
     fun playbackControl() {
-        when(tracksMediaPlayerInteractor.getPlayerState()) {
+        when (tracksMediaPlayerInteractor.getPlayerState()) {
             tracksMediaPlayerInteractor.getStatePlaying() -> {
                 pausePlayer()
             }
+
             tracksMediaPlayerInteractor.getStatePrepared(), tracksMediaPlayerInteractor.getStatePaused() -> {
                 startPlayer()
             }
@@ -104,9 +119,6 @@ class TracksMediaPlayerViewModel(
     }
 
     override fun onCleared() {
-        //renderState(
-        //    AudioPlayerState.PreparedPaused
-        //)
         setSpendTime("00:00")
         audioPleerHandler.removeCallbacksAndMessages(audioPleerRunnable)
         tracksMediaPlayerInteractor.stop()
@@ -130,12 +142,17 @@ class TracksMediaPlayerViewModel(
     }
 
     fun setAlbumImage(placeholder: Int, resourceRequestOptions: Int, imageView: ImageView) {
-        Glide.
-        with(getApplication<Application>()).
-        load(lastClickedTrack.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")).
-        placeholder(placeholder).
-        apply(RequestOptions.bitmapTransform(RoundedCorners(getApplication<Application>().resources.getDimensionPixelSize(resourceRequestOptions)))).
-        into(imageView)
+        Glide.with(getApplication<Application>())
+            .load(lastClickedTrack.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
+            .placeholder(placeholder).apply(
+            RequestOptions.bitmapTransform(
+                RoundedCorners(
+                    getApplication<Application>().resources.getDimensionPixelSize(
+                        resourceRequestOptions
+                    )
+                )
+            )
+        ).into(imageView)
     }
 
     fun getTrackName(): String {
@@ -147,7 +164,10 @@ class TracksMediaPlayerViewModel(
     }
 
     fun getTrackTime(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(lastClickedTrack.trackTimeMillis)
+        return SimpleDateFormat(
+            "mm:ss",
+            Locale.getDefault()
+        ).format(lastClickedTrack.trackTimeMillis)
     }
 
     fun getTrackCollection(): String {
@@ -155,7 +175,7 @@ class TracksMediaPlayerViewModel(
     }
 
     fun getTrackYear(): CharSequence {
-        return lastClickedTrack.releaseDate.subSequence(0,4)
+        return lastClickedTrack.releaseDate.subSequence(0, 4)
     }
 
     fun getTrackPrimaryGenre(): String {
