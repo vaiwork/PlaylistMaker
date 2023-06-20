@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker.ui.search.activity
+package com.vaiwork.playlistmaker.ui.search.fragment
 
 import android.os.Bundle
 import android.text.Editable

@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker.ui.settings.activity
+package com.vaiwork.playlistmaker.ui.settings.fragment
 
 import android.content.Intent
 import android.net.Uri

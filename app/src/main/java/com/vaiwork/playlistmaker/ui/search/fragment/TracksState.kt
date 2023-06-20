@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker.ui.search.activity
+package com.vaiwork.playlistmaker.ui.search.fragment
 
 import com.vaiwork.playlistmaker.domain.models.Track
 

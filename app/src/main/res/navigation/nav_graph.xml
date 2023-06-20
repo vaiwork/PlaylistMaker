@@ -6,11 +6,11 @@
     app:startDestination="@id/mediaFragment">
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.vaiwork.playlistmaker.ui.settings.activity.SettingsFragment"
+        android:name="com.vaiwork.playlistmaker.ui.settings.fragment.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.vaiwork.playlistmaker.ui.search.activity.SearchFragment"
+        android:name="com.vaiwork.playlistmaker.ui.search.fragment.SearchFragment"
         android:label="SearchFragment" >
         <action
             android:id="@+id/action_searchFragment_to_audioPlayerActivity"
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/mediaFragment"
-        android:name="com.vaiwork.playlistmaker.ui.media.activity.MediaFragment"
+        android:name="com.vaiwork.playlistmaker.ui.media.fragment.MediaFragment"
         android:label="MediaFragment" />
     <activity
         android:id="@+id/audioPlayerActivity"

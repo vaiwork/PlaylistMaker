@@ -11,7 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import com.vaiwork.playlistmaker.domain.api.SharedPreferenceInteractor
 import com.vaiwork.playlistmaker.domain.api.TracksInteractor
 import com.vaiwork.playlistmaker.domain.models.Track
-import com.vaiwork.playlistmaker.ui.search.activity.TracksState
+import com.vaiwork.playlistmaker.ui.search.fragment.TracksState
 import com.vaiwork.playlistmaker.util.App
 
 class TracksSearchViewModel(

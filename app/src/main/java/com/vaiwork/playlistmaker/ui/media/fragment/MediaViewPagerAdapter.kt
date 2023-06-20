@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker.ui.media.activity
+package com.vaiwork.playlistmaker.ui.media.fragment
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
