@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker.ui.search.activity
+package com.vaiwork.playlistmaker.ui.search.fragment
 
 import android.view.View
 import android.widget.ImageView
@@ -10,10 +10,11 @@ import com.vaiwork.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
+class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val songImage: ImageView = itemView.findViewById(R.id.song_view_song_image_view)
     private val songName: TextView = itemView.findViewById(R.id.song_view_song_name_text_view)
-    private val songExecutorName: TextView = itemView.findViewById(R.id.song_view_song_executor_name_text_view)
+    private val songExecutorName: TextView =
+        itemView.findViewById(R.id.song_view_song_executor_name_text_view)
     private val songTime: TextView = itemView.findViewById(R.id.song_view_song_time_text_view)
 
     fun bind(songTrack: Track, itemClickListener: TrackAdapter.TrackClickListener) {
@@ -23,7 +24,8 @@ class TrackViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
             .into(songImage)
         songName.text = songTrack.trackName
         songExecutorName.text = songTrack.artistName
-        songTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(songTrack.trackTimeMillis)
+        songTime.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(songTrack.trackTimeMillis)
 
         itemView.setOnClickListener {
             itemClickListener.onTrackClick(songTrack)

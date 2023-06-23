@@ -9,7 +9,7 @@ import com.vaiwork.playlistmaker.data.dto.TrackDto
 class SharedPreferencesClient(
     private val sharedPreference: SharedPreferences,
     private val gson: Gson
-): DBClient {
+) : DBClient {
 
     override fun getBooleanKey(
         sharedPreferenceName: String,
@@ -26,7 +26,10 @@ class SharedPreferencesClient(
         sharedPreferenceMode: Int,
         sharedPreferenceKey: String
     ): ArrayList<TrackDto>? {
-        return gson.fromJson(sharedPreference.getString(sharedPreferenceKey, "[]"), object : TypeToken<List<TrackDto>>() {}.type)
+        return gson.fromJson(
+            sharedPreference.getString(sharedPreferenceKey, "[]"),
+            object : TypeToken<List<TrackDto>>() {}.type
+        )
     }
 
     override fun setBooleanKey(

@@ -1,4 +1,4 @@
-package com.vaiwork.playlistmaker.ui.search.activity
+package com.vaiwork.playlistmaker.ui.search.fragment
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.models.Track
 
-class TrackAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>()
-{
-    private var itemClickListener: TrackClickListener = TrackClickListener {  }
+class TrackAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var itemClickListener: TrackClickListener = TrackClickListener { }
 
-    private var buttonClearHistoryClickListener: ClearHistoryClickListener = ClearHistoryClickListener {  }
+    private var buttonClearHistoryClickListener: ClearHistoryClickListener =
+        ClearHistoryClickListener { }
 
     private var tracks: ArrayList<Track> = ArrayList()
 
@@ -23,15 +23,22 @@ class TrackAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>()
             view = LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
             TrackViewHolder(view)
         } else {
-            view = LayoutInflater.from(parent.context).inflate(R.layout.track_clear_history_button, parent, false)
+            view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.track_clear_history_button, parent, false)
             TrackClearHistoryButtonView(view)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            R.layout.track_view -> (holder as TrackViewHolder).bind(tracks[position], itemClickListener)
-            R.layout.track_clear_history_button -> (holder as TrackClearHistoryButtonView).bind(buttonClearHistoryClickListener)
+            R.layout.track_view -> (holder as TrackViewHolder).bind(
+                tracks[position],
+                itemClickListener
+            )
+
+            R.layout.track_clear_history_button -> (holder as TrackClearHistoryButtonView).bind(
+                buttonClearHistoryClickListener
+            )
         }
     }
 

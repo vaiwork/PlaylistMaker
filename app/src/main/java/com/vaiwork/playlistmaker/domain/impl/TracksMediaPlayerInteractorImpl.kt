@@ -5,7 +5,7 @@ import com.vaiwork.playlistmaker.domain.api.TracksMediaPlayerRepository
 
 class TracksMediaPlayerInteractorImpl(
     private val tracksMediaPlayerRepository: TracksMediaPlayerRepository
-): TracksMediaPlayerInteractor {
+) : TracksMediaPlayerInteractor {
 
     override fun startPlayer() {
         tracksMediaPlayerRepository.startPlayer()

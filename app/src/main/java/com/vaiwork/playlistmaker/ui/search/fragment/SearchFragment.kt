@@ -1,10 +1,11 @@
-package com.vaiwork.playlistmaker.ui.search.activity
+package com.vaiwork.playlistmaker.ui.search.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -14,20 +15,22 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.vaiwork.playlistmaker.R
+import com.vaiwork.playlistmaker.databinding.FragmentSearchBinding
 import com.vaiwork.playlistmaker.domain.models.Track
-import com.vaiwork.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
 import com.vaiwork.playlistmaker.ui.search.view_model.ToastState
 import com.vaiwork.playlistmaker.ui.search.view_model.TracksSearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
+    private lateinit var binding: FragmentSearchBinding
 
     private val tracksSearchViewModel: TracksSearchViewModel by viewModel()
 
-    private var tracksAdapter : TrackAdapter = TrackAdapter()
+    private var tracksAdapter: TrackAdapter = TrackAdapter()
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchEmptyPlaceholderImageView: ImageView
@@ -37,27 +40,30 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchUpdatePlaceholderButton: Button
     private lateinit var searchEditText: EditText
     private lateinit var clearImageView: ImageView
-    private lateinit var toolbar: Toolbar
     private lateinit var yourSearcherTextView: TextView
     private lateinit var progressBar: ProgressBar
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        yourSearcherTextView = findViewById(R.id.activity_search_text_view_your_searches)
-        recyclerView = findViewById(R.id.activity_search_search_recycler_view)
-        searchEmptyPlaceholderImageView = findViewById(R.id.activity_search_empty_placeholder_image_view)
-        searchEmptyPlaceholderTextView = findViewById(R.id.activity_search_empty_placeholder_text_view)
-        searchErrorPlaceholderImageView = findViewById(R.id.activity_search_error_placeholder_image_view)
-        searchErrorPlaceholderTextView = findViewById(R.id.activity_search_error_placeholder_text_view)
-        searchUpdatePlaceholderButton = findViewById(R.id.activity_search_update_placeholder_button)
-        searchEditText = findViewById(R.id.activity_search_edit_text)
-        clearImageView = findViewById(R.id.activity_search_clear_image_view)
-        progressBar = findViewById(R.id.activity_search_progress_bar)
-        toolbar = findViewById(R.id.search_toolbar)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        //
+        yourSearcherTextView = binding.activitySearchTextViewYourSearches
+        recyclerView = binding.activitySearchSearchRecyclerView
+        searchEmptyPlaceholderImageView = binding.activitySearchEmptyPlaceholderImageView
+        searchEmptyPlaceholderTextView = binding.activitySearchEmptyPlaceholderTextView
+        searchErrorPlaceholderImageView = binding.activitySearchErrorPlaceholderImageView
+        searchErrorPlaceholderTextView = binding.activitySearchErrorPlaceholderTextView
+        searchUpdatePlaceholderButton = binding.activitySearchUpdatePlaceholderButton
+        searchEditText = binding.activitySearchEditText
+        clearImageView = binding.activitySearchClearImageView
+        progressBar = binding.activitySearchProgressBar
+
         tracksAdapter.setClearHistoryClickListener {
             tracksSearchViewModel.clearHistoryTracks()
             tracksAdapter.setTracks(ArrayList())
@@ -106,7 +112,7 @@ class SearchActivity : AppCompatActivity() {
                 } else {
                     showProgressBar(true)
                     tracksSearchViewModel.searchDebounce(
-                        changedText = s.toString() ?: ""
+                        changedText = s.toString()
                     )
                 }
                 tracksSearchViewModel.setEditableText(s.toString())
@@ -117,47 +123,45 @@ class SearchActivity : AppCompatActivity() {
         }
         editViewTextWatcher.let { searchEditText.addTextChangedListener(it) }
         searchEditText.addTextChangedListener(editViewTextWatcher)
-        searchEditText.setOnClickListener{
+        searchEditText.setOnClickListener {
             tracksSearchViewModel.searchRequest(searchEditText.text.toString())
         }
 
         clearImageView.setOnClickListener {
-            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputMethodManager?.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            val inputMethodManager =
+                requireContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(
+                requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
+            )
             searchEditText.setText("")
         }
 
-        toolbar.setNavigationOnClickListener { onBackPressed() }
-
-        searchUpdatePlaceholderButton.setOnClickListener{
+        searchUpdatePlaceholderButton.setOnClickListener {
             searchEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
         }
-
-        //
 
         tracksAdapter.setItemClickListener {
             if (tracksSearchViewModel.clickDebounce()) {
                 tracksSearchViewModel.onDebounce(it)
 
-                val audioPlayerActivityIntent = Intent(this, AudioPlayerActivity::class.java)
-                startActivity(audioPlayerActivityIntent)
+                findNavController().navigate(R.id.action_searchFragment_to_audioPlayerActivity)
             }
         }
 
-        tracksSearchViewModel.observeState().observe(this) {
+        tracksSearchViewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        tracksSearchViewModel.observeShowToastState().observe(this) {
+        tracksSearchViewModel.observeShowToastState().observe(viewLifecycleOwner) {
             showToast(it)
         }
 
-        tracksSearchViewModel.observeSetEditTextState().observe(this) {
+        tracksSearchViewModel.observeSetEditTextState().observe(viewLifecycleOwner) {
             setEditText(it)
         }
 
-        tracksSearchViewModel.observeToastState().observe(this) {toastState ->
-            if(toastState is ToastState.Show) {
+        tracksSearchViewModel.observeToastState().observe(viewLifecycleOwner) { toastState ->
+            if (toastState is ToastState.Show) {
                 showToast(toastState.additionalMessage)
                 tracksSearchViewModel.toastWasShown()
             }
@@ -170,12 +174,6 @@ class SearchActivity : AppCompatActivity() {
         } else {
             View.VISIBLE
         }
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        searchEditText = findViewById(R.id.activity_search_edit_text)
-        tracksSearchViewModel.onRestoreInstanceState(savedInstanceState)
     }
 
     fun showTracksList(isVisible: Boolean) {
@@ -252,7 +250,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showToast(additionalMessage: String) {
-        Toast.makeText(this, additionalMessage, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), additionalMessage, Toast.LENGTH_LONG).show()
     }
 
     private fun setEditText(text: String?) {
@@ -265,6 +263,14 @@ class SearchActivity : AppCompatActivity() {
             is TracksState.Content -> showContent(state.tracks)
             is TracksState.Error -> showError(state.errorMessage)
             is TracksState.Empty -> showEmpty(state.message)
+        }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        searchEditText = binding.activitySearchEditText
+        if (savedInstanceState != null) {
+            tracksSearchViewModel.onRestoreInstanceState(savedInstanceState)
         }
     }
 }

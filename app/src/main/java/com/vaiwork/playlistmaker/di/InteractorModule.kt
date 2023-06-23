@@ -13,7 +13,7 @@ val interactorModule = module {
         SharedPreferenceInteractorImpl(get())
     }
 
-    single<TracksInteractor>{
+    single<TracksInteractor> {
         TracksInteractorImpl(get())
     }
 

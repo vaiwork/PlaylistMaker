@@ -46,9 +46,11 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         tracksMediaPlayerViewModel.setDefaultPlayerState()
         tracksMediaPlayerViewModel.preparePlayer()
-        tracksMediaPlayerViewModel.setAlbumImage(R.drawable.placeholder_album_image_light_mode,
+        tracksMediaPlayerViewModel.setAlbumImage(
+            R.drawable.placeholder_album_image_light_mode,
             R.dimen.activity_pleer_album_image_corner_radius,
-            albumImageView)
+            albumImageView
+        )
 
         trackName.text = tracksMediaPlayerViewModel.getTrackName()
         artistName.text = tracksMediaPlayerViewModel.getTrackArtistName()
@@ -66,7 +68,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             render(it)
         }
 
-        tracksMediaPlayerViewModel.observeSetSpendTime().observe(this) {spendTimeState ->
+        tracksMediaPlayerViewModel.observeSetSpendTime().observe(this) { spendTimeState ->
             if (spendTimeState is SpendTimeState.Changed) {
                 setSpendTime(spendTimeState.timeString)
                 tracksMediaPlayerViewModel.spendTimeWasChanged()

@@ -5,7 +5,9 @@
     android:theme="@style/activityPleerTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AudioPleerActivity" >
+    android:id="@+id/audioPlayerActivity"
+    tools:context=".ui.audioplayer.activity.AudioPlayerActivity"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
