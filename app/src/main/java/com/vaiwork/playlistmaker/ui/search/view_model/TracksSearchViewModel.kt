@@ -8,11 +8,14 @@ import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.vaiwork.playlistmaker.domain.api.SharedPreferenceInteractor
 import com.vaiwork.playlistmaker.domain.api.TracksInteractor
 import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.ui.search.fragment.TracksState
 import com.vaiwork.playlistmaker.util.App
+import com.vaiwork.playlistmaker.util.debounce
+import kotlinx.coroutines.launch
 
 class TracksSearchViewModel(
     private val tracksInteractor: TracksInteractor,
@@ -45,67 +48,71 @@ class TracksSearchViewModel(
     private var editableText: String? = ""
     private var isClickAllowed = true
 
+    /*
     private val searchRunnable = Runnable {
         val newSearchText = lastSearchText ?: ""
         searchRequest(newSearchText)
     }
+     */
 
     fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             renderState(TracksState.Loading)
-            tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
-                override fun consume(foundTracks: ArrayList<Track>?, errorMessage: String?) {
-                    if (foundTracks != null) {
-                        tracks.clear()
-                        tracks.addAll(foundTracks)
-                    }
-                    when {
-                        errorMessage != null -> {
-                            renderState(
-                                TracksState.Error(
-                                    errorMessage = "Что-то не так",
-                                )
-                            )
-                            showToast(errorMessage)
-                        }
 
-                        tracks.isEmpty() -> {
-                            renderState(
-                                TracksState.Empty(
-                                    message = "Ничего не найдено",
-                                )
-                            )
-                        }
-
-                        else -> {
-                            renderState(
-                                TracksState.Content(
-                                    tracks = tracks,
-                                )
-                            )
-                        }
-                    }
+            viewModelScope.launch {
+                tracksInteractor.searchTracks(newSearchText).collect { pair ->
+                    processResults(pair.first, pair.second)
                 }
             }
-            )
         }
     }
 
-    fun searchDebounce(changedText: String) {
-        if (lastSearchText == changedText) {
-            return
+    private fun processResults(foundTracks: ArrayList<Track>?, errorMessage: String?) {
+        if (foundTracks != null) {
+            tracks.clear()
+            tracks.addAll(foundTracks)
         }
-        this.lastSearchText = changedText
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        when {
+            errorMessage != null -> {
+                renderState(
+                    TracksState.Error(
+                        errorMessage = "Что-то не так",
+                    )
+                )
+                showToast(errorMessage)
+            }
+
+            tracks.isEmpty() -> {
+                renderState(
+                    TracksState.Empty(
+                        message = "Ничего не найдено",
+                    )
+                )
+            }
+
+            else -> {
+                renderState(
+                    TracksState.Content(
+                        tracks = tracks,
+                    )
+                )
+            }
+        }
+    }
+
+    private val movieSearchDebounce = debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
+        searchRequest(changedText)
+    }
+
+    fun searchDebounce(changedText: String) {
+        if (lastSearchText != changedText) {
+            this.lastSearchText = changedText
+            movieSearchDebounce(changedText)
+        }
     }
 
     fun onDebounce(track: Track) {
         sharedPreferenceInteractor.addTrack(track, App.SETTINGS, MODE_PRIVATE, App.HISTORY_TRACKS)
-    }
-
-    override fun onCleared() {
-        handler.removeCallbacksAndMessages(searchRunnable)
     }
 
     fun onRestoreInstanceState(savedInstanceState: Bundle) {
