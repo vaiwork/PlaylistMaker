@@ -8,6 +8,7 @@ import android.widget.ImageView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -16,6 +17,9 @@ import com.vaiwork.playlistmaker.domain.api.TracksMediaPlayerInteractor
 import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.ui.audioplayer.activity.AudioPlayerState
 import com.vaiwork.playlistmaker.util.App
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -27,10 +31,7 @@ class TracksMediaPlayerViewModel(
 
     private lateinit var lastClickedTrack: Track
 
-    private val audioPleerHandler = Handler(Looper.getMainLooper())
-    private val audioPleerRunnable = Runnable {
-        spendTimeControl()
-    }
+    private var timerJob: Job? = null
 
     private val audioPlayerStateLiveData = MutableLiveData<AudioPlayerState>()
     fun observeAudioPlayerState(): LiveData<AudioPlayerState> = audioPlayerStateLiveData
@@ -42,20 +43,6 @@ class TracksMediaPlayerViewModel(
         MutableLiveData<ActivatePlayState>(ActivatePlayState.Default)
 
     fun observeActivatePlayImage(): LiveData<ActivatePlayState> = activatePlayImageLiveData
-
-    private fun spendTimeControl() {
-        if (tracksMediaPlayerInteractor.getPlayerState() == tracksMediaPlayerInteractor.getStatePlaying()) {
-            audioPleerHandler.postDelayed(
-                audioPleerRunnable,
-                tracksMediaPlayerInteractor.getAudioPleerDelay()
-            )
-            setSpendTime(
-                SimpleDateFormat("mm:ss", Locale.getDefault()).format(
-                    tracksMediaPlayerInteractor.getCurrentPosition()
-                )
-            )
-        }
-    }
 
     private fun startPlayer() {
         tracksMediaPlayerInteractor.startPlayer()
@@ -70,16 +57,30 @@ class TracksMediaPlayerViewModel(
             )
         )
         tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePlaying())
-        spendTimeControl()
+        startTimer()
     }
 
     private fun pausePlayer() {
-        audioPleerHandler.removeCallbacksAndMessages(audioPleerRunnable)
+        timerJob?.cancel()
         tracksMediaPlayerInteractor.pausePlayer()
         renderState(
             AudioPlayerState.PreparedPaused
         )
         tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePaused())
+    }
+
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (tracksMediaPlayerInteractor.getPlayerState() == tracksMediaPlayerInteractor.getStatePlaying()) {
+                delay(300L)
+                setSpendTime(
+                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(
+                        tracksMediaPlayerInteractor.getCurrentPosition()
+                    )
+                )
+            }
+            setSpendTime("00:00")
+        }
     }
 
     fun preparePlayer() {
@@ -119,19 +120,19 @@ class TracksMediaPlayerViewModel(
     }
 
     override fun onCleared() {
+        timerJob?.cancel()
         setSpendTime("00:00")
-        audioPleerHandler.removeCallbacksAndMessages(audioPleerRunnable)
         tracksMediaPlayerInteractor.stop()
         tracksMediaPlayerInteractor.prepareAsync()
         tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
     }
 
     fun onSaveInstanceState() {
+        timerJob?.cancel()
         renderState(
             AudioPlayerState.PreparedPaused
         )
         setSpendTime("00:00")
-        audioPleerHandler.removeCallbacksAndMessages(audioPleerRunnable)
         tracksMediaPlayerInteractor.stop()
         tracksMediaPlayerInteractor.prepareAsync()
         tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())

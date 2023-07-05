@@ -3,8 +3,6 @@ package com.vaiwork.playlistmaker.ui.search.view_model
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -37,23 +35,13 @@ class TracksSearchViewModel(
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
         const val SEARCH_EDIT_TEXT_CONTENT = "SEARCH_EDIT_TEXT_CONTENT"
     }
 
     private var lastSearchText: String? = null
-    private val handler = Handler(Looper.getMainLooper())
     private var tracks = ArrayList<Track>()
 
     private var editableText: String? = ""
-    private var isClickAllowed = true
-
-    /*
-    private val searchRunnable = Runnable {
-        val newSearchText = lastSearchText ?: ""
-        searchRequest(newSearchText)
-    }
-     */
 
     fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
@@ -120,15 +108,6 @@ class TracksSearchViewModel(
         if (editableText != null) {
             setEditText(editableText)
         }
-    }
-
-    fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
     }
 
     fun setEditableText(text: String) {
