@@ -2,8 +2,6 @@ package com.vaiwork.playlistmaker.ui.audioplayer.view_model
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
-import android.os.Handler
-import android.os.Looper
 import android.widget.ImageView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData

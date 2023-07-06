@@ -26,10 +26,7 @@ class RetrofitNetworkClient(
         }
         return withContext(Dispatchers.IO) {
             try {
-                //val resp = iTunesService.searchTracks(dto.expression).execute()
                 val resp = iTunesService.searchTracks(dto.expression)
-                //val body = resp.body() ?: Response()
-                //return body.apply { resultCode = resp.code() }
                 resp.apply { resultCode = 200 }
             } catch (e: Throwable) {
                 Response().apply { resultCode = 500 }

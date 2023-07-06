@@ -35,7 +35,7 @@ class SearchFragment : Fragment() {
     private var tracksAdapter: TrackAdapter = TrackAdapter()
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 500L
+        private const val CLICK_DEBOUNCE_DELAY = 10000L
     }
 
     private lateinit var onTrackClickDebounce: (Track) -> Unit
@@ -123,10 +123,10 @@ class SearchFragment : Fragment() {
                     }
                     recyclerView.adapter = tracksAdapter
                 } else {
-                    showProgressBar(true)
                     tracksSearchViewModel.searchDebounce(
                         changedText = s.toString()
                     )
+                    showProgressBar(true)
                 }
                 tracksSearchViewModel.setEditableText(s.toString())
             }
