@@ -35,7 +35,7 @@ class SearchFragment : Fragment() {
     private var tracksAdapter: TrackAdapter = TrackAdapter()
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 10000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
     private lateinit var onTrackClickDebounce: (Track) -> Unit
@@ -126,7 +126,6 @@ class SearchFragment : Fragment() {
                     tracksSearchViewModel.searchDebounce(
                         changedText = s.toString()
                     )
-                    showProgressBar(true)
                 }
                 tracksSearchViewModel.setEditableText(s.toString())
             }
@@ -137,6 +136,7 @@ class SearchFragment : Fragment() {
         editViewTextWatcher.let { searchEditText.addTextChangedListener(it) }
         searchEditText.addTextChangedListener(editViewTextWatcher)
         searchEditText.setOnClickListener {
+            if (searchEditText.text.toString().isNotEmpty()) { showProgressBar(true) }
             tracksSearchViewModel.searchRequest(searchEditText.text.toString())
         }
 
@@ -204,7 +204,7 @@ class SearchFragment : Fragment() {
         searchUpdatePlaceholderButton.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
-    fun showProgressBar(isVisible: Boolean) {
+    private fun showProgressBar(isVisible: Boolean) {
         progressBar.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 

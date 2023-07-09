@@ -20,6 +20,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
+import kotlin.concurrent.timer
 
 class TracksMediaPlayerViewModel(
     private val tracksMediaPlayerInteractor: TracksMediaPlayerInteractor,
@@ -44,6 +45,7 @@ class TracksMediaPlayerViewModel(
 
     private fun startPlayer() {
         tracksMediaPlayerInteractor.startPlayer()
+        startTimer()
         renderState(
             AudioPlayerState.Started(
                 isDarkTheme = sharedPreferenceInteractor.getBoolean(
@@ -55,7 +57,6 @@ class TracksMediaPlayerViewModel(
             )
         )
         tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePlaying())
-        startTimer()
     }
 
     private fun pausePlayer() {
@@ -69,7 +70,7 @@ class TracksMediaPlayerViewModel(
 
     private fun startTimer() {
         timerJob = viewModelScope.launch {
-            while (tracksMediaPlayerInteractor.getPlayerState() == tracksMediaPlayerInteractor.getStatePlaying()) {
+            do {
                 delay(300L)
                 setSpendTime(
                     SimpleDateFormat("mm:ss", Locale.getDefault()).format(
@@ -77,7 +78,7 @@ class TracksMediaPlayerViewModel(
                     )
                 )
             }
-            setSpendTime("00:00")
+            while (tracksMediaPlayerInteractor.getPlayerState() == tracksMediaPlayerInteractor.getStatePlaying())
         }
     }
 
@@ -97,6 +98,7 @@ class TracksMediaPlayerViewModel(
                 AudioPlayerState.PreparedPaused
             )
             setSpendTime("00:00")
+            timerJob?.cancel()
             tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
         }
     }
@@ -126,14 +128,7 @@ class TracksMediaPlayerViewModel(
     }
 
     fun onSaveInstanceState() {
-        timerJob?.cancel()
-        renderState(
-            AudioPlayerState.PreparedPaused
-        )
-        setSpendTime("00:00")
-        tracksMediaPlayerInteractor.stop()
-        tracksMediaPlayerInteractor.prepareAsync()
-        tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
+        pausePlayer()
     }
 
     private fun getHistoryTracks(): ArrayList<Track> {

@@ -41,10 +41,12 @@ class TracksMediaPlayerClient(
 
     override fun reset() {
         mediaPlayer.reset()
+        playerState = STATE_DEFAULT
     }
 
     override fun stop() {
         mediaPlayer.stop()
+        playerState = STATE_DEFAULT
     }
 
     override fun setCurrentPlayerState(state: Int) {
