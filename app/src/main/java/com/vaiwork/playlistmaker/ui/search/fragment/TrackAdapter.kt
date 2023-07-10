@@ -8,6 +8,7 @@ import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.models.Track
 
 class TrackAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     private var itemClickListener: TrackClickListener = TrackClickListener { }
 
     private var buttonClearHistoryClickListener: ClearHistoryClickListener =

@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.vaiwork.playlistmaker.R
@@ -23,6 +24,7 @@ import com.vaiwork.playlistmaker.databinding.FragmentSearchBinding
 import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.ui.search.view_model.ToastState
 import com.vaiwork.playlistmaker.ui.search.view_model.TracksSearchViewModel
+import com.vaiwork.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -31,6 +33,12 @@ class SearchFragment : Fragment() {
     private val tracksSearchViewModel: TracksSearchViewModel by viewModel()
 
     private var tracksAdapter: TrackAdapter = TrackAdapter()
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
+
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchEmptyPlaceholderImageView: ImageView
@@ -52,6 +60,11 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        onTrackClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+            tracksSearchViewModel.onDebounce(track)
+            findNavController().navigate(R.id.action_searchFragment_to_audioPlayerActivity)
+        }
 
         yourSearcherTextView = binding.activitySearchTextViewYourSearches
         recyclerView = binding.activitySearchSearchRecyclerView
@@ -110,7 +123,6 @@ class SearchFragment : Fragment() {
                     }
                     recyclerView.adapter = tracksAdapter
                 } else {
-                    showProgressBar(true)
                     tracksSearchViewModel.searchDebounce(
                         changedText = s.toString()
                     )
@@ -124,6 +136,7 @@ class SearchFragment : Fragment() {
         editViewTextWatcher.let { searchEditText.addTextChangedListener(it) }
         searchEditText.addTextChangedListener(editViewTextWatcher)
         searchEditText.setOnClickListener {
+            if (searchEditText.text.toString().isNotEmpty()) { showProgressBar(true) }
             tracksSearchViewModel.searchRequest(searchEditText.text.toString())
         }
 
@@ -141,11 +154,7 @@ class SearchFragment : Fragment() {
         }
 
         tracksAdapter.setItemClickListener {
-            if (tracksSearchViewModel.clickDebounce()) {
-                tracksSearchViewModel.onDebounce(it)
-
-                findNavController().navigate(R.id.action_searchFragment_to_audioPlayerActivity)
-            }
+            onTrackClickDebounce(it)
         }
 
         tracksSearchViewModel.observeState().observe(viewLifecycleOwner) {
@@ -195,7 +204,7 @@ class SearchFragment : Fragment() {
         searchUpdatePlaceholderButton.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
-    fun showProgressBar(isVisible: Boolean) {
+    private fun showProgressBar(isVisible: Boolean) {
         progressBar.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 

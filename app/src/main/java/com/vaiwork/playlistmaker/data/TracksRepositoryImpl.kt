@@ -5,12 +5,14 @@ import com.vaiwork.playlistmaker.data.dto.TrackSearchRequest
 import com.vaiwork.playlistmaker.data.dto.TrackSearchResponse
 import com.vaiwork.playlistmaker.domain.api.TracksRepository
 import com.vaiwork.playlistmaker.domain.models.Track
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class TracksRepositoryImpl(
     private val networkClient: NetworkClient
 ) : TracksRepository {
 
-    override fun searchTracks(expression: String): Resource<ArrayList<Track>> {
+    override fun searchTracks(expression: String): Flow<Resource<ArrayList<Track>>> = flow {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
         val result: ArrayList<Track> = arrayListOf()
         when (response.resultCode) {
@@ -54,16 +56,16 @@ class TracksRepositoryImpl(
                             }
                         )
                     )
+                    emit(Resource.Success(result))
                 }
-                return Resource.Success(result)
             }
 
             -1 -> {
-                return Resource.Error("Проверьте подключение к интернету")
+                emit(Resource.Error("Проверьте подключение к интернету"))
             }
 
             else -> {
-                return Resource.Error("Ошибка сервера")
+                emit(Resource.Error("Ошибка сервера"))
             }
         }
     }
