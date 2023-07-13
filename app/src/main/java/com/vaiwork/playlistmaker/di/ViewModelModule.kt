@@ -24,7 +24,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        TracksMediaPlayerViewModel(get(), get(), androidApplication())
+        TracksMediaPlayerViewModel(get(), get(), get(), androidApplication())
     }
 
 
