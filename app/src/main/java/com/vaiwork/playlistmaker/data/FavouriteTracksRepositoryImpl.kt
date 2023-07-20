@@ -13,7 +13,7 @@ class FavouriteTracksRepositoryImpl(
 ): FavouriteTracksRepository {
     override fun getFavouritesTracks(): Flow<List<Track>> = flow {
         val tracks = appDatabase.favouriteTracksDao().selectAllTracks()
-        emit(convertFromTrackEntity(tracks))
+        emit(convertFromTrackEntity(tracks.sortedBy { track: TrackEntity -> track.addedDateTime }))
     }
 
     override suspend fun addTrackToFavourite(track: Track) {

@@ -19,7 +19,11 @@
     <fragment
         android:id="@+id/mediaFragment"
         android:name="com.vaiwork.playlistmaker.ui.media.fragment.MediaFragment"
-        android:label="MediaFragment" />
+        android:label="MediaFragment">
+        <action
+            android:id="@+id/action_mediaFragment_to_audioPlayerActivity"
+            app:destination="@id/audioPlayerActivity" />
+    </fragment>
     <activity
         android:id="@+id/audioPlayerActivity"
         android:name="com.vaiwork.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity"

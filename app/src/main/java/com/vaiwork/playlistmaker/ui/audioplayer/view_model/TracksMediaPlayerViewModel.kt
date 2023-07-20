@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEmpty
 import kotlinx.coroutines.launch
+import org.jetbrains.annotations.NotNull
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.concurrent.timer
@@ -39,6 +40,9 @@ class TracksMediaPlayerViewModel(
     private lateinit var lastClickedTrack: Track
 
     private var timerJob: Job? = null
+
+    private val favouriteTrack = MutableLiveData<Track>()
+    fun observeFavouriteTrack(): LiveData<Track> = favouriteTrack
 
     private val audioPlayerStateLiveData = MutableLiveData<AudioPlayerState>()
     fun observeAudioPlayerState(): LiveData<AudioPlayerState> = audioPlayerStateLiveData
@@ -56,6 +60,11 @@ class TracksMediaPlayerViewModel(
 
     private val isTrackFromFavourites = MutableLiveData<Boolean>()
     fun observeIsTrackFromFavourites(): LiveData<Boolean> = isTrackFromFavourites
+
+    fun changeTrack(track: Track) {
+        lastClickedTrack = track
+        preparePlayer()
+    }
 
     private fun startPlayer() {
         tracksMediaPlayerInteractor.startPlayer()
@@ -96,9 +105,7 @@ class TracksMediaPlayerViewModel(
         }
     }
 
-    fun preparePlayer() {
-        val tracks = getHistoryTracks()
-        lastClickedTrack = tracks[0]
+    private fun preparePlayer() {
         tracksMediaPlayerInteractor.reset()
         tracksMediaPlayerInteractor.setDataSource(lastClickedTrack.previewUrl)
         tracksMediaPlayerInteractor.prepareAsync()
@@ -114,6 +121,17 @@ class TracksMediaPlayerViewModel(
             setSpendTime("00:00")
             timerJob?.cancel()
             tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
+        }
+    }
+
+    fun preparePlayerTrack(trackId: Int) {
+        viewModelScope.launch {
+            if (favouriteTracksInteractor.getFavouriteTracks().first().find { track -> track.trackId == trackId } == null) {
+                val tracks = getHistoryTracks()
+                favouriteTrack.postValue(tracks[0])
+            } else {
+                favouriteTrack.postValue(favouriteTracksInteractor.getFavouriteTracks().first().find { track -> track.trackId == trackId }!!)
+            }
         }
     }
 
@@ -235,9 +253,15 @@ class TracksMediaPlayerViewModel(
         }
     }
 
-    fun isTrackFromFavouritesControl() {
+    fun isTrackFromFavouritesControl(trackId: Int) {
         viewModelScope.launch {
-            isTrackFromFavourites.postValue(favouriteTracksInteractor.getFavouriteTracks().map { tracks -> tracks.map { track -> track.trackId } }.first().contains(lastClickedTrack.trackId))
+            //if (trackId != -1) {
+                isTrackFromFavourites.postValue(
+                    favouriteTracksInteractor.getFavouriteTracks()
+                        .map { tracks -> tracks.map { track -> track.trackId } }.first()
+                        .contains(trackId)
+                )
+            //}
         }
     }
 
