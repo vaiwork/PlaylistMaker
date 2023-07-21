@@ -19,16 +19,10 @@ import com.vaiwork.playlistmaker.ui.audioplayer.activity.LikeButtonState
 import com.vaiwork.playlistmaker.util.App
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEmpty
 import kotlinx.coroutines.launch
-import org.jetbrains.annotations.NotNull
 import java.text.SimpleDateFormat
 import java.util.Locale
-import kotlin.concurrent.timer
 
 class TracksMediaPlayerViewModel(
     private val tracksMediaPlayerInteractor: TracksMediaPlayerInteractor,
@@ -126,11 +120,12 @@ class TracksMediaPlayerViewModel(
 
     fun preparePlayerTrack(trackId: Int) {
         viewModelScope.launch {
-            if (favouriteTracksInteractor.getFavouriteTracks().first().find { track -> track.trackId == trackId } == null) {
+            if (favouriteTracksInteractor.getFavouriteTracks().first()?.find { track -> track.trackId == trackId } == null) {
                 val tracks = getHistoryTracks()
                 favouriteTrack.postValue(tracks[0])
             } else {
-                favouriteTrack.postValue(favouriteTracksInteractor.getFavouriteTracks().first().find { track -> track.trackId == trackId }!!)
+                favouriteTrack.postValue(
+                    favouriteTracksInteractor.getFavouriteTracks().first()!!.find { track -> track.trackId == trackId }!!)
             }
         }
     }
@@ -255,13 +250,9 @@ class TracksMediaPlayerViewModel(
 
     fun isTrackFromFavouritesControl(trackId: Int) {
         viewModelScope.launch {
-            //if (trackId != -1) {
-                isTrackFromFavourites.postValue(
-                    favouriteTracksInteractor.getFavouriteTracks()
-                        .map { tracks -> tracks.map { track -> track.trackId } }.first()
-                        .contains(trackId)
-                )
-            //}
+            isTrackFromFavourites.postValue(
+                favouriteTracksInteractor.selectTrackByTrackId(trackId).first() != null
+            )
         }
     }
 

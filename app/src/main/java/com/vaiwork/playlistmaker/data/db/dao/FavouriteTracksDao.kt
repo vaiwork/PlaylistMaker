@@ -13,10 +13,10 @@ interface FavouriteTracksDao {
     suspend fun insertTracks(tracks: List<TrackEntity>)
 
     @Query("SELECT * FROM favourite_tracks_table")
-    suspend fun selectAllTracks(): List<TrackEntity>
+    suspend fun selectAllTracks(): List<TrackEntity>?
 
     @Query("SELECT * FROM favourite_tracks_table WHERE trackId =:trackId")
-    suspend fun selectTrackByTrackId(trackId: Int): TrackEntity
+    suspend fun selectTrackByTrackId(trackId: Int): TrackEntity?
 
     @Delete(entity = TrackEntity::class)
     suspend fun deleteTrackEntity(trackEntity: TrackEntity)

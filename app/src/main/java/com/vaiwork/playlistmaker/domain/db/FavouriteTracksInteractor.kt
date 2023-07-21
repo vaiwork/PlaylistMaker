@@ -4,7 +4,8 @@ import com.vaiwork.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 interface FavouriteTracksInteractor {
-    fun getFavouriteTracks(): Flow<List<Track>>
+    fun getFavouriteTracks(): Flow<List<Track>?>
     suspend fun addTrackToFavourite(track: Track)
     suspend fun deleteTrackFromFavourite(track: Track)
+    fun selectTrackByTrackId(trackId: Int): Flow<Track?>
 }
