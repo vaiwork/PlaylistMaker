@@ -5,6 +5,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.ActivatePlayState
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.SpendTimeState
@@ -25,6 +28,12 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var artistName: TextView
     private lateinit var playImageView: ImageView
     private lateinit var spendTimeTextView: TextView
+    private lateinit var likeImageView: ImageView
+
+    companion object {
+        private const val ARGS_TRACK_ID = "track_id"
+        fun createArgs(trackId: Int): Bundle = bundleOf(ARGS_TRACK_ID to trackId)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,31 +50,62 @@ class AudioPlayerActivity : AppCompatActivity() {
         styleTextView = findViewById(R.id.activity_pleer_style)
         countryTextView = findViewById(R.id.activity_pleer_country)
         spendTimeTextView = findViewById(R.id.activity_pleer_spend_time_text_view)
+        likeImageView = findViewById(R.id.activity_pleer_like_image_view)
 
-        toolbar.setNavigationOnClickListener { onBackPressed() }
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
 
         tracksMediaPlayerViewModel.setDefaultPlayerState()
-        tracksMediaPlayerViewModel.preparePlayer()
-        tracksMediaPlayerViewModel.setAlbumImage(
-            R.drawable.placeholder_album_image_light_mode,
-            R.dimen.activity_pleer_album_image_corner_radius,
-            albumImageView
-        )
-
-        trackName.text = tracksMediaPlayerViewModel.getTrackName()
-        artistName.text = tracksMediaPlayerViewModel.getTrackArtistName()
-        timeTextView.text = tracksMediaPlayerViewModel.getTrackTime()
-        albumTextView.text = tracksMediaPlayerViewModel.getTrackCollection()
-        yearTextView.text = tracksMediaPlayerViewModel.getTrackYear()
-        styleTextView.text = tracksMediaPlayerViewModel.getTrackPrimaryGenre()
-        countryTextView.text = tracksMediaPlayerViewModel.getTrackCountry()
+        val trackId = intent.getIntExtra(ARGS_TRACK_ID,-1)
+        tracksMediaPlayerViewModel.preparePlayerTrack(trackId)
 
         playImageView.setOnClickListener {
             tracksMediaPlayerViewModel.playbackControl()
         }
 
+        likeImageView.setOnClickListener {
+            tracksMediaPlayerViewModel.likeControl()
+        }
+
+        tracksMediaPlayerViewModel.observeFavouriteTrack().observe(this) {
+            tracksMediaPlayerViewModel.changeTrack(it)
+            tracksMediaPlayerViewModel.setAlbumImage(
+                R.drawable.placeholder_album_image_light_mode,
+                R.dimen.activity_pleer_album_image_corner_radius,
+                albumImageView
+            )
+            trackName.text = tracksMediaPlayerViewModel.getTrackName()
+            artistName.text = tracksMediaPlayerViewModel.getTrackArtistName()
+            timeTextView.text = tracksMediaPlayerViewModel.getTrackTime()
+            albumTextView.text = tracksMediaPlayerViewModel.getTrackCollection()
+            yearTextView.text = tracksMediaPlayerViewModel.getTrackYear()
+            styleTextView.text = tracksMediaPlayerViewModel.getTrackPrimaryGenre()
+            countryTextView.text = tracksMediaPlayerViewModel.getTrackCountry()
+        }
+
+        tracksMediaPlayerViewModel.observeIsTrackFromFavourites().observe(this) {
+            renderIsTrackFromFavourite(it)
+        }
+
         tracksMediaPlayerViewModel.observeAudioPlayerState().observe(this) {
             render(it)
+        }
+
+        tracksMediaPlayerViewModel.observeLikeButtonState().observe(this) { likeButtonState ->
+            when (likeButtonState) {
+                is LikeButtonState.ClickedAdd -> {
+                    setClickedAddLikeButtonImage()
+                    tracksMediaPlayerViewModel.likeButtonClicked()
+                }
+                is LikeButtonState.ClickedRemove -> {
+                    setClickedRemoveLikeButtonImage()
+                    tracksMediaPlayerViewModel.likeButtonClicked()
+                }
+                else -> {
+                    tracksMediaPlayerViewModel.isTrackFromFavouritesControl(trackId)
+                }
+            }
         }
 
         tracksMediaPlayerViewModel.observeSetSpendTime().observe(this) { spendTimeState ->
@@ -95,6 +135,22 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
     }
 
+    private fun renderIsTrackFromFavourite(isTrackInFavourites: Boolean) {
+        if (isTrackInFavourites) {
+            setClickedAddLikeButtonImage()
+        } else {
+            setClickedRemoveLikeButtonImage()
+        }
+    }
+
+    private fun setClickedRemoveLikeButtonImage() {
+        likeImageView.setImageResource(R.drawable.hearth_light_mode_button)
+    }
+
+    private fun setClickedAddLikeButtonImage() {
+        likeImageView.setImageResource(R.drawable.heart_clicked_mode_button)
+    }
+
     private fun setSpendTime(text: String) {
         spendTimeTextView.text = text
     }
@@ -119,7 +175,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     private fun setLightPlayImage() {
         playImageView.setImageResource(R.drawable.play_light_mode_button)
     }
-
 
     private fun activatePlayImage(value: Boolean) {
         playImageView.isEnabled = value

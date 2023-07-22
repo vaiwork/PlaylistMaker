@@ -22,15 +22,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.databinding.FragmentSearchBinding
 import com.vaiwork.playlistmaker.domain.models.Track
+import com.vaiwork.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
 import com.vaiwork.playlistmaker.ui.search.view_model.ToastState
 import com.vaiwork.playlistmaker.ui.search.view_model.TracksSearchViewModel
 import com.vaiwork.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
-    private lateinit var binding: FragmentSearchBinding
 
     private val tracksSearchViewModel: TracksSearchViewModel by viewModel()
+    private lateinit var binding: FragmentSearchBinding
 
     private var tracksAdapter: TrackAdapter = TrackAdapter()
 
@@ -63,7 +64,7 @@ class SearchFragment : Fragment() {
 
         onTrackClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
             tracksSearchViewModel.onDebounce(track)
-            findNavController().navigate(R.id.action_searchFragment_to_audioPlayerActivity)
+            findNavController().navigate(R.id.action_searchFragment_to_audioPlayerActivity, AudioPlayerActivity.createArgs(track.trackId))
         }
 
         yourSearcherTextView = binding.activitySearchTextViewYourSearches
@@ -280,6 +281,16 @@ class SearchFragment : Fragment() {
         searchEditText = binding.activitySearchEditText
         if (savedInstanceState != null) {
             tracksSearchViewModel.onRestoreInstanceState(savedInstanceState)
+        }
+        if (tracksSearchViewModel.getHistoryTracks().isNotEmpty()) {
+            tracksAdapter.setHistoryAdapter()
+            tracksAdapter.setTracks(tracksSearchViewModel.getHistoryTracks())
+            recyclerView.adapter = tracksAdapter
+            showTracksList(true)
+            showYourSearchers(true)
+
+            showEmptyPlaceholderMessage(false)
+            showErrorPlaceholderMessage(false)
         }
     }
 }

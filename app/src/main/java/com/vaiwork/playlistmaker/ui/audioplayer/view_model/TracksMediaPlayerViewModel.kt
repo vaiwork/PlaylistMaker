@@ -12,19 +12,22 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.vaiwork.playlistmaker.domain.api.SharedPreferenceInteractor
 import com.vaiwork.playlistmaker.domain.api.TracksMediaPlayerInteractor
+import com.vaiwork.playlistmaker.domain.db.FavouriteTracksInteractor
 import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.ui.audioplayer.activity.AudioPlayerState
+import com.vaiwork.playlistmaker.ui.audioplayer.activity.LikeButtonState
 import com.vaiwork.playlistmaker.util.App
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
-import kotlin.concurrent.timer
 
 class TracksMediaPlayerViewModel(
     private val tracksMediaPlayerInteractor: TracksMediaPlayerInteractor,
     private val sharedPreferenceInteractor: SharedPreferenceInteractor,
+    private val favouriteTracksInteractor: FavouriteTracksInteractor,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -32,8 +35,14 @@ class TracksMediaPlayerViewModel(
 
     private var timerJob: Job? = null
 
+    private val favouriteTrack = MutableLiveData<Track>()
+    fun observeFavouriteTrack(): LiveData<Track> = favouriteTrack
+
     private val audioPlayerStateLiveData = MutableLiveData<AudioPlayerState>()
     fun observeAudioPlayerState(): LiveData<AudioPlayerState> = audioPlayerStateLiveData
+
+    private val likeButtonStateLiveData = MutableLiveData<LikeButtonState>(LikeButtonState.Default)
+    fun observeLikeButtonState(): LiveData<LikeButtonState> = likeButtonStateLiveData
 
     private val setSpendTimeLiveData = MutableLiveData<SpendTimeState>(SpendTimeState.Default)
     fun observeSetSpendTime(): LiveData<SpendTimeState> = setSpendTimeLiveData
@@ -42,6 +51,14 @@ class TracksMediaPlayerViewModel(
         MutableLiveData<ActivatePlayState>(ActivatePlayState.Default)
 
     fun observeActivatePlayImage(): LiveData<ActivatePlayState> = activatePlayImageLiveData
+
+    private val isTrackFromFavourites = MutableLiveData<Boolean>()
+    fun observeIsTrackFromFavourites(): LiveData<Boolean> = isTrackFromFavourites
+
+    fun changeTrack(track: Track) {
+        lastClickedTrack = track
+        preparePlayer()
+    }
 
     private fun startPlayer() {
         tracksMediaPlayerInteractor.startPlayer()
@@ -82,9 +99,7 @@ class TracksMediaPlayerViewModel(
         }
     }
 
-    fun preparePlayer() {
-        val tracks = getHistoryTracks()
-        lastClickedTrack = tracks[0]
+    private fun preparePlayer() {
         tracksMediaPlayerInteractor.reset()
         tracksMediaPlayerInteractor.setDataSource(lastClickedTrack.previewUrl)
         tracksMediaPlayerInteractor.prepareAsync()
@@ -100,6 +115,18 @@ class TracksMediaPlayerViewModel(
             setSpendTime("00:00")
             timerJob?.cancel()
             tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
+        }
+    }
+
+    fun preparePlayerTrack(trackId: Int) {
+        viewModelScope.launch {
+            if (favouriteTracksInteractor.getFavouriteTracks().first()?.find { track -> track.trackId == trackId } == null) {
+                val tracks = getHistoryTracks()
+                favouriteTrack.postValue(tracks[0])
+            } else {
+                favouriteTrack.postValue(
+                    favouriteTracksInteractor.getFavouriteTracks().first()!!.find { track -> track.trackId == trackId }!!)
+            }
         }
     }
 
@@ -198,5 +225,50 @@ class TracksMediaPlayerViewModel(
 
     fun activatePlayImageChanged() {
         activatePlayImageLiveData.value = ActivatePlayState.Default
+    }
+
+    fun likeButtonClicked() {
+        likeButtonStateLiveData.value = LikeButtonState.Default
+    }
+
+    fun likeControl() {
+        when (likeButtonStateLiveData.value) {
+            is LikeButtonState.Default -> {
+                if (isTrackFromFavourites.value!!) {
+                    renderState(LikeButtonState.ClickedRemove)
+                    deleteTrackFromFavourites()
+                } else {
+                    renderState(LikeButtonState.ClickedAdd)
+                    addTrackToFavourites()
+                }
+            }
+            else -> {
+                renderState(LikeButtonState.Default)
+            }
+        }
+    }
+
+    fun isTrackFromFavouritesControl(trackId: Int) {
+        viewModelScope.launch {
+            isTrackFromFavourites.postValue(
+                favouriteTracksInteractor.selectTrackByTrackId(trackId).first() != null
+            )
+        }
+    }
+
+    private fun renderState(state: LikeButtonState) {
+        likeButtonStateLiveData.postValue(state)
+    }
+
+    private fun addTrackToFavourites() {
+        viewModelScope.launch {
+            favouriteTracksInteractor.addTrackToFavourite(lastClickedTrack)
+        }
+    }
+
+    private fun deleteTrackFromFavourites() {
+        viewModelScope.launch {
+            favouriteTracksInteractor.deleteTrackFromFavourite(lastClickedTrack)
+        }
     }
 }
