@@ -1,11 +1,15 @@
 package com.vaiwork.playlistmaker.data
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.vaiwork.playlistmaker.data.db.entity.PlaylistEntity
 import com.vaiwork.playlistmaker.data.db.entity.TrackEntity
+import com.vaiwork.playlistmaker.domain.models.Playlist
 import com.vaiwork.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackDbConverter {
+class DbConverter {
     fun map(track: Track?): TrackEntity? {
 
         if (track != null) {
@@ -46,6 +50,41 @@ class TrackDbConverter {
             )
         } else {
             return null
+        }
+    }
+
+    fun map(playlistEntity: PlaylistEntity?): Playlist? {
+        return if (playlistEntity != null) {
+            Playlist(
+                playlistEntity.playlistTitle,
+                playlistEntity.playlistDescription,
+                playlistEntity.playlistCoverLocalUri,
+                Gson().fromJson(
+                    playlistEntity.playlistTracks,
+                    object : TypeToken<List<Track>>() {}.type
+                ),
+                playlistEntity.playlistTracksNumber
+            )
+        } else {
+            null
+        }
+    }
+
+    fun map(playlist: Playlist?): PlaylistEntity? {
+        return if (playlist != null) {
+            PlaylistEntity(
+                0,
+                playlist.playlistTitle,
+                playlist.playlistDescription,
+                playlist.playlistCoverLocalUri,
+                if (!playlist.playlistTracks.isNullOrEmpty()) {
+                    Gson().toJson(playlist.playlistTracks, object : TypeToken<List<Track>>() {}.type)
+                } else { "[]" },
+                if (!playlist.playlistTracks.isNullOrEmpty()) { playlist.playlistTracks.size} else {0},
+                System.currentTimeMillis()
+            )
+        } else {
+            null
         }
     }
 }

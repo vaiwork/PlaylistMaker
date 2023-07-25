@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.vaiwork.playlistmaker.R
@@ -49,7 +48,6 @@ class FavouritesTracksFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         onTrackClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
-            //favouritesTracksViewModel.onDebounce(track)
             findNavController().navigate(R.id.action_mediaFragment_to_audioPlayerActivity, AudioPlayerActivity.createArgs(track.trackId))
         }
 

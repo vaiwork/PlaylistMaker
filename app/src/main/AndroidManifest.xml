@@ -20,6 +20,9 @@
         <activity
             android:name=".ui.audioplayer.activity.AudioPlayerActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.newplaylist.activity.NewPlaylistActivity"
+            android:exported="false" />
         <activity android:name=".ui.root.activity.RootActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustNothing"

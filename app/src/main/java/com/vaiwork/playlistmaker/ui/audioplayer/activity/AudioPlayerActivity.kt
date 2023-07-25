@@ -6,8 +6,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.ActivatePlayState
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.SpendTimeState

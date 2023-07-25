@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 
 class FavouriteTracksRepositoryImpl(
     private val appDatabase: AppDatabase,
-    private val trackDbConverter: TrackDbConverter,
+    private val dbConverter: DbConverter,
 ): FavouriteTracksRepository {
     override fun getFavouritesTracks(): Flow<List<Track>> = flow {
         val tracks = appDatabase.favouriteTracksDao().selectAllTracks()
@@ -25,7 +25,7 @@ class FavouriteTracksRepositoryImpl(
     }
 
     override suspend fun addTrackToFavourite(track: Track) {
-        val trackEntity = trackDbConverter.map(track)
+        val trackEntity = dbConverter.map(track)
         if (trackEntity != null)
             appDatabase.favouriteTracksDao().insertTracks(listOf(trackEntity))
         else
@@ -33,18 +33,18 @@ class FavouriteTracksRepositoryImpl(
     }
 
     override suspend fun deleteTrackFromFavourite(track: Track) {
-        val trackEntity = trackDbConverter.map(track)
+        val trackEntity = dbConverter.map(track)
         if (trackEntity != null)
             appDatabase.favouriteTracksDao().deleteTrackEntity(trackEntity)
     }
 
     override fun selectTrackByTrackId(trackId: Int): Flow<Track?> = flow {
-        emit(trackDbConverter.map(appDatabase.favouriteTracksDao().selectTrackByTrackId(trackId)))
+        emit(dbConverter.map(appDatabase.favouriteTracksDao().selectTrackByTrackId(trackId)))
     }
 
 
     private fun convertFromTrackEntity(tracks: List<TrackEntity>?): List<Track>? {
-        return tracks?.map { track -> trackDbConverter.map(track)!! }
+        return tracks?.map { track -> dbConverter.map(track)!! }
     }
 
 }

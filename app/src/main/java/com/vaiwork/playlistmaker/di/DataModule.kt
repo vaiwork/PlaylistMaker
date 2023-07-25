@@ -5,18 +5,14 @@ import android.media.MediaPlayer
 import androidx.room.Room
 import com.google.gson.Gson
 import com.vaiwork.playlistmaker.data.DBClient
-import com.vaiwork.playlistmaker.data.FavouriteTracksRepositoryImpl
 import com.vaiwork.playlistmaker.data.MediaPlayerClient
 import com.vaiwork.playlistmaker.data.NetworkClient
-import com.vaiwork.playlistmaker.data.TrackDbConverter
+import com.vaiwork.playlistmaker.data.DbConverter
 import com.vaiwork.playlistmaker.data.db.AppDatabase
 import com.vaiwork.playlistmaker.data.db.SharedPreferencesClient
 import com.vaiwork.playlistmaker.data.media.TracksMediaPlayerClient
 import com.vaiwork.playlistmaker.data.network.RetrofitNetworkClient
 import com.vaiwork.playlistmaker.data.network.iTunesSearchApi
-import com.vaiwork.playlistmaker.domain.db.FavouriteTracksInteractor
-import com.vaiwork.playlistmaker.domain.db.FavouriteTracksRepository
-import com.vaiwork.playlistmaker.domain.impl.FavouriteTracksInteractorImpl
 import com.vaiwork.playlistmaker.util.App
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -44,7 +40,7 @@ val dataModule = module {
         MediaPlayer()
     }
 
-    factory { TrackDbConverter() }
+    factory { DbConverter() }
 
     single<MediaPlayerClient> {
         TracksMediaPlayerClient(get())

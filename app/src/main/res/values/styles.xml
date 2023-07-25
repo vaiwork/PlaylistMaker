@@ -147,4 +147,10 @@
         <item name="android:gravity">center_horizontal|top</item>
         <item name="android:textFontWeight" tools:targetApi="p">500</item>
     </style>
+    <style name="activityNewPlaylistToolbarTitleTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight" tools:targetApi="p">500</item>
+    </style>
 </resources>
