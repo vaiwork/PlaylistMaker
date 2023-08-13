@@ -130,7 +130,7 @@
         <item name="android:textFontWeight" tools:targetApi="p">500</item>
     </style>
     <style name="fragmentPlaylistsNewPlaylistButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
-        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_gravity">center|top</item>
         <item name="android:layout_marginTop">@dimen/activity_search_button_margin_top</item>
         <item name="cornerRadius">@dimen/activity_search_corner_radius_button</item>
         <item name="android:backgroundTint">?attr/colorOnPrimary</item>

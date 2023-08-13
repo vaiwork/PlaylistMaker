@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.db.PlaylistsInteractor
 import com.vaiwork.playlistmaker.domain.models.Playlist
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ class NewPlaylistViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    private var coverLocalUri: String = ""
+    private var coverLocalUri: String = Uri.parse("android.resource://" + application.applicationContext.packageName +  "/drawable/" + R.drawable.placeholder_album_image_light_mode).toString()
 
     private val newPlaylistTitleMutableLiveData = MutableLiveData<NewPlaylistTitleState>()
     fun observeNewPlaylistTitle(): LiveData<NewPlaylistTitleState> = newPlaylistTitleMutableLiveData

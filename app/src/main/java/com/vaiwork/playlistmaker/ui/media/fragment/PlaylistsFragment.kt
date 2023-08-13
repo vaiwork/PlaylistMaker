@@ -81,7 +81,6 @@ class PlaylistsFragment : Fragment() {
 
     private fun showError() {
         binding?.apply {
-            fragmentPlaylistsNewPlaylistButton.isVisible = true
             fragmentPlaylistsPlaceholderImageView.isVisible = true
             fragmentPlaylistsPlaceholderTextView.isVisible = true
         }
@@ -89,7 +88,6 @@ class PlaylistsFragment : Fragment() {
 
     private fun hideError() {
         binding?.apply {
-            fragmentPlaylistsNewPlaylistButton.isVisible = false
             fragmentPlaylistsPlaceholderImageView.isVisible = false
             fragmentPlaylistsPlaceholderTextView.isVisible = false
         }

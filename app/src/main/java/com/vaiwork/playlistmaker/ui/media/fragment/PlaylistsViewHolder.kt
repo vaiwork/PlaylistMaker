@@ -16,10 +16,10 @@ class PlaylistsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     fun bind(playlist: Playlist) {
         playlistImageView.setImageURI(Uri.parse(playlist.playlistCoverLocalUri))
         playlistTitleTextView.text = playlist.playlistTitle
-        playlistTracksCountTextView.text = playlist.playlistTracksNumber.toString() + " Tracks"
+        playlistTracksCountTextView.text = playlist.playlistTracksNumber.toString() + " треков"
 
         itemView.setOnClickListener {
-            //
+            // TODO:
         }
     }
 }

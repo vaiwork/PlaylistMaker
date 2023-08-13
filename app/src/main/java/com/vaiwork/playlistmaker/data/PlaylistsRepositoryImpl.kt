@@ -7,6 +7,7 @@ import com.vaiwork.playlistmaker.domain.db.PlaylistsRepository
 import com.vaiwork.playlistmaker.domain.models.Playlist
 import com.vaiwork.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 
 class PlaylistsRepositoryImpl(
@@ -30,6 +31,31 @@ class PlaylistsRepositoryImpl(
             appDatabase.playlistsDao().insertPlaylists(emptyList())
         } else {
             appDatabase.playlistsDao().insertPlaylists(listOf(playlistEntity))
+        }
+    }
+
+    override fun updatePlaylistRow(playlist: Playlist, trackId: Int): Flow<Int> = flow {
+        val playlists: List<PlaylistEntity>? = appDatabase.playlistsDao().selectAllPlaylists()
+        for (_playlist in playlists!!) {
+            if (dbConverter.map(_playlist)?.equals(playlist) == true) {
+                var tracks: List<Int> = playlist.playlistTracks
+                if (!tracks.contains(trackId)) {
+                    tracks += trackId
+                    val newPlaylist = Playlist(
+                        playlist.playlistTitle,
+                        playlist.playlistDescription,
+                        playlist.playlistCoverLocalUri,
+                        tracks,
+                        tracks.size
+                    )
+                    dbConverter.map(newPlaylist, _playlist.playlistId, _playlist.addedDateTime)
+                        ?.let { appDatabase.playlistsDao().updatePlaylistRow(it) }
+                    emit(0)
+                } else {
+                    emit(1)
+                }
+                break
+            }
         }
     }
 

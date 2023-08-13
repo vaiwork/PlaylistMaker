@@ -8,16 +8,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_playlists_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:visibility="gone"
-        />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         >
         <Button
@@ -26,7 +19,6 @@
             android:layout_height="wrap_content"
             style="@style/fragmentPlaylistsNewPlaylistButton"
             android:text="@string/fragment_playlists_new_playlist"
-            android:visibility="gone"
             />
         <ImageView
             android:id="@+id/fragment_playlists_placeholder_image_view"
@@ -43,6 +35,12 @@
             android:text="@string/fragment_playlists_you_do_not_create_no_one_playlists"
             android:visibility="gone"
             />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_playlists_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="16dp"
+            />
     </LinearLayout>
-
 </FrameLayout>
