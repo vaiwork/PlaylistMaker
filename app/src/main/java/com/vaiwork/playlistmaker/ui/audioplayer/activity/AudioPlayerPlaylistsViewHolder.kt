@@ -15,9 +15,18 @@ class AudioPlayerPlaylistsViewHolder(itemView: View): RecyclerView.ViewHolder(it
     private val playlistViewBottomSheetTracksCountTextView: TextView = itemView.findViewById(R.id.playlist_view_bottom_sheet_tracks_count_text_view)
 
     fun bind(playlist: Playlist, itemClickListener: AudioPlayerPlaylistsAdapter.PlaylistClickListener) {
-        playlistViewBottomSheetImageView.setImageURI(Uri.parse(playlist.playlistCoverLocalUri))
+        if (playlist.playlistCoverLocalUri == "") {
+            playlistViewBottomSheetImageView.setImageResource(R.drawable.placeholder_album_image_light_mode)
+            playlistViewBottomSheetImageView.setBackgroundColor(255)
+        } else {
+            playlistViewBottomSheetImageView.setImageURI(Uri.parse(playlist.playlistCoverLocalUri))
+        }
         playlistViewBottomSheetTitleTextView.text = playlist.playlistTitle
-        playlistViewBottomSheetTracksCountTextView.text = playlist.playlistTracksNumber.toString() + " Tracks"
+        when(playlist.playlistTracksNumber % 10) {
+            1 -> playlistViewBottomSheetTracksCountTextView.text = playlist.playlistTracksNumber.toString() + " трек"
+            2,3,4 -> playlistViewBottomSheetTracksCountTextView.text = playlist.playlistTracksNumber.toString() + " трека"
+            else -> playlistViewBottomSheetTracksCountTextView.text = playlist.playlistTracksNumber.toString() + " треков"
+        }
 
         itemView.setOnClickListener {
             itemClickListener.onPlaylistClick(playlist)

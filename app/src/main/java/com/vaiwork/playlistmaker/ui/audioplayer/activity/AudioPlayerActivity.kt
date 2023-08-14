@@ -1,21 +1,18 @@
 package com.vaiwork.playlistmaker.ui.audioplayer.activity
 
-import android.app.Dialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.dialog.MaterialDialogs
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.models.Playlist
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.ActivatePlayState
@@ -76,6 +73,8 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         newPlaylistButton = findViewById(R.id.activity_audio_pleer_new_playlist_buttom)
         newPlaylistButton.setOnClickListener {
+            bottomSheetDialogFragment.visibility = View.GONE
+            overlay.visibility = View.GONE
             startActivity(Intent(this, NewPlaylistActivity::class.java))
         }
 
@@ -112,7 +111,7 @@ class AudioPlayerActivity : AppCompatActivity() {
                 is PlaylistsState.Content -> { viewPlaylists(it.playlists) }
             }
         }
-        tracksMediaPlayerViewModel.isPlaylistsEmpty()
+        tracksMediaPlayerViewModel.onScreenShow()
         playlistsAdapter.setItemClickListener {
             tracksMediaPlayerViewModel.addTrackToPlaylist(it)
         }
@@ -193,7 +192,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        tracksMediaPlayerViewModel.isPlaylistsEmpty()
+        tracksMediaPlayerViewModel.onScreenShow()
         super.onResume()
     }
 
@@ -276,16 +275,12 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun showTrackAddedToPlaylist(value: String) {
-        MaterialAlertDialogBuilder(this)
-            .setMessage(value)
-            .show()
+        Toast.makeText(this, value, Toast.LENGTH_SHORT).show()
         bottomSheetDialogFragment.visibility = View.GONE
         overlay.visibility = View.GONE
     }
 
     private fun showTrackAlreadyAddedToPlaylist(value: String) {
-        MaterialAlertDialogBuilder(this)
-            .setMessage(value)
-            .show()
+        Toast.makeText(this, value, Toast.LENGTH_SHORT).show()
     }
 }

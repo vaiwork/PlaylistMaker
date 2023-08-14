@@ -1,6 +1,5 @@
 package com.vaiwork.playlistmaker.ui.newplaylist.activity
 
-import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -8,8 +7,9 @@ import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.EditText
+import android.widget.TextView
 import android.widget.ImageView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -29,8 +29,8 @@ class NewPlaylistActivity : AppCompatActivity() {
 
     private lateinit var backToolbar: Toolbar
     private lateinit var playlistImageView: ImageView
-    private lateinit var playlistTitleEditText: EditText
-    private lateinit var playlistDescriptionEditText: EditText
+    private lateinit var playlistTitleEditText: TextView
+    private lateinit var playlistDescriptionEditText: TextView
     private lateinit var createPlaylistAppCompatButton: AppCompatButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,10 +45,10 @@ class NewPlaylistActivity : AppCompatActivity() {
                 MaterialAlertDialogBuilder(this)
                     .setTitle("Завершить создание плейлиста?")
                     .setMessage("Все несохраненные данные будут потеряны")
-                    .setNegativeButton("Отмена") { dialog, which ->
+                    .setNegativeButton("Отмена") { _, _ ->
 
                     }
-                    .setPositiveButton("Завершить") { dialog, which ->
+                    .setPositiveButton("Завершить") { _, _ ->
                         finish()
                     }
                     .show()
@@ -56,6 +56,29 @@ class NewPlaylistActivity : AppCompatActivity() {
                 finish()
             }
         }
+
+        var callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (playlistImageView.drawable != null
+                    && (!playlistTitleEditText.text.isNullOrEmpty()
+                            || !playlistDescriptionEditText.text.isNullOrEmpty())) {
+                    MaterialAlertDialogBuilder(this@NewPlaylistActivity)
+                        .setTitle("Завершить создание плейлиста?")
+                        .setMessage("Все несохраненные данные будут потеряны")
+                        .setNegativeButton("Отмена") { _, _ ->
+
+                        }
+                        .setPositiveButton("Завершить") { _, _ ->
+                            finish()
+                        }
+                        .show()
+                } else {
+                    finish()
+                }
+            }
+        }
+        this.onBackPressedDispatcher.addCallback(this, callback)
+
 
         playlistImageView = findViewById(R.id.activity_new_playlist_image)
         val playlistImageViewMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -95,12 +118,14 @@ class NewPlaylistActivity : AppCompatActivity() {
         createPlaylistAppCompatButton.setOnClickListener {
             MaterialAlertDialogBuilder(this)
                 .setMessage("Плейлист " + playlistTitleEditText.text.toString() + " создан")
-                .setNeutralButton("ОК",  object: DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        newPlaylistViewModel.addPlaylist(playlistTitleEditText.text.toString(), playlistDescriptionEditText.text.toString())
-                        finish()
-                    }
-                })
+                .setNeutralButton("ОК"
+                ) { _, _ ->
+                    newPlaylistViewModel.addPlaylist(
+                        playlistTitleEditText.text.toString(),
+                        playlistDescriptionEditText.text.toString()
+                    )
+                    finish()
+                }
                 .show()
         }
     }

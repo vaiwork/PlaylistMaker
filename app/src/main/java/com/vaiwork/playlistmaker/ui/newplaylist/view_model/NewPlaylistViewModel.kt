@@ -22,13 +22,13 @@ class NewPlaylistViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    private var coverLocalUri: String = Uri.parse("android.resource://" + application.applicationContext.packageName +  "/drawable/" + R.drawable.placeholder_album_image_light_mode).toString()
+    private var coverLocalUri: String = ""
 
     private val newPlaylistTitleMutableLiveData = MutableLiveData<NewPlaylistTitleState>()
     fun observeNewPlaylistTitle(): LiveData<NewPlaylistTitleState> = newPlaylistTitleMutableLiveData
 
     fun newPlaylistTitleController(str: String) {
-        if (!str.isNullOrEmpty()) {
+        if (str.isNotEmpty()) {
             newPlaylistTitleMutableLiveData.postValue(NewPlaylistTitleState.Changed(str))
         } else {
             newPlaylistTitleMutableLiveData.postValue(NewPlaylistTitleState.Default)

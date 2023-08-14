@@ -18,7 +18,7 @@ class PlaylistsRepositoryImpl(
         val playlists = appDatabase.playlistsDao().selectAllPlaylists()
         if (playlists != null) {
             convertFromPlaylistEntity(
-                playlists.sortedBy { playlist: PlaylistEntity -> playlist.addedDateTime }.reversed()
+                playlists.sortedByDescending  { playlist: PlaylistEntity -> playlist.addedDateTime }
             )?.let { emit(it) }
         } else {
             emit(emptyList())

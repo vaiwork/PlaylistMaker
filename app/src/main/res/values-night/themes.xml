@@ -84,5 +84,10 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="navigationIcon">@drawable/back_dark_mode</item>
+        <item name="android:background">#000000</item>
+        <item name="boxStrokeColor">#FFFFFF</item>
+    </style>
+    <style name="activityAudioPleerBottomSheetGrayView" parent="root">
+        <item name="android:backgroundTint">#FFFFFF</item>
     </style>
 </resources>

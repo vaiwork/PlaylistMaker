@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
         <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="searchImageViewActivitySearchTheme" parent="root">
@@ -82,5 +83,10 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="navigationIcon">@drawable/back</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="boxStrokeColor">#AEAFB4</item>
+    </style>
+    <style name="activityAudioPleerBottomSheetGrayView" parent="root">
+        <item name="android:backgroundTint">#E6E8EB</item>
     </style>
 </resources>

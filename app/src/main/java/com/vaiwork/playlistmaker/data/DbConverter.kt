@@ -72,18 +72,18 @@ class DbConverter {
         }
     }
 
-    fun map(playlist: Playlist?, playlistId: Int = -1, addedDateTime: Long = -1): PlaylistEntity? {
+    fun map(playlist: Playlist?, playlistId: Int? = null, addedDateTime: Long? = null): PlaylistEntity? {
         return if (playlist != null) {
             PlaylistEntity(
-                if (playlistId == -1) {0} else {playlistId},
+                playlistId ?: 0,
                 playlist.playlistTitle,
                 playlist.playlistDescription,
                 playlist.playlistCoverLocalUri,
-                if (!playlist.playlistTracks.isNullOrEmpty()) {
+                if (playlist.playlistTracks.isNotEmpty()) {
                     Gson().toJson(playlist.playlistTracks, object : TypeToken<List<Int>>() {}.type)
                 } else { "[]" },
-                if (!playlist.playlistTracks.isNullOrEmpty()) { playlist.playlistTracks.size} else {0},
-                if (addedDateTime == (-1).toLong()) { System.currentTimeMillis() } else { addedDateTime }
+                playlist.playlistTracks.size,
+                addedDateTime ?: System.currentTimeMillis()
             )
         } else {
             null

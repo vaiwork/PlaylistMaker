@@ -23,7 +23,6 @@ import com.vaiwork.playlistmaker.ui.audioplayer.activity.PlaylistsState
 import com.vaiwork.playlistmaker.util.App
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -163,7 +162,7 @@ class TracksMediaPlayerViewModel(
         timerJob?.cancel()
         setSpendTime("00:00")
         tracksMediaPlayerInteractor.stop()
-        tracksMediaPlayerInteractor.prepareAsync()
+        //tracksMediaPlayerInteractor.prepareAsync()
         tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
     }
 
@@ -285,7 +284,7 @@ class TracksMediaPlayerViewModel(
         }
     }
 
-    fun isPlaylistsEmpty() {
+    fun onScreenShow() {
         viewModelScope.launch {
             val playlists = playlistsInteractor.getPlaylists().first()
             if (!playlists.isNullOrEmpty()) {
@@ -301,7 +300,7 @@ class TracksMediaPlayerViewModel(
             var resultCode: Int = playlistsInteractor.updatePlaylistRow(playlist, lastClickedTrack.trackId).first()
             if (resultCode == 0) {
                 playlistsTrackInteractor.insertTrackToPlaylist(lastClickedTrack)
-                isPlaylistsEmpty()
+                onScreenShow()
             }
             isTrackAdded.postValue(Pair(resultCode, playlist.playlistTitle))
         }
