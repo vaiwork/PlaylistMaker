@@ -3,19 +3,23 @@ package com.vaiwork.playlistmaker.ui.newplaylist.activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.TextView
 import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputLayout
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.ui.newplaylist.view_model.NewPlaylistTitleState
 import com.vaiwork.playlistmaker.ui.newplaylist.view_model.NewPlaylistViewModel
@@ -33,9 +37,15 @@ class NewPlaylistActivity : AppCompatActivity() {
     private lateinit var playlistDescriptionEditText: TextView
     private lateinit var createPlaylistAppCompatButton: AppCompatButton
 
+    private lateinit var playlistDescirptionInputTextLayout: TextInputLayout
+    private lateinit var playlistTitleInputTextLayout: TextInputLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_playlist)
+
+        playlistDescirptionInputTextLayout = findViewById(R.id.activity_new_playlist_track_description)
+        playlistTitleInputTextLayout = findViewById(R.id.activity_new_playlist_playlist_name)
 
         backToolbar = findViewById(R.id.activity_new_playlist_back_toolbar)
         backToolbar.setNavigationOnClickListener {
@@ -57,7 +67,7 @@ class NewPlaylistActivity : AppCompatActivity() {
             }
         }
 
-        var callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (playlistImageView.drawable != null
                     && (!playlistTitleEditText.text.isNullOrEmpty()
@@ -84,6 +94,7 @@ class NewPlaylistActivity : AppCompatActivity() {
         val playlistImageViewMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 playlistImageView.setImageURI(uri)
+                playlistImageView.scaleType = ImageView.ScaleType.CENTER_CROP
                 newPlaylistViewModel.setPlaylistCoverLocalUri(saveImageToPrivateStorage(uri))
             }
         }
@@ -107,26 +118,34 @@ class NewPlaylistActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
+                playlistTitleInputTextLayout.isHovered = s.toString().isNotEmpty()
             }
         }
         playlistTitleEditTextWatcher.let { playlistTitleEditText.addTextChangedListener(it) }
 
         playlistDescriptionEditText = findViewById(R.id.activity_new_playlist_track_description_edit_text)
+        val playlistDescriptionEditTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                playlistDescirptionInputTextLayout.isHovered = s.toString().isNotEmpty()
+            }
+        }
+        playlistDescriptionEditTextWatcher.let { playlistDescriptionEditText.addTextChangedListener(it) }
 
         createPlaylistAppCompatButton = findViewById(R.id.activity_new_playlist_create_image_button)
         createPlaylistAppCompatButton.isEnabled = false
         createPlaylistAppCompatButton.setOnClickListener {
-            MaterialAlertDialogBuilder(this)
-                .setMessage("Плейлист " + playlistTitleEditText.text.toString() + " создан")
-                .setNeutralButton("ОК"
-                ) { _, _ ->
-                    newPlaylistViewModel.addPlaylist(
-                        playlistTitleEditText.text.toString(),
-                        playlistDescriptionEditText.text.toString()
-                    )
-                    finish()
-                }
-                .show()
+            Toast.makeText(this, "Плейлист " + playlistTitleEditText.text.toString() + " создан", Toast.LENGTH_SHORT).show()
+            newPlaylistViewModel.addPlaylist(
+                playlistTitleEditText.text.toString(),
+                playlistDescriptionEditText.text.toString()
+            )
+            finish()
         }
     }
 
@@ -135,19 +154,13 @@ class NewPlaylistActivity : AppCompatActivity() {
     }
 
     private fun saveImageToPrivateStorage(uri: Uri): String {
-        //создаём экземпляр класса File, который указывает на нужный каталог
         val filePath = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "MyPlaylistPictures")
-        //создаем каталог, если он не создан
         if (!filePath.exists()){
             filePath.mkdirs()
         }
-        //создаём экземпляр класса File, который указывает на файл внутри каталога
         val file = File(filePath, uri.path!!.substringAfterLast("/").replace(":", "_") + ".jpeg")
-        // создаём входящий поток байтов из выбранной картинки
         val inputStream = contentResolver.openInputStream(uri)
-        // создаём исходящий поток байтов в созданный выше файл
         val outputStream = FileOutputStream(file)
-        // записываем картинку с помощью BitmapFactory
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)

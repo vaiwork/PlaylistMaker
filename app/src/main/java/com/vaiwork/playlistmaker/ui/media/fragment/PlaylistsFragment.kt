@@ -1,6 +1,8 @@
 package com.vaiwork.playlistmaker.ui.media.fragment
 
+import android.R.attr.spacing
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.vaiwork.playlistmaker.domain.models.Playlist
 import com.vaiwork.playlistmaker.ui.media.view_model.PlaylistsState
 import com.vaiwork.playlistmaker.ui.media.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class PlaylistsFragment : Fragment() {
     private val playlistsViewModel: PlaylistsViewModel by viewModel()

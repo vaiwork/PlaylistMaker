@@ -16,8 +16,9 @@ class AudioPlayerPlaylistsViewHolder(itemView: View): RecyclerView.ViewHolder(it
 
     fun bind(playlist: Playlist, itemClickListener: AudioPlayerPlaylistsAdapter.PlaylistClickListener) {
         if (playlist.playlistCoverLocalUri == "") {
-            playlistViewBottomSheetImageView.setImageResource(R.drawable.placeholder_album_image_light_mode)
+            playlistViewBottomSheetImageView.setImageResource(R.drawable.playlist_placeholder_image_mini)
             playlistViewBottomSheetImageView.setBackgroundColor(255)
+            playlistViewBottomSheetImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
         } else {
             playlistViewBottomSheetImageView.setImageURI(Uri.parse(playlist.playlistCoverLocalUri))
         }

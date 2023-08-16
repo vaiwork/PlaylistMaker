@@ -1,51 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/root"
-    >
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginTop="16dp">
     <ImageView
         android:id="@+id/playlist_view_image_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@drawable/playlist_view_image_view_background"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
+        android:layout_gravity="start"
         android:clipToOutline="true"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/playlist_view_text_view_title"
         />
-    <LinearLayout
-        android:id="@+id/playlist_view_linear_layout_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
         <TextView
             android:id="@+id/playlist_view_text_view_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="2sp"
             android:translationY="-0.97sp"
-            android:gravity="top"
             android:textSize="12sp"
             android:letterSpacing="0.03"
             android:textColor="?attr/colorOnPrimary"
             android:hint="TITLE"
             android:textColorHint="?attr/colorOnPrimary"
             android:fontFamily="@font/ys_display_regular"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/playlist_view_image_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
             />
         <TextView
             android:id="@+id/playlist_view_text_view_tracks_count"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="2sp"
             android:translationY="-0.97sp"
-            android:gravity="top"
             android:textSize="12sp"
             android:letterSpacing="0.03"
             android:textColor="?attr/colorOnPrimary"
             android:hint="20 tracks"
             android:textColorHint="?attr/colorOnPrimary"
             android:fontFamily="@font/ys_display_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playlist_view_text_view_title"
+
             />
-    </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

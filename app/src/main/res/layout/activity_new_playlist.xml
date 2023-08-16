@@ -45,11 +45,12 @@
         android:layout_height="312dp"
         android:layout_marginTop="26dp"
         android:background="@drawable/activity_new_playlist_playlist_image"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
         android:src="@drawable/activity_new_playlist_image_add_photo"
         app:layout_constraintEnd_toStartOf="@id/activity_new_playlist_end_vertical_guideline"
         app:layout_constraintStart_toEndOf="@id/activity_new_playlist_start_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/activity_new_playlist_back_toolbar"
+        android:clipToOutline="true"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -62,14 +63,14 @@
         app:layout_constraintStart_toEndOf="@id/activity_new_playlist_start_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/activity_new_playlist_image"
         android:hint="Название*"
-        android:textColorHint="?attr/colorOnPrimary"
-        app:hintTextColor="?attr/colorOnPrimary"
+        android:textColorHint="@color/activity_new_playlist_text_color_hint"
+        app:hintTextColor="@color/activity_new_playlist_hint_text_color"
         >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/activity_new_playlist_playlist_name_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:maxLines="1"
             android:singleLine="true"
             android:inputType="text"
@@ -94,9 +95,10 @@
         app:layout_constraintStart_toEndOf="@id/activity_new_playlist_start_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/activity_new_playlist_playlist_name"
         android:hint="Описание"
-        android:textColorHint="?attr/colorOnPrimary"
-        app:hintTextColor="?attr/colorOnPrimary"
+        android:textColorHint="@color/activity_new_playlist_text_color_hint"
+        app:hintTextColor="@color/activity_new_playlist_hint_text_color"
         >
+        <!-- textColorHint -> color for hint text inside box -->
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/activity_new_playlist_track_description_edit_text"

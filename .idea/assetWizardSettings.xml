@@ -19,8 +19,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="playlist_image_placeholder" />
-                            <entry key="sourceFile" value="C:\Users\admin\Desktop\Vector.svg" />
+                            <entry key="outputName" value="playlist_placeholder_image_mini" />
+                            <entry key="sourceFile" value="C:\Users\admin\Desktop\PlaceholderMini.svg" />
                           </map>
                         </option>
                       </PersistentState>

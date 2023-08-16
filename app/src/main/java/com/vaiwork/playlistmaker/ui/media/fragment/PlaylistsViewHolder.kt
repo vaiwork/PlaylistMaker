@@ -18,8 +18,9 @@ class PlaylistsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         if (playlist.playlistCoverLocalUri != "") {
             playlistImageView.setImageURI(Uri.parse(playlist.playlistCoverLocalUri))
         } else {
-            playlistImageView.setImageResource(R.drawable.placeholder_album_image_light_mode)
+            playlistImageView.setImageResource(R.drawable.playlist_placeholder_image_mini)
             playlistImageView.setBackgroundColor(255)
+            playlistImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
         }
         playlistTitleTextView.text = playlist.playlistTitle
         when(playlist.playlistTracksNumber % 10) {
