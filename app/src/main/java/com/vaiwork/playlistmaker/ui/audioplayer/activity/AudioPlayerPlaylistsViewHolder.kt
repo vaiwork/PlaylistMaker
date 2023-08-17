@@ -5,6 +5,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.models.Playlist
 
@@ -16,11 +19,27 @@ class AudioPlayerPlaylistsViewHolder(itemView: View): RecyclerView.ViewHolder(it
 
     fun bind(playlist: Playlist, itemClickListener: AudioPlayerPlaylistsAdapter.PlaylistClickListener) {
         if (playlist.playlistCoverLocalUri == "") {
-            playlistViewBottomSheetImageView.setImageResource(R.drawable.playlist_placeholder_image_mini)
+            Glide.with(playlistViewBottomSheetImageView)
+                .load(R.drawable.playlist_placeholder_image_mini)
+                .transform(
+                    CenterInside(),
+                    RoundedCorners(
+                        playlistViewBottomSheetImageView.resources.getDimensionPixelSize(
+                            R.dimen.activity_pleer_album_image_corner_radius
+                        )
+                    )
+                ).into(playlistViewBottomSheetImageView)
             playlistViewBottomSheetImageView.setBackgroundColor(255)
-            playlistViewBottomSheetImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
         } else {
-            playlistViewBottomSheetImageView.setImageURI(Uri.parse(playlist.playlistCoverLocalUri))
+            Glide.with(playlistViewBottomSheetImageView)
+                .load(playlist.playlistCoverLocalUri)
+                .transform(
+                    RoundedCorners(
+                        playlistViewBottomSheetImageView.resources.getDimensionPixelSize(
+                            R.dimen.activity_pleer_album_image_corner_radius
+                        )
+                    )
+                ).into(playlistViewBottomSheetImageView)
         }
         playlistViewBottomSheetTitleTextView.text = playlist.playlistTitle
         when(playlist.playlistTracksNumber % 10) {

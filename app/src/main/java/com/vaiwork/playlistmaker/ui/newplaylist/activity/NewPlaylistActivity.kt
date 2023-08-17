@@ -3,7 +3,6 @@ package com.vaiwork.playlistmaker.ui.newplaylist.activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
@@ -14,10 +13,12 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.vaiwork.playlistmaker.R
@@ -93,8 +94,17 @@ class NewPlaylistActivity : AppCompatActivity() {
         playlistImageView = findViewById(R.id.activity_new_playlist_image)
         val playlistImageViewMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                playlistImageView.setImageURI(uri)
-                playlistImageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                Glide.with(playlistImageView)
+                    .load(uri)
+                    .placeholder(R.drawable.playlist_placeholder_image_mini)
+                    .transform(
+                        CenterCrop(),
+                        RoundedCorners(
+                            playlistImageView.resources.getDimensionPixelSize(
+                                R.dimen.activity_pleer_album_image_corner_radius
+                            )
+                        )
+                    ).into(playlistImageView)
                 newPlaylistViewModel.setPlaylistCoverLocalUri(saveImageToPrivateStorage(uri))
             }
         }

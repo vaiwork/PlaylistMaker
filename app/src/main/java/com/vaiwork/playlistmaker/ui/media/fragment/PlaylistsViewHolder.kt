@@ -1,11 +1,12 @@
 package com.vaiwork.playlistmaker.ui.media.fragment
 
-import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.domain.models.Playlist
 
@@ -16,11 +17,27 @@ class PlaylistsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
     fun bind(playlist: Playlist) {
         if (playlist.playlistCoverLocalUri != "") {
-            playlistImageView.setImageURI(Uri.parse(playlist.playlistCoverLocalUri))
+            Glide.with(playlistImageView)
+                .load(playlist.playlistCoverLocalUri)
+                .transform(
+                    RoundedCorners(
+                        playlistImageView.resources.getDimensionPixelSize(
+                            R.dimen.activity_pleer_album_image_corner_radius
+                        )
+                    )
+                ).into(playlistImageView)
         } else {
-            playlistImageView.setImageResource(R.drawable.playlist_placeholder_image_mini)
+            Glide.with(playlistImageView)
+                .load(R.drawable.playlist_placeholder_image_mini)
+                .transform(
+                    CenterCrop(),
+                    RoundedCorners(
+                        playlistImageView.resources.getDimensionPixelSize(
+                            R.dimen.activity_pleer_album_image_corner_radius
+                        )
+                    )
+                ).into(playlistImageView)
             playlistImageView.setBackgroundColor(255)
-            playlistImageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
         }
         playlistTitleTextView.text = playlist.playlistTitle
         when(playlist.playlistTracksNumber % 10) {
