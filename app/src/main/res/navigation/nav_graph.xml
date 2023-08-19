@@ -23,10 +23,20 @@
         <action
             android:id="@+id/action_mediaFragment_to_audioPlayerActivity"
             app:destination="@id/audioPlayerActivity" />
+        <action
+            android:id="@+id/action_mediaFragment_to_newPlaylistActivity2"
+            app:destination="@id/newPlaylistActivity2" />
     </fragment>
     <activity
         android:id="@+id/audioPlayerActivity"
         android:name="com.vaiwork.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity"
         android:label="activity_audio_pleer"
-        tools:layout="@layout/activity_audio_pleer" />
+        tools:layout="@layout/activity_audio_pleer" >
+    </activity>
+    <activity
+        android:id="@+id/newPlaylistActivity2"
+        android:name="com.vaiwork.playlistmaker.ui.newplaylist.activity.NewPlaylistActivity"
+        android:label="activity_new_playlist"
+        tools:layout="@layout/activity_new_playlist"
+        />
 </navigation>

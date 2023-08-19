@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/root"
+    >
+    <ImageView
+        android:id="@+id/playlist_view_bottom_sheet_image_view"
+        android:layout_width="@dimen/image_view_track_view_side"
+        android:layout_height="@dimen/image_view_track_view_side"
+        android:layout_marginStart="13dp"
+        android:layout_marginVertical="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/playlist_view_bottom_sheet_image_view_background"
+        android:scaleType="fitXY"
+        android:clipToOutline="true"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/playlist_view_bottom_sheet_title_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Best songs 2021"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnPrimary"
+            android:fontFamily="@font/ys_display_regular"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginBottom="1dp"
+            />
+        <TextView
+            android:id="@+id/playlist_view_bottom_sheet_tracks_count_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="N треков"
+            android:textSize="11sp"
+            android:textColor="@color/yp_text_gray"
+            android:fontFamily="@font/ys_display_regular"
+            android:layout_marginBottom="14dp"
+            android:layout_marginEnd="44dp"
+            />
+    </LinearLayout>
+</LinearLayout>

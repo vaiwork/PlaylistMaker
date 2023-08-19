@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
         <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="searchImageViewActivitySearchTheme" parent="root">
@@ -68,5 +69,23 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:backgroundTint">@color/white</item>
+    </style>
+    <style name="activityNewPlaylistTheme" parent="Widget.Design.TabLayout">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/yp_black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#AEAFB4</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/yp_black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="navigationIcon">@drawable/back</item>
+        <item name="android:background">#FFFFFF</item>
+    </style>
+    <style name="activityAudioPleerBottomSheetGrayView" parent="root">
+        <item name="android:backgroundTint">#E6E8EB</item>
     </style>
 </resources>

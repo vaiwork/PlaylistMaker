@@ -13,9 +13,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.vaiwork.playlistmaker.domain.api.SharedPreferenceInteractor
 import com.vaiwork.playlistmaker.domain.api.TracksMediaPlayerInteractor
 import com.vaiwork.playlistmaker.domain.db.FavouriteTracksInteractor
+import com.vaiwork.playlistmaker.domain.db.PlaylistsInteractor
+import com.vaiwork.playlistmaker.domain.db.PlaylistsTrackInteractor
+import com.vaiwork.playlistmaker.domain.models.Playlist
 import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.ui.audioplayer.activity.AudioPlayerState
 import com.vaiwork.playlistmaker.ui.audioplayer.activity.LikeButtonState
+import com.vaiwork.playlistmaker.ui.audioplayer.activity.PlaylistsState
 import com.vaiwork.playlistmaker.util.App
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -28,6 +32,8 @@ class TracksMediaPlayerViewModel(
     private val tracksMediaPlayerInteractor: TracksMediaPlayerInteractor,
     private val sharedPreferenceInteractor: SharedPreferenceInteractor,
     private val favouriteTracksInteractor: FavouriteTracksInteractor,
+    private val playlistsInteractor: PlaylistsInteractor,
+    private val playlistsTrackInteractor: PlaylistsTrackInteractor,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -54,6 +60,12 @@ class TracksMediaPlayerViewModel(
 
     private val isTrackFromFavourites = MutableLiveData<Boolean>()
     fun observeIsTrackFromFavourites(): LiveData<Boolean> = isTrackFromFavourites
+
+    private val playlistsStateLiveData = MutableLiveData<PlaylistsState>()
+    fun observePlaylistsState(): LiveData<PlaylistsState> = playlistsStateLiveData
+
+    private val isTrackAdded = MutableLiveData<Pair<Int, String>>()
+    fun observeIsTrackAdded(): LiveData<Pair<Int, String>> = isTrackAdded
 
     fun changeTrack(track: Track) {
         lastClickedTrack = track
@@ -150,7 +162,7 @@ class TracksMediaPlayerViewModel(
         timerJob?.cancel()
         setSpendTime("00:00")
         tracksMediaPlayerInteractor.stop()
-        tracksMediaPlayerInteractor.prepareAsync()
+        //tracksMediaPlayerInteractor.prepareAsync()
         tracksMediaPlayerInteractor.setPlayerState(tracksMediaPlayerInteractor.getStatePrepared())
     }
 
@@ -269,6 +281,28 @@ class TracksMediaPlayerViewModel(
     private fun deleteTrackFromFavourites() {
         viewModelScope.launch {
             favouriteTracksInteractor.deleteTrackFromFavourite(lastClickedTrack)
+        }
+    }
+
+    fun onScreenShow() {
+        viewModelScope.launch {
+            val playlists = playlistsInteractor.getPlaylists().first()
+            if (!playlists.isNullOrEmpty()) {
+                playlistsStateLiveData.postValue(PlaylistsState.Content(playlists))
+            } else {
+                playlistsStateLiveData.postValue(PlaylistsState.Default)
+            }
+        }
+    }
+
+    fun addTrackToPlaylist(playlist: Playlist) {
+        viewModelScope.launch {
+            var resultCode: Int = playlistsInteractor.updatePlaylistRow(playlist, lastClickedTrack.trackId).first()
+            if (resultCode == 0) {
+                playlistsTrackInteractor.insertTrackToPlaylist(lastClickedTrack)
+                onScreenShow()
+            }
+            isTrackAdded.postValue(Pair(resultCode, playlist.playlistTitle))
         }
     }
 }

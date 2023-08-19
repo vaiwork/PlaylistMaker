@@ -1,17 +1,24 @@
 package com.vaiwork.playlistmaker.ui.audioplayer.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.vaiwork.playlistmaker.R
+import com.vaiwork.playlistmaker.domain.models.Playlist
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.ActivatePlayState
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.SpendTimeState
 import com.vaiwork.playlistmaker.ui.audioplayer.view_model.TracksMediaPlayerViewModel
+import com.vaiwork.playlistmaker.ui.newplaylist.activity.NewPlaylistActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AudioPlayerActivity : AppCompatActivity() {
@@ -29,6 +36,15 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var playImageView: ImageView
     private lateinit var spendTimeTextView: TextView
     private lateinit var likeImageView: ImageView
+
+    private lateinit var addToPlaylistImageView: ImageView
+    private lateinit var bottomSheetDialogFragment: LinearLayout
+    private lateinit var recyclerView: RecyclerView
+
+    private lateinit var overlay: View
+    private lateinit var newPlaylistButton: AppCompatButton
+
+    private var playlistsAdapter: AudioPlayerPlaylistsAdapter = AudioPlayerPlaylistsAdapter()
 
     companion object {
         private const val ARGS_TRACK_ID = "track_id"
@@ -51,6 +67,54 @@ class AudioPlayerActivity : AppCompatActivity() {
         countryTextView = findViewById(R.id.activity_pleer_country)
         spendTimeTextView = findViewById(R.id.activity_pleer_spend_time_text_view)
         likeImageView = findViewById(R.id.activity_pleer_like_image_view)
+        addToPlaylistImageView = findViewById(R.id.activity_pleer_add_to_playlist_image_view)
+
+        overlay = findViewById(R.id.overlay)
+
+        newPlaylistButton = findViewById(R.id.activity_audio_pleer_new_playlist_buttom)
+        newPlaylistButton.setOnClickListener {
+            bottomSheetDialogFragment.visibility = View.GONE
+            overlay.visibility = View.GONE
+            startActivity(Intent(this, NewPlaylistActivity::class.java))
+        }
+
+        bottomSheetDialogFragment = findViewById(R.id.activity_audio_pleer_bottom_sheet)
+        bottomSheetDialogFragment.visibility = View.GONE
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetDialogFragment).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        overlay.visibility = View.GONE
+                    }
+                    else -> {
+                        overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                overlay.alpha = slideOffset
+            }
+        })
+
+        recyclerView = findViewById(R.id.activity_audio_pleer_recycler_view)
+
+        addToPlaylistImageView.setOnClickListener {
+            bottomSheetDialogFragment.visibility = View.VISIBLE
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        tracksMediaPlayerViewModel.observePlaylistsState().observe(this) { it ->
+            when(it) {
+                is PlaylistsState.Default -> { showPlaylists(false) }
+                is PlaylistsState.Content -> { viewPlaylists(it.playlists) }
+            }
+        }
+        tracksMediaPlayerViewModel.onScreenShow()
+        playlistsAdapter.setItemClickListener {
+            tracksMediaPlayerViewModel.addTrackToPlaylist(it)
+        }
 
         toolbar.setNavigationOnClickListener {
             finish()
@@ -82,6 +146,10 @@ class AudioPlayerActivity : AppCompatActivity() {
             yearTextView.text = tracksMediaPlayerViewModel.getTrackYear()
             styleTextView.text = tracksMediaPlayerViewModel.getTrackPrimaryGenre()
             countryTextView.text = tracksMediaPlayerViewModel.getTrackCountry()
+        }
+
+        tracksMediaPlayerViewModel.observeIsTrackAdded().observe(this) {
+            renderIsTrackAdded(it)
         }
 
         tracksMediaPlayerViewModel.observeIsTrackFromFavourites().observe(this) {
@@ -121,6 +189,11 @@ class AudioPlayerActivity : AppCompatActivity() {
                 tracksMediaPlayerViewModel.activatePlayImageChanged()
             }
         }
+    }
+
+    override fun onResume() {
+        tracksMediaPlayerViewModel.onScreenShow()
+        super.onResume()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -178,5 +251,36 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun activatePlayImage(value: Boolean) {
         playImageView.isEnabled = value
+    }
+
+    private fun viewPlaylists(playlists: List<Playlist>) {
+        playlistsAdapter.setPlaylists(playlists)
+        recyclerView.adapter = playlistsAdapter
+        showPlaylists(true)
+    }
+
+    private fun showPlaylists(isVisible: Boolean) {
+        recyclerView.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
+
+    private fun renderIsTrackAdded(value: Pair<Int, String>) {
+        when (value.first) {
+            0 -> {
+                showTrackAddedToPlaylist("Добавлено в плейлист " + value.second)
+            }
+            else -> {
+                showTrackAlreadyAddedToPlaylist("Трек уже добавлен в плейлист " + value.second)
+            }
+        }
+    }
+
+    private fun showTrackAddedToPlaylist(value: String) {
+        Toast.makeText(this, value, Toast.LENGTH_SHORT).show()
+        bottomSheetDialogFragment.visibility = View.GONE
+        overlay.visibility = View.GONE
+    }
+
+    private fun showTrackAlreadyAddedToPlaylist(value: String) {
+        Toast.makeText(this, value, Toast.LENGTH_SHORT).show()
     }
 }
