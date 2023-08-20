@@ -15,4 +15,8 @@ class PlaylistsTrackInteractorImpl(
     override fun getTracksByIds(tracksIds: List<Int>): Flow<List<Track>> {
         return playlistsTrackRepository.getTracksByIds(tracksIds)
     }
+
+    override suspend fun deleteTrackRow(trackId: Int) {
+        playlistsTrackRepository.deleteTrackRow(trackId)
+    }
 }

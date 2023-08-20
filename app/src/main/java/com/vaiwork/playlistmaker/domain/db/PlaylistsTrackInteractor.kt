@@ -7,4 +7,6 @@ interface PlaylistsTrackInteractor {
     suspend fun insertTrackToPlaylist(track: Track)
 
     fun getTracksByIds(tracksIds: List<Int>): Flow<List<Track>>
+
+    suspend fun deleteTrackRow(trackId: Int)
 }

@@ -16,8 +16,8 @@ class PlaylistsInteractorImpl(
         playlistsRepository.addPlaylist(playlist)
     }
 
-    override fun updatePlaylistRow(playlist: Playlist, trackId: Int): Flow<Int> {
-        return playlistsRepository.updatePlaylistRow(playlist, trackId)
+    override fun updatePlaylistRow(playlist: Playlist, trackId: Int, remove: Boolean): Flow<Int> {
+        return playlistsRepository.updatePlaylistRow(playlist, trackId, remove)
     }
 
     override fun mapPlaylistToString(playlist: Playlist): String {

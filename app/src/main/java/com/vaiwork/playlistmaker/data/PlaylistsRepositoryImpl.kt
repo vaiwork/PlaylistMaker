@@ -36,7 +36,7 @@ class PlaylistsRepositoryImpl(
         }
     }
 
-    override fun updatePlaylistRow(playlist: Playlist, trackId: Int): Flow<Int> = flow {
+    override fun updatePlaylistRow(playlist: Playlist, trackId: Int, remove: Boolean): Flow<Int> = flow {
         val playlists: List<PlaylistEntity>? = appDatabase.playlistsDao().selectAllPlaylists()
         for (_playlist in playlists!!) {
             if (dbConverter.map(_playlist)?.equals(playlist) == true) {
@@ -54,7 +54,21 @@ class PlaylistsRepositoryImpl(
                         ?.let { appDatabase.playlistsDao().updatePlaylistRow(it) }
                     emit(0)
                 } else {
-                    emit(1)
+                    if (remove) {
+                        tracks -= trackId
+                        val newPlaylist = Playlist(
+                            playlist.playlistTitle,
+                            playlist.playlistDescription,
+                            playlist.playlistCoverLocalUri,
+                            tracks,
+                            tracks.size
+                        )
+                        dbConverter.map(newPlaylist, _playlist.playlistId, _playlist.addedDateTime)
+                            ?.let { appDatabase.playlistsDao().updatePlaylistRow(it) }
+                        emit(0)
+                    } else {
+                        emit(1)
+                    }
                 }
                 break
             }

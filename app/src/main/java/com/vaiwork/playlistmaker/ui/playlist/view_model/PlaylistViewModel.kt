@@ -19,6 +19,12 @@ class PlaylistViewModel(
     private val tracksMinutesCalcLiveData = MutableLiveData<String>()
     fun observeTracksMinutesCalcLiveData(): LiveData<String> = tracksMinutesCalcLiveData
 
+    private val tracksLiveData = MutableLiveData<List<Track>>()
+    fun observeTracksLiveData(): LiveData<List<Track>> = tracksLiveData
+
+    private val playlistStateLiveData = MutableLiveData<PlaylistState>()
+    fun observePlaylistState(): LiveData<PlaylistState> = playlistStateLiveData
+
     fun mapStringToPlaylist(playlistString: String): Playlist {
         return playlistsInteractor.mapStringToPlaylist(playlistString)
     }
@@ -69,4 +75,48 @@ class PlaylistViewModel(
         }
     }
 
+    fun getPlaylistTracks(tracksIds: List<Int>) {
+        viewModelScope.launch {
+            val tracks: List<Track> = playlistsTrackInteractor.getTracksByIds(tracksIds).first()
+            tracksLiveData.postValue(tracks)
+        }
+    }
+
+    private fun deleteTrackFromDB(track: Track) {
+        viewModelScope.launch {
+            val playlists = playlistsInteractor.getPlaylists().first()
+            var isUsed: Boolean = false
+            for (playlist in playlists!!) {
+                if (playlist.playlistTracks.contains(track.trackId)) {
+                    isUsed = true
+                }
+            }
+            if (!isUsed) {
+                playlistsTrackInteractor.deleteTrackRow(track.trackId)
+            }
+        }
+    }
+
+    fun deleteTrackFromPlaylist(playlist: Playlist, track: Track) {
+        viewModelScope.launch {
+            // delete trackId from playlist
+            val resultCode = playlistsInteractor.updatePlaylistRow(playlist, track.trackId, true).first()
+            if (resultCode == 0) {
+                // post data to update UI on playlist view
+                playlistStateLiveData.postValue(
+                    PlaylistState.Changed(
+                        Playlist(
+                            playlist.playlistTitle,
+                            playlist.playlistDescription,
+                            playlist.playlistCoverLocalUri,
+                            playlist.playlistTracks - track.trackId,
+                            playlist.playlistTracksNumber - 1
+                        )
+                    )
+                )
+                // get trackIds from all playlists if trackId in list pass else delete from DB
+                deleteTrackFromDB(track)
+            }
+        }
+    }
 }

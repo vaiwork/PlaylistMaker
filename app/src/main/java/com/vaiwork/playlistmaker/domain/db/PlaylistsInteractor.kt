@@ -9,7 +9,7 @@ interface PlaylistsInteractor {
 
     suspend fun addPlaylist(playlist: Playlist)
 
-    fun updatePlaylistRow(playlist: Playlist, trackId: Int): Flow<Int>
+    fun updatePlaylistRow(playlist: Playlist, trackId: Int, remove: Boolean = false): Flow<Int>
 
     fun mapPlaylistToString(playlist: Playlist): String
 

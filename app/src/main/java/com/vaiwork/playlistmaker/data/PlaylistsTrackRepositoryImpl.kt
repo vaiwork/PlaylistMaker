@@ -23,9 +23,16 @@ class PlaylistsTrackRepositoryImpl(
     override fun getTracksByIds(tracksIds: List<Int>): Flow<List<Track>> = flow {
         var tracks: List<Track> = emptyList()
         for (trackId in tracksIds) {
-            var track = appDatabase.playlistsTrackDao().selectPlaylistsTrackById(trackId)
-            tracks += dbConverter.pmap(track)!!
+            val trackEntity = appDatabase.playlistsTrackDao().selectPlaylistsTrackById(trackId)
+            val track = dbConverter.pmap(trackEntity)
+            if (track != null) {
+                tracks += track
+            }
         }
         emit(tracks)
+    }
+
+    override suspend fun deleteTrackRow(trackId: Int) {
+        appDatabase.playlistsTrackDao().deleteTrackRow(trackId)
     }
 }
