@@ -1,13 +1,16 @@
 package com.vaiwork.playlistmaker.ui.playlist.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.ImageView.ScaleType
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -41,7 +44,13 @@ class PlaylistFragment : Fragment() {
     private lateinit var calcTracksTextView: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var bottomSheetLinearLayout: LinearLayout
-    private lateinit var buttonsLinearLayout: LinearLayout
+    private lateinit var shareButton: ImageView
+    private lateinit var threeDotsButton: ImageView
+
+    private lateinit var bottomSheetThreeDotsLinearLayout: LinearLayout
+    private lateinit var shareTextView: TextView
+    private lateinit var editInfoTextView: TextView
+    private lateinit var deletePlaylistTextView: TextView
 
     private lateinit var onPlaylistTrackClickDebounce: (Track) -> Unit
 
@@ -69,8 +78,15 @@ class PlaylistFragment : Fragment() {
         calcMinutesTextView = binding.fragmentPlaylistCalcMinutes
         calcTracksTextView = binding.fragmentPlaylistCalcTracks
         recyclerView = binding.fragmentPlaylistRecyclerView
-        buttonsLinearLayout = binding.fragmentPlaylistButtons
+        shareButton = binding.fragmentPlaylistShare
+        threeDotsButton = binding.fragmentPlaylistThreeDots
         bottomSheetLinearLayout = binding.fragmentPlaylistBottomSheet
+
+        bottomSheetThreeDotsLinearLayout = binding.fragmentPlaylistBottomSheetThreeDots
+        shareTextView = binding.fragmentPlaylistTextViewShare
+        editInfoTextView = binding.fragmentPlaylistTextViewEditInfo
+        deletePlaylistTextView = binding.fragmentPlaylistTextViewDeletePlaylist
+
 
         playlistViewModel.observePlaylistState().observe(viewLifecycleOwner) { state ->
             when(state) {
@@ -134,5 +150,62 @@ class PlaylistFragment : Fragment() {
             }
         }
         playlistViewModel.getPlaylistTracks(playlist.playlistTracks)
+
+        shareButton.setOnClickListener {
+            shareClick(playlist)
+        }
+
+        threeDotsButton.setOnClickListener {
+            bottomSheetThreeDotsLinearLayout.visibility = View.VISIBLE
+
+            shareTextView.setOnClickListener {
+                shareClick(playlist)
+            }
+
+            editInfoTextView.setOnClickListener {
+
+            }
+
+            deletePlaylistTextView.setOnClickListener {
+                bottomSheetThreeDotsLinearLayout.visibility = View.GONE
+
+                MaterialAlertDialogBuilder(this.requireContext())
+                    .setTitle("Хотите удалить плейлист?")
+                    .setNegativeButton("Нет") { _, _ ->
+                    }
+                    .setPositiveButton("Да") { _, _ ->
+                        playlistViewModel.observeTestIntLiveData().observe(viewLifecycleOwner) {
+                            findNavController().navigateUp()
+                        }
+                        playlistViewModel.deletePlaylist(playlist)
+                    }
+                    .show()
+            }
+        }
+    }
+
+    private fun shareClick(playlist: Playlist) {
+        if (playlistViewModel.isEmptyPlaylist(playlist)) {
+            Toast
+                .makeText(
+                    this.context,
+                    "В этом плейлисте нет списка треков, которым можно поделиться",
+                    Toast.LENGTH_SHORT
+                ).show()
+        } else {
+            playlistViewModel.observeShareStringLiveData().observe(viewLifecycleOwner) {
+                val shareImageViewIntent = Intent(Intent.ACTION_SEND)
+                shareImageViewIntent.type = "text/plain"
+                shareImageViewIntent.putExtra(
+                    Intent.EXTRA_TEXT, it
+                )
+                val shareChooserImageViewIntent = Intent.createChooser(
+                    shareImageViewIntent,
+                    null
+                )
+                startActivity(shareChooserImageViewIntent)
+            }
+            playlistViewModel.createShareString(playlist)
+        }
     }
 }

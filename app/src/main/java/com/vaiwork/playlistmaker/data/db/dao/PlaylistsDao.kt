@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.vaiwork.playlistmaker.data.db.entity.PlaylistEntity
+import com.vaiwork.playlistmaker.domain.models.Playlist
 
 @Dao
 interface PlaylistsDao {
@@ -17,4 +18,7 @@ interface PlaylistsDao {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updatePlaylistRow(playlist: PlaylistEntity): Int
+
+    @Query("DELETE FROM playlists_table WHERE playlistId = :playlistId")
+    suspend fun deletePlaylistRow(playlistId: Int): Int
 }

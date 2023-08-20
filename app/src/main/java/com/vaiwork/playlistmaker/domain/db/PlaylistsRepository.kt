@@ -14,4 +14,6 @@ interface PlaylistsRepository {
     fun mapPlaylistToString(playlist: Playlist): String
 
     fun mapStringToPlaylist(playlistString: String) : Playlist
+
+    fun deletePlaylist(playlist: Playlist): Flow<Int>
 }

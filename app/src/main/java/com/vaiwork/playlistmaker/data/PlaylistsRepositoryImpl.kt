@@ -1,5 +1,6 @@
 package com.vaiwork.playlistmaker.data
 
+import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.vaiwork.playlistmaker.data.db.AppDatabase
@@ -81,6 +82,19 @@ class PlaylistsRepositoryImpl(
 
     override fun mapStringToPlaylist(playlistString: String): Playlist {
         return dbConverter.mapStringToPlaylist(playlistString)
+    }
+
+    override fun deletePlaylist(playlist: Playlist): Flow<Int> = flow {
+        val playlists: List<PlaylistEntity>? = appDatabase.playlistsDao().selectAllPlaylists()
+        if (!playlists.isNullOrEmpty()) {
+            for (_playlist in playlists) {
+                if (dbConverter.map(_playlist)?.equals(playlist) == true) {
+                    appDatabase.playlistsDao().deletePlaylistRow(_playlist.playlistId)
+                    emit(_playlist.playlistId)
+                }
+            }
+        }
+        emit(-1)
     }
 
     private fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>?): List<Playlist>? {

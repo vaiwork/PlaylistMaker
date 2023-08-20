@@ -152,4 +152,89 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fragment_playlist_bottom_sheet_three_dots"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/fragment_playlist_bottom_sheet_radius_background"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="400dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:visibility="gone"
+        >
+        <View
+            android:layout_width="50dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/fragment_playlist_gray_view"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            >
+            <include
+                layout="@layout/playlist_view_bottom_sheet"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:id="@+id/fragment_playlist_text_view_share"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:layout_marginBottom="21dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="44dp"
+                android:text="Поделиться"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="16sp"
+                android:fontFamily="@font/ys_display_regular"
+
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:id="@+id/fragment_playlist_text_view_edit_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:layout_marginBottom="21dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="44dp"
+                android:text="Редактировать информацию"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="16sp"
+                android:fontFamily="@font/ys_display_regular"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:id="@+id/fragment_playlist_text_view_delete_playlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:layout_marginBottom="21dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="44dp"
+                android:text="Удалить плейлист"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="16sp"
+                android:fontFamily="@font/ys_display_regular"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

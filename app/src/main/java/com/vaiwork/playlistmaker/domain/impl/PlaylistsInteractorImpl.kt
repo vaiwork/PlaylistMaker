@@ -27,4 +27,8 @@ class PlaylistsInteractorImpl(
     override fun mapStringToPlaylist(playlistString: String): Playlist {
         return playlistsRepository.mapStringToPlaylist(playlistString)
     }
+
+    override fun deletePlaylist(playlist: Playlist): Flow<Int> {
+        return playlistsRepository.deletePlaylist(playlist)
+    }
 }

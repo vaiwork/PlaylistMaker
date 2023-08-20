@@ -10,11 +10,20 @@ import com.vaiwork.playlistmaker.domain.models.Playlist
 import com.vaiwork.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlaylistViewModel(
     var playlistsInteractor: PlaylistsInteractor,
     var playlistsTrackInteractor: PlaylistsTrackInteractor
 ): ViewModel() {
+
+    private val testIntLiveData = MutableLiveData<Int>()
+    fun observeTestIntLiveData(): LiveData<Int> = testIntLiveData
+
+
+    private val shareStringLiveData = MutableLiveData<String>()
+    fun observeShareStringLiveData(): LiveData<String> = shareStringLiveData
 
     private val tracksMinutesCalcLiveData = MutableLiveData<String>()
     fun observeTracksMinutesCalcLiveData(): LiveData<String> = tracksMinutesCalcLiveData
@@ -117,6 +126,55 @@ class PlaylistViewModel(
                 // get trackIds from all playlists if trackId in list pass else delete from DB
                 deleteTrackFromDB(track)
             }
+        }
+    }
+
+    fun isEmptyPlaylist(playlist: Playlist): Boolean {
+        return playlist.playlistTracks.isEmpty()
+    }
+
+    fun createShareString(playlist: Playlist) {
+        viewModelScope.launch {
+            val tracks: List<Track> = playlistsTrackInteractor.getTracksByIds(playlist.playlistTracks).first()
+            val tracksNumber = tracks.size
+            var str: String = if (tracksNumber % 100 < 10 || tracksNumber % 100 > 19) {
+                when (tracksNumber % 10) {
+                    1 -> {
+                        "$tracksNumber трек"
+                    }
+                    2,3,4 -> {
+                        "$tracksNumber трека"
+                    }
+                    else -> {
+                        "$tracksNumber треков"
+                    }
+                }
+            } else {
+                "$tracksNumber треков"
+            }
+            str += "\n"
+            for ((indx, track) in tracks.withIndex()) {
+                str += "${indx+1}. " +
+                        "${track.artistName} - " +
+                        "${track.trackName} (" +
+                        SimpleDateFormat(
+                            "mm:ss",
+                            Locale.getDefault()
+                        ).format(track.trackTimeMillis) +
+                        ")\n"
+            }
+            shareStringLiveData.postValue(str)
+        }
+    }
+
+    fun deletePlaylist(playlist: Playlist) {
+        viewModelScope.launch {
+            val tracks = playlistsTrackInteractor.getTracksByIds(playlist.playlistTracks).first()
+            val playlistId: Int = playlistsInteractor.deletePlaylist(playlist).first()
+            for (track in tracks) {
+                deleteTrackFromDB(track)
+            }
+            testIntLiveData.postValue(playlistId)
         }
     }
 }
