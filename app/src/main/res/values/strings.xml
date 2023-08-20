@@ -35,4 +35,6 @@
     <string name="fragment_playlists_new_playlist">Новый плейлист</string>
     <string name="activity_media_favourites_tracks">Избранные треки</string>
     <string name="activity_media_playlists">Плейлисты</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.vaiwork.playlistmaker.data
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.vaiwork.playlistmaker.data.db.AppDatabase
 import com.vaiwork.playlistmaker.data.db.entity.PlaylistEntity
 import com.vaiwork.playlistmaker.data.db.entity.TrackEntity
@@ -57,6 +59,14 @@ class PlaylistsRepositoryImpl(
                 break
             }
         }
+    }
+
+    override fun mapPlaylistToString(playlist: Playlist): String {
+        return dbConverter.mapPlaylistToString(playlist)
+    }
+
+    override fun mapStringToPlaylist(playlistString: String): Playlist {
+        return dbConverter.mapStringToPlaylist(playlistString)
     }
 
     private fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>?): List<Playlist>? {

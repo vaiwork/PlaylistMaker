@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_mediaFragment_to_newPlaylistActivity2"
             app:destination="@id/newPlaylistActivity2" />
+        <action
+            android:id="@+id/action_mediaFragment_to_playlistFragment"
+            app:destination="@id/playlistFragment" />
     </fragment>
     <activity
         android:id="@+id/audioPlayerActivity"
@@ -39,4 +42,9 @@
         android:label="activity_new_playlist"
         tools:layout="@layout/activity_new_playlist"
         />
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.vaiwork.playlistmaker.ui.playlist.fragment.PlaylistFragment"
+        android:label="fragment_playlist"
+        tools:layout="@layout/fragment_playlist" />
 </navigation>

@@ -15,7 +15,7 @@ class PlaylistsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val playlistTitleTextView: TextView = itemView.findViewById(R.id.playlist_view_text_view_title)
     private val playlistTracksCountTextView: TextView = itemView.findViewById(R.id.playlist_view_text_view_tracks_count)
 
-    fun bind(playlist: Playlist) {
+    fun bind(playlist: Playlist, playlistClickListener: PlaylistsAdapter.PlaylistClickListener) {
         if (playlist.playlistCoverLocalUri != "") {
             Glide.with(playlistImageView)
                 .load(playlist.playlistCoverLocalUri)
@@ -47,7 +47,7 @@ class PlaylistsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         }
 
         itemView.setOnClickListener {
-            // TODO:
+            playlistClickListener.onPlaylistClick(playlist)
         }
     }
 }

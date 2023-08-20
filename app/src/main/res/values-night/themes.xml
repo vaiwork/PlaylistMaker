@@ -12,38 +12,45 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColorHint">@color/yp_black</item>
     </style>
     <style name="searchImageViewActivitySearchTheme" parent="root">
         <item name="android:src">@drawable/search_icon_dark_mode</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="clearTextImageViewActivitySearchTheme" parent="root">
         <item name="android:src">@drawable/clear_text_dark_mode</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="trackArrowButtonTrackViewTheme" parent="root">
         <item name="android:src">@drawable/arrow_forward_night</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="trackEllipseTrackViewTheme" parent="root">
         <item name="android:src">@drawable/ellipse_night</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="activitySearchEmptyPlaceholderImageViewTheme" parent="root">
         <item name="android:src">@drawable/empty_placeholder_dark_mode</item>
         <item name="android:layout_marginTop">110dp</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="activitySearchErrorPlaceholderImageViewTheme" parent="root">
         <item name="android:src">@drawable/error_placeholder_dark_mode</item>
         <item name="android:layout_marginTop">110dp</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="activityPleerTheme" parent="root">
         <item name="navigationIcon">@drawable/back_dark_mode</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="fragmentFavouritesTracksPlaceholderImageViewTheme" parent="root">
         <item name="android:src">@drawable/empty_placeholder_dark_mode</item>
         <item name="android:layout_marginTop">106dp</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="fragmentFavouritesTracksTheme" parent="root">
         <item name="android:backgroundTint">@color/white</item>
@@ -55,6 +62,7 @@
         <item name="android:src">@drawable/empty_placeholder_dark_mode</item>
         <item name="android:layout_marginTop">46dp</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="activityMediaTheme" parent="Widget.Design.TabLayout">
         <!-- Primary brand color. -->
@@ -88,5 +96,9 @@
     </style>
     <style name="activityAudioPleerBottomSheetGrayView" parent="root">
         <item name="android:backgroundTint">#FFFFFF</item>
+    </style>
+    <style name="fragmentPlaylistTheme" parent="root">
+        <item name="navigationIcon">@drawable/back_dark_mode</item>
+        <item name="android:background">#E6E8EB</item>
     </style>
 </resources>

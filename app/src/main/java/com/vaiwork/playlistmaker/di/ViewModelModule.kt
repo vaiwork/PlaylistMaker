@@ -5,6 +5,7 @@ import com.vaiwork.playlistmaker.ui.root.view_model.RootViewModel
 import com.vaiwork.playlistmaker.ui.media.view_model.FavouritesTracksViewModel
 import com.vaiwork.playlistmaker.ui.media.view_model.PlaylistsViewModel
 import com.vaiwork.playlistmaker.ui.newplaylist.view_model.NewPlaylistViewModel
+import com.vaiwork.playlistmaker.ui.playlist.view_model.PlaylistViewModel
 import com.vaiwork.playlistmaker.ui.search.view_model.TracksSearchViewModel
 import com.vaiwork.playlistmaker.ui.settings.view_model.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -39,5 +40,9 @@ val viewModelModule = module {
 
     viewModel {
         NewPlaylistViewModel(get(), androidApplication())
+    }
+
+    viewModel {
+        PlaylistViewModel(get(), get())
     }
 }

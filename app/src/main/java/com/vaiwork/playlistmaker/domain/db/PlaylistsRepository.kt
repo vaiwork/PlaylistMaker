@@ -10,4 +10,8 @@ interface PlaylistsRepository {
     suspend fun addPlaylist(playlist: Playlist)
 
     fun updatePlaylistRow(playlist: Playlist, trackId: Int): Flow<Int>
+
+    fun mapPlaylistToString(playlist: Playlist): String
+
+    fun mapStringToPlaylist(playlistString: String) : Playlist
 }
