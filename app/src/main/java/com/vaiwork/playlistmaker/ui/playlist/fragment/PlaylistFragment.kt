@@ -50,6 +50,7 @@ class PlaylistFragment : Fragment() {
     private lateinit var shareTextView: TextView
     private lateinit var editInfoTextView: TextView
     private lateinit var deletePlaylistTextView: TextView
+    private lateinit var albumThreeDotsImageView: ImageView
 
     private lateinit var overlay: View
 
@@ -89,7 +90,7 @@ class PlaylistFragment : Fragment() {
         shareTextView = binding.fragmentPlaylistTextViewShare
         editInfoTextView = binding.fragmentPlaylistTextViewEditInfo
         deletePlaylistTextView = binding.fragmentPlaylistTextViewDeletePlaylist
-
+        albumThreeDotsImageView = binding.fragmentPlaylistBottomSheetThreeDots.findViewById(R.id.playlist_view_bottom_sheet_image_view)
 
         playlistViewModel.observePlaylistState().observe(viewLifecycleOwner) { state ->
             when(state) {
@@ -160,6 +161,12 @@ class PlaylistFragment : Fragment() {
 
         threeDotsButton.setOnClickListener {
             bottomSheetThreeDotsLinearLayout.visibility = View.VISIBLE
+
+            Glide
+                .with(albumThreeDotsImageView)
+                .load(playlist.playlistCoverLocalUri)
+                .placeholder(R.drawable.placeholder_album_image_light_mode)
+                .into(albumThreeDotsImageView)
 
             shareTextView.setOnClickListener {
                 shareClick(playlist)

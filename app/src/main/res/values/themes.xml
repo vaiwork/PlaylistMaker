@@ -21,14 +21,6 @@
         <item name="android:src">@drawable/clear_text_light_mode</item>
         <item name="android:backgroundTint">@color/white</item>
     </style>
-    <style name="trackArrowButtonTrackViewTheme" parent="root">
-        <item name="android:src">@drawable/arrow_forward_light</item>
-        <item name="android:backgroundTint">@color/white</item>
-    </style>
-    <style name="trackEllipseTrackViewTheme" parent="root">
-        <item name="android:src">@drawable/ellipse_light</item>
-        <item name="android:backgroundTint">@color/white</item>
-    </style>
     <style name="activitySearchEmptyPlaceholderImageViewTheme" parent="root" >
         <item name="android:src">@drawable/empty_placeholder_light_mode</item>
         <item name="android:layout_marginTop">110dp</item>
@@ -98,5 +90,8 @@
     <style name="fragmentPlaylistTheme" parent="root">
         <item name="navigationIcon">@drawable/back</item>
         <item name="android:background">#E6E8EB</item>
+    </style>
+    <style name="fragmentPlaylistRecyclerViewTheme" parent="root">
+        <item name="android:background">@color/white</item>
     </style>
 </resources>
