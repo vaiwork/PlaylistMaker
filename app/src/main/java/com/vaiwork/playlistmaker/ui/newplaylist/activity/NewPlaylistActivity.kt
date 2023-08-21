@@ -16,12 +16,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.vaiwork.playlistmaker.R
+import com.vaiwork.playlistmaker.domain.models.Playlist
 import com.vaiwork.playlistmaker.ui.newplaylist.view_model.NewPlaylistTitleState
 import com.vaiwork.playlistmaker.ui.newplaylist.view_model.NewPlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,18 +43,30 @@ class NewPlaylistActivity : AppCompatActivity() {
     private lateinit var playlistDescirptionInputTextLayout: TextInputLayout
     private lateinit var playlistTitleInputTextLayout: TextInputLayout
 
+    companion object {
+        private const val ARGS_PLAYLIST_STRING = "playlist_string"
+        fun createArgs(playlistString: String): Bundle = bundleOf(
+            ARGS_PLAYLIST_STRING to playlistString
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_playlist)
 
         playlistDescirptionInputTextLayout = findViewById(R.id.activity_new_playlist_track_description)
         playlistTitleInputTextLayout = findViewById(R.id.activity_new_playlist_playlist_name)
-
         backToolbar = findViewById(R.id.activity_new_playlist_back_toolbar)
+        playlistImageView = findViewById(R.id.activity_new_playlist_image)
+        playlistTitleEditText = findViewById(R.id.activity_new_playlist_playlist_name_edit_text)
+        playlistDescriptionEditText = findViewById(R.id.activity_new_playlist_track_description_edit_text)
+        createPlaylistAppCompatButton = findViewById(R.id.activity_new_playlist_create_image_button)
+
         backToolbar.setNavigationOnClickListener {
-            if (playlistImageView.drawable != null
+            if ( playlistImageView.drawable != null
                 && (!playlistTitleEditText.text.isNullOrEmpty()
-                        || !playlistDescriptionEditText.text.isNullOrEmpty())) {
+                        || !playlistDescriptionEditText.text.isNullOrEmpty())
+                && !newPlaylistViewModel.isUpdateView() ) {
                 MaterialAlertDialogBuilder(this)
                     .setTitle("Завершить создание плейлиста?")
                     .setMessage("Все несохраненные данные будут потеряны")
@@ -90,8 +104,6 @@ class NewPlaylistActivity : AppCompatActivity() {
         }
         this.onBackPressedDispatcher.addCallback(this, callback)
 
-
-        playlistImageView = findViewById(R.id.activity_new_playlist_image)
         val playlistImageViewMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 Glide.with(playlistImageView)
@@ -112,7 +124,7 @@ class NewPlaylistActivity : AppCompatActivity() {
             playlistImageViewMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        playlistTitleEditText = findViewById(R.id.activity_new_playlist_playlist_name_edit_text)
+
         newPlaylistViewModel.observeNewPlaylistTitle().observe(this) {
             when (it) {
                 is NewPlaylistTitleState.Changed -> setCreatePlaylistAppCompatButtonActive(true)
@@ -133,7 +145,7 @@ class NewPlaylistActivity : AppCompatActivity() {
         }
         playlistTitleEditTextWatcher.let { playlistTitleEditText.addTextChangedListener(it) }
 
-        playlistDescriptionEditText = findViewById(R.id.activity_new_playlist_track_description_edit_text)
+
         val playlistDescriptionEditTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -147,15 +159,69 @@ class NewPlaylistActivity : AppCompatActivity() {
         }
         playlistDescriptionEditTextWatcher.let { playlistDescriptionEditText.addTextChangedListener(it) }
 
-        createPlaylistAppCompatButton = findViewById(R.id.activity_new_playlist_create_image_button)
+        newPlaylistViewModel.observePlaylistAddedLiveData().observe(this) {
+            when(it) {
+                0 -> Toast.makeText(
+                    this,
+                    "Плейлист " + playlistTitleEditText.text.toString() + " создан",
+                    Toast.LENGTH_SHORT
+                ).show()
+                else -> {}
+            }
+        }
+
+        newPlaylistViewModel.observePlaylistChangedLiveData().observe(this) {
+            when(it) {
+                0 -> finish()
+                else -> {}
+            }
+        }
+
         createPlaylistAppCompatButton.isEnabled = false
         createPlaylistAppCompatButton.setOnClickListener {
-            Toast.makeText(this, "Плейлист " + playlistTitleEditText.text.toString() + " создан", Toast.LENGTH_SHORT).show()
-            newPlaylistViewModel.addPlaylist(
-                playlistTitleEditText.text.toString(),
-                playlistDescriptionEditText.text.toString()
-            )
-            finish()
+
+            if (!newPlaylistViewModel.isUpdateView()) {
+                newPlaylistViewModel.addPlaylist(
+                    playlistTitleEditText.text.toString(),
+                    playlistDescriptionEditText.text.toString()
+                )
+                finish()
+            } else {
+                newPlaylistViewModel.addPlaylist(
+                    playlistTitleEditText.text.toString(),
+                    playlistDescriptionEditText.text.toString(),
+                    true
+                )
+            }
+        }
+
+        val playlist: Playlist? = getPlaylist()
+        if (playlist != null) {
+            backToolbar.title = "Редактировать плейлист"
+            createPlaylistAppCompatButton.text = "Редактировать"
+            Glide.with(playlistImageView)
+                .load(playlist.playlistCoverLocalUri)
+                .placeholder(R.drawable.playlist_placeholder_image_mini)
+                .transform(
+                    CenterCrop(),
+                    RoundedCorners(
+                        playlistImageView.resources.getDimensionPixelSize(
+                            R.dimen.activity_pleer_album_image_corner_radius
+                        )
+                    )
+                ).into(playlistImageView)
+            playlistTitleEditText.text = playlist.playlistTitle
+            playlistDescriptionEditText.text = playlist.playlistDescription
+            newPlaylistViewModel.setPlaylistCoverLocalUri(playlist.playlistCoverLocalUri)
+        }
+    }
+
+    private fun getPlaylist(): Playlist? {
+        val playlistString: String? = intent.getStringExtra(ARGS_PLAYLIST_STRING)
+        return if (playlistString != null) {
+            newPlaylistViewModel.mapStringToPlaylist(playlistString)
+        } else {
+            null
         }
     }
 

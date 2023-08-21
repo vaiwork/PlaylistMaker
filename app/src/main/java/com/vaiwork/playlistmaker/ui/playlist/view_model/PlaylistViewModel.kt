@@ -38,6 +38,10 @@ class PlaylistViewModel(
         return playlistsInteractor.mapStringToPlaylist(playlistString)
     }
 
+    fun mapPlaylistToString(playlist: Playlist): String {
+        return playlistsInteractor.mapPlaylistToString(playlist)
+    }
+
     fun calcMinutesTracks(tracksIds: List<Int>) {
         viewModelScope.launch {
             val tracks: List<Track> = playlistsTrackInteractor.getTracksByIds(tracksIds).first()

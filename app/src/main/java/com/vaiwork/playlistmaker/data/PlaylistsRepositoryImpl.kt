@@ -1,16 +1,10 @@
 package com.vaiwork.playlistmaker.data
 
-import android.widget.Toast
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.vaiwork.playlistmaker.data.db.AppDatabase
 import com.vaiwork.playlistmaker.data.db.entity.PlaylistEntity
-import com.vaiwork.playlistmaker.data.db.entity.TrackEntity
 import com.vaiwork.playlistmaker.domain.db.PlaylistsRepository
 import com.vaiwork.playlistmaker.domain.models.Playlist
-import com.vaiwork.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 
 class PlaylistsRepositoryImpl(
@@ -28,12 +22,22 @@ class PlaylistsRepositoryImpl(
         }
     }
 
-    override suspend fun addPlaylist(playlist: Playlist) {
+    override fun addPlaylist(playlist: Playlist): Flow<Int> = flow {
+        var playlistExist = false
+        val playlists: List<PlaylistEntity>? = appDatabase.playlistsDao().selectAllPlaylists()
+        for (_playlist in playlists!!) {
+            if (dbConverter.map(_playlist)?.equals(playlist) == true) {
+                playlistExist = true
+                break
+            }
+        }
         val playlistEntity: PlaylistEntity? = dbConverter.map(playlist)
-        if (playlistEntity == null) {
-            appDatabase.playlistsDao().insertPlaylists(emptyList())
-        } else {
+        if (playlistEntity != null && !playlistExist) {
             appDatabase.playlistsDao().insertPlaylists(listOf(playlistEntity))
+            emit(0)
+        } else {
+            appDatabase.playlistsDao().insertPlaylists(emptyList())
+            emit(-1)
         }
     }
 
@@ -92,6 +96,34 @@ class PlaylistsRepositoryImpl(
                     appDatabase.playlistsDao().deletePlaylistRow(_playlist.playlistId)
                     emit(_playlist.playlistId)
                 }
+            }
+        }
+        emit(-1)
+    }
+
+    override fun updatePlaylist(playlistOld: Playlist, playlistTitle :String, playlistDescription: String, playlistCoverLocalUri: String): Flow<Int> = flow {
+        val playlists: List<PlaylistEntity>? = appDatabase.playlistsDao().selectAllPlaylists()
+        if (!playlists.isNullOrEmpty()) {
+            var canBeChanged = true
+            var playlistIdForChange = -1
+            for (_playlist in playlists) {
+                if (dbConverter.map(_playlist)?.equals(playlistOld) == true) {
+                    playlistIdForChange = _playlist.playlistId
+                }
+                if (_playlist.playlistTitle.equals(playlistTitle)
+                    && _playlist.playlistDescription.equals(playlistDescription)
+                    && _playlist.playlistCoverLocalUri.equals(playlistCoverLocalUri)) {
+                    canBeChanged = false
+                }
+            }
+            if (canBeChanged) {
+                appDatabase.playlistsDao().updatePlaylist(
+                    playlistCoverLocalUri,
+                    playlistTitle,
+                    playlistDescription,
+                    playlistIdForChange
+                )
+                emit(0)
             }
         }
         emit(-1)

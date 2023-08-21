@@ -152,7 +152,11 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
     </LinearLayout>
-
+    <View android:id="@+id/fragment_playlist_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone"/>
     <LinearLayout
         android:id="@+id/fragment_playlist_bottom_sheet_three_dots"
         android:layout_width="match_parent"

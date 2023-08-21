@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.ImageView.ScaleType
 import android.widget.LinearLayout
@@ -17,14 +16,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.dialog.MaterialDialogs
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.databinding.FragmentPlaylistBinding
 import com.vaiwork.playlistmaker.domain.models.Playlist
 import com.vaiwork.playlistmaker.domain.models.Track
 import com.vaiwork.playlistmaker.ui.audioplayer.activity.AudioPlayerActivity
-import com.vaiwork.playlistmaker.ui.media.fragment.PlaylistsFragment
+import com.vaiwork.playlistmaker.ui.newplaylist.activity.NewPlaylistActivity
 import com.vaiwork.playlistmaker.ui.playlist.view_model.PlaylistState
 import com.vaiwork.playlistmaker.ui.playlist.view_model.PlaylistViewModel
 import com.vaiwork.playlistmaker.util.debounce
@@ -52,13 +51,17 @@ class PlaylistFragment : Fragment() {
     private lateinit var editInfoTextView: TextView
     private lateinit var deletePlaylistTextView: TextView
 
+    private lateinit var overlay: View
+
     private lateinit var onPlaylistTrackClickDebounce: (Track) -> Unit
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
 
         private const val ARGS_PLAYLIST: String = "PLAYLIST_STRING"
-        fun createArgs(playlistString: String): Bundle = bundleOf(ARGS_PLAYLIST to playlistString)
+        fun createArgs(playlistString: String): Bundle = bundleOf(
+            ARGS_PLAYLIST to playlistString
+        )
     }
 
     override fun onCreateView(
@@ -163,7 +166,12 @@ class PlaylistFragment : Fragment() {
             }
 
             editInfoTextView.setOnClickListener {
-
+                findNavController().navigate(
+                    R.id.action_playlistFragment_to_newPlaylistActivity2,
+                    NewPlaylistActivity.createArgs(
+                        playlistViewModel.mapPlaylistToString(playlist)
+                    )
+                )
             }
 
             deletePlaylistTextView.setOnClickListener {
@@ -181,6 +189,22 @@ class PlaylistFragment : Fragment() {
                     }
                     .show()
             }
+
+            overlay = binding.fragmentPlaylistOverlay
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetThreeDotsLinearLayout)
+            bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    when (newState) {
+                        BottomSheetBehavior.STATE_HIDDEN -> {
+                            overlay.visibility = View.GONE
+                        }
+                        else -> {
+                            overlay.visibility = View.VISIBLE
+                        }
+                    }
+                }
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+            })
         }
     }
 
