@@ -86,7 +86,8 @@ class NewPlaylistActivity : AppCompatActivity() {
             override fun handleOnBackPressed() {
                 if (playlistImageView.drawable != null
                     && (!playlistTitleEditText.text.isNullOrEmpty()
-                            || !playlistDescriptionEditText.text.isNullOrEmpty())) {
+                            || !playlistDescriptionEditText.text.isNullOrEmpty())
+                    && !newPlaylistViewModel.isUpdateView()) {
                     MaterialAlertDialogBuilder(this@NewPlaylistActivity)
                         .setTitle("Завершить создание плейлиста?")
                         .setMessage("Все несохраненные данные будут потеряны")
@@ -172,8 +173,10 @@ class NewPlaylistActivity : AppCompatActivity() {
 
         newPlaylistViewModel.observePlaylistChangedLiveData().observe(this) {
             when(it) {
-                0 -> finish()
-                else -> {}
+                -1 -> {}
+                else -> {
+                    finish()
+                }
             }
         }
 

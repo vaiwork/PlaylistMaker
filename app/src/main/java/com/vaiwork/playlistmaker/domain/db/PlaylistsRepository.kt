@@ -1,5 +1,6 @@
 package com.vaiwork.playlistmaker.domain.db
 
+import com.vaiwork.playlistmaker.data.db.entity.PlaylistEntity
 import com.vaiwork.playlistmaker.domain.models.Playlist
 import kotlinx.coroutines.flow.Flow
 
@@ -18,4 +19,8 @@ interface PlaylistsRepository {
     fun mapPlaylistToString(playlist: Playlist): String
 
     fun mapStringToPlaylist(playlistString: String) : Playlist
+
+    fun getPlaylistRow(playlistId: Int): Flow<Playlist?>
+
+    fun getPlaylistId(playlist: Playlist): Flow<Int>
 }

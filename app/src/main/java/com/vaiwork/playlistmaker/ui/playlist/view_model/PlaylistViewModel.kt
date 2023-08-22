@@ -18,9 +18,13 @@ class PlaylistViewModel(
     var playlistsTrackInteractor: PlaylistsTrackInteractor
 ): ViewModel() {
 
+    private var playlistId: Int = -1
+
+    private val setPlaylistIdLiveData = MutableLiveData<Int>()
+    fun observeSetPlaylistIdLiveData(): LiveData<Int> = setPlaylistIdLiveData
+
     private val testIntLiveData = MutableLiveData<Int>()
     fun observeTestIntLiveData(): LiveData<Int> = testIntLiveData
-
 
     private val shareStringLiveData = MutableLiveData<String>()
     fun observeShareStringLiveData(): LiveData<String> = shareStringLiveData
@@ -38,8 +42,18 @@ class PlaylistViewModel(
         return playlistsInteractor.mapStringToPlaylist(playlistString)
     }
 
+    fun setCurrentPlaylistId(playlist: Playlist) {
+         viewModelScope.launch {
+             setPlaylistIdLiveData.postValue(playlistsInteractor.getPlaylistId(playlist).first())
+         }
+    }
+
     fun mapPlaylistToString(playlist: Playlist): String {
         return playlistsInteractor.mapPlaylistToString(playlist)
+    }
+
+    fun setPlaylistId(_playlistId: Int) {
+        this.playlistId = _playlistId
     }
 
     fun calcMinutesTracks(tracksIds: List<Int>) {
@@ -112,10 +126,8 @@ class PlaylistViewModel(
 
     fun deleteTrackFromPlaylist(playlist: Playlist, track: Track) {
         viewModelScope.launch {
-            // delete trackId from playlist
             val resultCode = playlistsInteractor.updatePlaylistRow(playlist, track.trackId, true).first()
             if (resultCode == 0) {
-                // post data to update UI on playlist view
                 playlistStateLiveData.postValue(
                     PlaylistState.Changed(
                         Playlist(
@@ -127,7 +139,6 @@ class PlaylistViewModel(
                         )
                     )
                 )
-                // get trackIds from all playlists if trackId in list pass else delete from DB
                 deleteTrackFromDB(track)
             }
         }
@@ -179,6 +190,15 @@ class PlaylistViewModel(
                 deleteTrackFromDB(track)
             }
             testIntLiveData.postValue(playlistId)
+        }
+    }
+
+    fun updateUI() {
+        viewModelScope.launch {
+            val playlist = playlistsInteractor.getPlaylistRow(playlistId).first()
+            if (playlist != null) {
+                playlistStateLiveData.postValue(PlaylistState.Changed(playlist))
+            }
         }
     }
 }

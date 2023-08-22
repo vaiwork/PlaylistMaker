@@ -18,4 +18,8 @@ interface PlaylistsInteractor {
     fun mapPlaylistToString(playlist: Playlist): String
 
     fun mapStringToPlaylist(playlistString: String): Playlist
+
+    fun getPlaylistRow(playlistId: Int): Flow<Playlist?>
+
+    fun getPlaylistId(playlist: Playlist): Flow<Int>
 }

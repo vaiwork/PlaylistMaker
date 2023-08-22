@@ -28,6 +28,14 @@ class PlaylistsInteractorImpl(
         return playlistsRepository.mapStringToPlaylist(playlistString)
     }
 
+    override fun getPlaylistRow(playlistId: Int): Flow<Playlist?> {
+        return playlistsRepository.getPlaylistRow(playlistId)
+    }
+
+    override fun getPlaylistId(playlist: Playlist): Flow<Int> {
+        return playlistsRepository.getPlaylistId(playlist)
+    }
+
     override fun deletePlaylist(playlist: Playlist): Flow<Int> {
         return playlistsRepository.deletePlaylist(playlist)
     }

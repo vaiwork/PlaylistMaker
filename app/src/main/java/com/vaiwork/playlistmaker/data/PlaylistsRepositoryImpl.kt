@@ -88,6 +88,22 @@ class PlaylistsRepositoryImpl(
         return dbConverter.mapStringToPlaylist(playlistString)
     }
 
+    override fun getPlaylistRow(playlistId: Int): Flow<Playlist?> = flow {
+        emit(dbConverter.map(appDatabase.playlistsDao().getPlaylistRow(playlistId)))
+    }
+
+    override fun getPlaylistId(playlist: Playlist): Flow<Int> = flow {
+        val playlistsEntity = appDatabase.playlistsDao().selectAllPlaylists()
+        if (playlistsEntity != null) {
+            for (_playlistEntity in playlistsEntity) {
+                if (playlist == dbConverter.map(_playlistEntity)) {
+                    emit(_playlistEntity.playlistId)
+                }
+            }
+        }
+        emit(-1)
+    }
+
     override fun deletePlaylist(playlist: Playlist): Flow<Int> = flow {
         val playlists: List<PlaylistEntity>? = appDatabase.playlistsDao().selectAllPlaylists()
         if (!playlists.isNullOrEmpty()) {
@@ -123,7 +139,7 @@ class PlaylistsRepositoryImpl(
                     playlistDescription,
                     playlistIdForChange
                 )
-                emit(0)
+                emit(playlistIdForChange)
             }
         }
         emit(-1)

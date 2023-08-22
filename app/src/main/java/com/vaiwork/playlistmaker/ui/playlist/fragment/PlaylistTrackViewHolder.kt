@@ -16,6 +16,7 @@ class PlaylistTrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
     private val songName: TextView = itemView.findViewById(R.id.song_view_song_name_text_view)
     private val songExecutorName: TextView =
         itemView.findViewById(R.id.song_view_song_executor_name_text_view)
+    private val songArrowForward: ImageView = itemView.findViewById(R.id.song_view_arrow_forward_image_view)
     private val songTime: TextView = itemView.findViewById(R.id.song_view_song_time_text_view)
     fun bind(songTrack: Track, itemClickListener: PlaylistTrackAdapter.PlaylistTrackClickListener, itemLongClickListener: PlaylistTrackAdapter.PlaylistTrackLongClickListener) {
         Glide.with(itemView)

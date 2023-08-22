@@ -50,7 +50,10 @@ class PlaylistFragment : Fragment() {
     private lateinit var shareTextView: TextView
     private lateinit var editInfoTextView: TextView
     private lateinit var deletePlaylistTextView: TextView
+
     private lateinit var albumThreeDotsImageView: ImageView
+    private lateinit var nameThreeDotsTextView: TextView
+    private lateinit var tracksCountThreeDotsTextView: TextView
 
     private lateinit var overlay: View
 
@@ -91,6 +94,8 @@ class PlaylistFragment : Fragment() {
         editInfoTextView = binding.fragmentPlaylistTextViewEditInfo
         deletePlaylistTextView = binding.fragmentPlaylistTextViewDeletePlaylist
         albumThreeDotsImageView = binding.fragmentPlaylistBottomSheetThreeDots.findViewById(R.id.playlist_view_bottom_sheet_image_view)
+        nameThreeDotsTextView = binding.fragmentPlaylistBottomSheetThreeDots.findViewById(R.id.playlist_view_bottom_sheet_title_text_view)
+        tracksCountThreeDotsTextView = binding.fragmentPlaylistBottomSheetThreeDots.findViewById(R.id.playlist_view_bottom_sheet_tracks_count_text_view)
 
         playlistViewModel.observePlaylistState().observe(viewLifecycleOwner) { state ->
             when(state) {
@@ -100,6 +105,16 @@ class PlaylistFragment : Fragment() {
         }
 
         val playlist: Playlist = getPlaylist()
+        playlistViewModel.observeSetPlaylistIdLiveData().observe(viewLifecycleOwner) {
+            when(it) {
+                -1 -> {
+                }
+                else -> {
+                    playlistViewModel.setPlaylistId(it)
+                }
+            }
+        }
+        playlistViewModel.setCurrentPlaylistId(playlist)
         setUI(playlist)
 
         onPlaylistTrackClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
@@ -113,7 +128,7 @@ class PlaylistFragment : Fragment() {
 
     private fun getPlaylist(): Playlist {
         return requireArguments().getString(ARGS_PLAYLIST)
-            ?.let { playlistViewModel.mapStringToPlaylist(it) }!!
+                ?.let { playlistViewModel.mapStringToPlaylist(it) }!!
     }
 
     private fun setUI(playlist: Playlist) {
@@ -126,8 +141,13 @@ class PlaylistFragment : Fragment() {
             albumImageView.scaleType = ScaleType.FIT_XY
         }
         nameTextView.text = playlist.playlistTitle
+        nameThreeDotsTextView.text = playlist.playlistTitle
+
         descriptionTextView.text = playlist.playlistDescription
+
         calcTracksTextView.text = playlistViewModel.calcNumberTracks(playlist.playlistTracksNumber)
+        tracksCountThreeDotsTextView.text = calcTracksTextView.text
+
         playlistViewModel.observeTracksMinutesCalcLiveData().observe(viewLifecycleOwner) { it ->
             calcMinutesTextView.text = it
         }
@@ -159,8 +179,53 @@ class PlaylistFragment : Fragment() {
             shareClick(playlist)
         }
 
+        shareTextView.setOnClickListener {
+            shareClick(playlist)
+        }
+
+        editInfoTextView.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_playlistFragment_to_newPlaylistActivity2,
+                NewPlaylistActivity.createArgs(
+                    playlistViewModel.mapPlaylistToString(playlist)
+                )
+            )
+        }
+
+        deletePlaylistTextView.setOnClickListener {
+            bottomSheetThreeDotsLinearLayout.visibility = View.GONE
+
+            MaterialAlertDialogBuilder(this.requireContext())
+                .setTitle("Хотите удалить плейлист?")
+                .setNegativeButton("Нет") { _, _ ->
+                }
+                .setPositiveButton("Да") { _, _ ->
+                    playlistViewModel.observeTestIntLiveData().observe(viewLifecycleOwner) {
+                        findNavController().navigateUp()
+                    }
+                    playlistViewModel.deletePlaylist(playlist)
+                }
+                .show()
+        }
+
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetThreeDotsLinearLayout)
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        overlay.visibility = View.GONE
+                    }
+                    else -> {
+                        overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
         threeDotsButton.setOnClickListener {
             bottomSheetThreeDotsLinearLayout.visibility = View.VISIBLE
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
             Glide
                 .with(albumThreeDotsImageView)
@@ -168,50 +233,7 @@ class PlaylistFragment : Fragment() {
                 .placeholder(R.drawable.placeholder_album_image_light_mode)
                 .into(albumThreeDotsImageView)
 
-            shareTextView.setOnClickListener {
-                shareClick(playlist)
-            }
-
-            editInfoTextView.setOnClickListener {
-                findNavController().navigate(
-                    R.id.action_playlistFragment_to_newPlaylistActivity2,
-                    NewPlaylistActivity.createArgs(
-                        playlistViewModel.mapPlaylistToString(playlist)
-                    )
-                )
-            }
-
-            deletePlaylistTextView.setOnClickListener {
-                bottomSheetThreeDotsLinearLayout.visibility = View.GONE
-
-                MaterialAlertDialogBuilder(this.requireContext())
-                    .setTitle("Хотите удалить плейлист?")
-                    .setNegativeButton("Нет") { _, _ ->
-                    }
-                    .setPositiveButton("Да") { _, _ ->
-                        playlistViewModel.observeTestIntLiveData().observe(viewLifecycleOwner) {
-                            findNavController().navigateUp()
-                        }
-                        playlistViewModel.deletePlaylist(playlist)
-                    }
-                    .show()
-            }
-
             overlay = binding.fragmentPlaylistOverlay
-            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetThreeDotsLinearLayout)
-            bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    when (newState) {
-                        BottomSheetBehavior.STATE_HIDDEN -> {
-                            overlay.visibility = View.GONE
-                        }
-                        else -> {
-                            overlay.visibility = View.VISIBLE
-                        }
-                    }
-                }
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-            })
         }
     }
 
@@ -238,5 +260,11 @@ class PlaylistFragment : Fragment() {
             }
             playlistViewModel.createShareString(playlist)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        playlistViewModel.updateUI()
     }
 }

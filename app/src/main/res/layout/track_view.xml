@@ -57,7 +57,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/ellipse_light"
-                android:backgroundTint="@color/white"
                 />
             <TextView
                 android:id="@+id/song_view_song_time_text_view"
@@ -80,6 +79,5 @@
         android:layout_marginEnd="20dp"
         android:scaleType="center"
         android:src="@drawable/arrow_forward_light"
-        android:backgroundTint="@color/white"
         />
 </LinearLayout>
