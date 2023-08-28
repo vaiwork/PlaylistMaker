@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaiwork.playlistmaker.domain.db.PlaylistsInteractor
+import com.vaiwork.playlistmaker.domain.models.Playlist
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -24,5 +25,9 @@ class PlaylistsViewModel(
                 stateLiveData.postValue(PlaylistsState.ErrorYouDoNotCreateAnyPlaylists)
             }
         }
+    }
+
+    fun mapPlaylistToString(playlist: Playlist): String {
+        return playlistsInteractor.mapPlaylistToString(playlist)
     }
 }

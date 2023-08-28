@@ -4,6 +4,8 @@ import com.vaiwork.playlistmaker.data.db.AppDatabase
 import com.vaiwork.playlistmaker.data.db.entity.PlaylistsTrackEntity
 import com.vaiwork.playlistmaker.domain.db.PlaylistsTrackRepository
 import com.vaiwork.playlistmaker.domain.models.Track
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class PlaylistsTrackRepositoryImpl(
     private val appDatabase: AppDatabase,
@@ -16,5 +18,21 @@ class PlaylistsTrackRepositoryImpl(
         } else {
             appDatabase.playlistsTrackDao().insertTrackToPlaylist(listOf(playlistsTrackEntity))
         }
+    }
+
+    override fun getTracksByIds(tracksIds: List<Int>): Flow<List<Track>> = flow {
+        var tracks: List<Track> = emptyList()
+        for (trackId in tracksIds) {
+            val trackEntity = appDatabase.playlistsTrackDao().selectPlaylistsTrackById(trackId)
+            val track = dbConverter.pmap(trackEntity)
+            if (track != null) {
+                tracks += track
+            }
+        }
+        emit(tracks)
+    }
+
+    override suspend fun deleteTrackRow(trackId: Int) {
+        appDatabase.playlistsTrackDao().deleteTrackRow(trackId)
     }
 }

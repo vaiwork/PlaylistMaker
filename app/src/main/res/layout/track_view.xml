@@ -14,6 +14,7 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/track_image_view_style"
         android:scaleType="centerCrop"
+        android:src="@drawable/placeholder_album_image_light_mode"
         />
     <LinearLayout
         android:layout_width="wrap_content"
@@ -22,7 +23,6 @@
         android:layout_weight="8"
         android:layout_marginTop="@dimen/linear_layout_track_view_margin"
         android:layout_marginEnd="@dimen/linear_layout_track_view_margin"
-        android:theme="@style/root"
         >
         <TextView
             android:id="@+id/song_view_song_name_text_view"
@@ -32,13 +32,14 @@
             android:layout_width="match_parent"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="@dimen/text_size_track_view_big"
+            android:hint="Title hint"
+            android:textColorHint="?attr/colorOnPrimary"
             />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="1dp"
-            android:theme="@style/root"
             >
             <TextView
                 android:id="@+id/song_view_song_executor_name_text_view"
@@ -48,12 +49,14 @@
                 android:layout_height="match_parent"
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="@dimen/text_size_track_view_small"
+                android:hint="Musician"
+                android:textColorHint="?attr/colorOnPrimary"
                 />
             <ImageView
                 android:id="@+id/song_view_ellipse"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:theme="@style/trackEllipseTrackViewTheme"
+                android:src="@drawable/ellipse_light"
                 />
             <TextView
                 android:id="@+id/song_view_song_time_text_view"
@@ -63,6 +66,8 @@
                 android:layout_height="match_parent"
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="@dimen/text_size_track_view_small"
+                android:hint="00:00"
+                android:textColorHint="?attr/colorOnPrimary"
                 />
         </LinearLayout>
     </LinearLayout>
@@ -71,8 +76,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:theme="@style/trackArrowButtonTrackViewTheme"
         android:layout_marginEnd="20dp"
         android:scaleType="center"
+        android:src="@drawable/arrow_forward_light"
         />
 </LinearLayout>

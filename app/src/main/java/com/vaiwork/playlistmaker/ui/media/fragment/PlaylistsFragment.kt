@@ -1,23 +1,23 @@
 package com.vaiwork.playlistmaker.ui.media.fragment
 
-import android.R.attr.spacing
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.vaiwork.playlistmaker.R
 import com.vaiwork.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.vaiwork.playlistmaker.domain.models.Playlist
 import com.vaiwork.playlistmaker.ui.media.view_model.PlaylistsState
 import com.vaiwork.playlistmaker.ui.media.view_model.PlaylistsViewModel
+import com.vaiwork.playlistmaker.ui.playlist.fragment.PlaylistFragment
+import com.vaiwork.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -30,9 +30,13 @@ class PlaylistsFragment : Fragment() {
     private lateinit var newPlaylistButton: Button
     private lateinit var recyclerView: RecyclerView
 
+    private lateinit var onPlaylistClickDebounce: (Playlist) -> Unit
+
     companion object {
         fun newInstance() = PlaylistsFragment()
             .apply { }
+
+        private var CLICK_DEBOUNCE_DELAY = 1000L
     }
 
     override fun onCreateView(
@@ -65,6 +69,14 @@ class PlaylistsFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 
         playlistsViewModel.isPlaylistsEmptyCheck()
+
+        onPlaylistClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { playlist ->
+            findNavController().navigate(R.id.action_mediaFragment_to_playlistFragment, PlaylistFragment.createArgs(playlistsViewModel.mapPlaylistToString(playlist)))
+        }
+
+        playlistsAdapter.setItemClickListener {
+            onPlaylistClickDebounce(it)
+        }
     }
 
     private fun viewPlaylists(playlists: List<Playlist>) {

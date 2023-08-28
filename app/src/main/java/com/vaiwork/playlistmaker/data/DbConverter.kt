@@ -133,4 +133,15 @@ class DbConverter {
         }
     }
 
+    fun mapPlaylistToString(playlist: Playlist) : String {
+        return Gson().toJson(this.map(playlist), object : TypeToken<PlaylistEntity>() {}.type)
+    }
+
+    fun mapStringToPlaylist(playlistString: String) : Playlist {
+        val playlistEntity: PlaylistEntity = Gson().fromJson(
+            playlistString,
+            object : TypeToken<PlaylistEntity>() {}.type
+        )
+        return this.map(playlistEntity)!!
+    }
 }

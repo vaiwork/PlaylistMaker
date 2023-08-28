@@ -12,11 +12,35 @@ class PlaylistsInteractorImpl(
         return playlistsRepository.getPlaylists()
     }
 
-    override suspend fun addPlaylist(playlist: Playlist) {
-        playlistsRepository.addPlaylist(playlist)
+    override fun addPlaylist(playlist: Playlist): Flow<Int> {
+        return playlistsRepository.addPlaylist(playlist)
     }
 
-    override fun updatePlaylistRow(playlist: Playlist, trackId: Int): Flow<Int> {
-        return playlistsRepository.updatePlaylistRow(playlist, trackId)
+    override fun updatePlaylistRow(playlist: Playlist, trackId: Int, remove: Boolean): Flow<Int> {
+        return playlistsRepository.updatePlaylistRow(playlist, trackId, remove)
+    }
+
+    override fun mapPlaylistToString(playlist: Playlist): String {
+        return playlistsRepository.mapPlaylistToString(playlist)
+    }
+
+    override fun mapStringToPlaylist(playlistString: String): Playlist {
+        return playlistsRepository.mapStringToPlaylist(playlistString)
+    }
+
+    override fun getPlaylistRow(playlistId: Int): Flow<Playlist?> {
+        return playlistsRepository.getPlaylistRow(playlistId)
+    }
+
+    override fun getPlaylistId(playlist: Playlist): Flow<Int> {
+        return playlistsRepository.getPlaylistId(playlist)
+    }
+
+    override fun deletePlaylist(playlist: Playlist): Flow<Int> {
+        return playlistsRepository.deletePlaylist(playlist)
+    }
+
+    override fun updatePlaylist(playlistOld: Playlist, playlistTitle :String, playlistDescription: String, playlistCoverLocalUri: String): Flow<Int> {
+        return playlistsRepository.updatePlaylist(playlistOld, playlistTitle, playlistDescription, playlistCoverLocalUri)
     }
 }
